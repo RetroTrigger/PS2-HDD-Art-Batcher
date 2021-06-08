@@ -1,0 +1,51 @@
+name: Release HDL Batch Installer
+on:
+  workflow_dispatch:
+  push:
+#    paths:
+#      - '.github/workflows/repack-and-release.yml'
+
+#  schedule:
+#   - cron: "0 15 * * 5,2"
+jobs:
+
+  Repack_and_Release:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        package: [English, Spanish]
+    steps:
+
+    - name: checkout code for release
+      uses: actions/checkout@v1
+      
+    - name: Zip Folder
+      run: |
+        SCH=${GITHUB_SHA::7}
+        PKG=${{ matrix.package }}
+        cd $PKG
+        cd BAT
+        echo commit $SCH>commit.sys
+        echo `date`>>commit.sys
+        cd ..
+        cd ..
+        DATEE=`date '+[%Y-%m-%d]'`
+        mv $PKG HDD_ART_BATCHER-$PKG-$DATEE
+        zip -r HDD_Art_Batcher\[$SCH\] HDD_ART_BATCHER-$PKG-*/*
+        ls -R
+    - name: Upload artifacts
+      if: ${{ success() }}
+      uses: actions/upload-artifact@v2
+      with:
+        name:  ${{ matrix.package }}
+        path: |
+             HDD_Art_Batcher*.zip
+    - name: Create release
+      if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        automatic_release_tag: ${{ matrix.package }}
+        title:  " HDD Art Batcher ${{ matrix.package }}"
+        files: |
+                HDD_Art_Batcher*.zip
