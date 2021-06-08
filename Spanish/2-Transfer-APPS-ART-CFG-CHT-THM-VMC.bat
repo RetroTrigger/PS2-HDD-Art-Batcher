@@ -10,7 +10,7 @@ REM  --> Check for permissions
 
 if '%errorlevel%' NEQ '0' (
 "%~dp0BAT\Diagbox.EXE" gd 0e
-    echo Requesting Administrative Privileges...
+    echo Solicitando privilegios de administrador...
 "%~dp0BAT\Diagbox.EXE" gd 07
 	goto UACPrompt
 ) else ( goto gotAdmin )
@@ -38,77 +38,77 @@ setlocal EnableExtensions
 "%~dp0BAT\Diagbox.EXE" gd 08
 echo\
 echo\
-echo Checking Batch Dependencies...
+echo Checkeando dependencias del script...
 echo ----------------------------------------------------
 
 IF NOT EXIST %~dp0BAT\busybox.exe (
 	set @dep_bbx=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "busybox.exe" Missing
+	echo DEP "busybox.exe" Faltante
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @dep_bbx=good
-	echo DEP "busybox.exe" Confirmed
+	echo DEP "busybox.exe" Encontrado
 	)
 
 IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
 	set @dep_hdl=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "hdl_dump_093.exe" Missing
+	echo DEP "hdl_dump_093.exe" Faltante
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" Confirmed
+	echo DEP "hdl_dump_093.exe" Encontrado
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	set @dep_pfs=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "pfsshell.exe" Missing
+	echo DEP "pfsshell.exe" Faltante
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @dep_pfs=good
-	echo DEP "pfsshell.exe" Confirmed
+	echo DEP "pfsshell.exe" Encontrado
 	)
 
 IF NOT EXIST %~dp0BAT\libapa.dll (
 	set @pfs_lib1=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libapa.dll" Missing
+	echo DEP "libapa.dll" Faltante
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib1=good
-	echo DEP "libapa.dll" Confirmed
+	echo DEP "libapa.dll" Encontrado
 	)
 
 IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
 	set @pfs_lib2=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libfakeps2sdk.dll" Missing
+	echo DEP "libfakeps2sdk.dll" Faltante
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib2=good
-	echo DEP "libfakeps2sdk.dll" Confirmed
+	echo DEP "libfakeps2sdk.dll" Encontrado
 	)
 
 IF NOT EXIST %~dp0BAT\libiomanX.dll (
 	set @pfs_lib3=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libiomanX.dll" Missing
+	echo DEP "libiomanX.dll" Faltante
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib3=good
-	echo DEP "libiomanX.dll" Confirmed
+	echo DEP "libiomanX.dll" Encontrado
 	)
 
 IF NOT EXIST %~dp0BAT\libpfs.dll (
 	set @pfs_lib4=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libpfs.dll" Missing
+	echo DEP "libpfs.dll" Faltante
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib4=good
-	echo DEP "libpfs.dll" Confirmed
+	echo DEP "libpfs.dll" Encontrado
 	)
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
@@ -128,15 +128,15 @@ cls
 mkdir %~dp0TMP >nul 2>&1
 echo\
 echo\
-echo Scanning for Playstation 2 HDDs:
+echo Buscando HDDs de Playstation 2:
 echo ----------------------------------------------------
 "%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
-		echo         Playstation 2 HDD Not Detected
-		echo         Drive Must Be Formatted First
+		echo         No se detectaron HDDs en formato PS2
+		echo         Revisa la unidad
 		echo\
 		echo\
 		rmdir /Q/S %~dp0TMP
@@ -146,17 +146,17 @@ IF "!@hdl_path!"=="" (
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
-echo Transfer Applications:
+echo Transferir Applicaciones:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) Si
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) No
 "%~dp0BAT\Diagbox.EXE" gd 0e
-echo		3) convert apps into title.cfg format before install
+echo		3) convertir apps a formato title.cfg antes de transferir (se verán en OPL automaticamente)
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
-CHOICE /C 123 /M "Select Option:"
+CHOICE /C 123 /M "Seleccione:"
 
 IF ERRORLEVEL 1 set @pfs_apps=yes
 IF ERRORLEVEL 2 set @pfs_apps=no
@@ -166,15 +166,15 @@ IF ERRORLEVEL 3 set @pfs_apps=yes & call make_title_cfg.BAT
 
 echo\
 echo\
-echo Transfer Artwork:
+echo Transferir Caratulas:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) Si
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) No
 echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
-CHOICE /C 12 /M "Select Option:"
+CHOICE /C 12 /M "Seleccione:"
 
 IF ERRORLEVEL 1 set @pfs_art=yes
 IF ERRORLEVEL 2 set @pfs_art=no
@@ -183,15 +183,15 @@ IF ERRORLEVEL 2 set @pfs_art=no
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
-echo Transfer Configs:
+echo Transferir Configuraciones de juegos:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) Si
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) No
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
-CHOICE /C 12 /M "Select Option:"
+CHOICE /C 12 /M "Seleccione:"
 
 IF ERRORLEVEL 1 set @pfs_cfg=yes
 IF ERRORLEVEL 2 set @pfs_cfg=no
@@ -200,40 +200,40 @@ IF ERRORLEVEL 2 set @pfs_cfg=no
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
-echo Transfer Cheats:
+echo Transferir Trucos (CHT):
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) Si
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) No
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
-CHOICE /C 12 /M "Select Option:"
+CHOICE /C 12 /M "Seleccione:"
 
 IF ERRORLEVEL 1 set @pfs_cht=yes
 IF ERRORLEVEL 2 set @pfs_cht=no
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
-echo Transfer VMCs:
+echo Transferir VMCs:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) Si
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) No
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
-CHOICE /C 12 /M "Select Option:"
+CHOICE /C 12 /M "Seleccione:"
 
 IF ERRORLEVEL 1 set @pfs_vmc=yes
 IF ERRORLEVEL 2 set @pfs_vmc=no
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
-echo Transfer Themes:
+echo Transferir Temas:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) Si
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) No
 "%~dp0BAT\Diagbox.EXE" gd 07
@@ -246,7 +246,7 @@ IF ERRORLEVEL 2 set @pfs_thm=no
 
 	echo\
 	echo\
-	echo Estimating File Size:
+	echo Tamano estimado de archivos:
 	echo ----------------------------------------------------
 
 REM APPS INFO
@@ -260,8 +260,8 @@ IF %@pfs_apps%==yes (
 	set /P @apps_file=<%~dp0TMP\appsfiles.txt
 	set /P @apps_size=<%~dp0TMP\appssizeMB.txt
 	del %~dp0TMP\appsfiles.txt %~dp0TMP\appssize.txt %~dp0TMP\appssizeMB.txt >nul 2>&1
-	echo         APPS - Files: !@apps_file! Size: !@apps_size! Mb
-	) else ( echo         APPS - Source Not Detected... )
+	echo         APPS - Archivos: !@apps_file! Tamano: !@apps_size! Mb
+	) else ( echo         APPS - esta vacia... )
 )
 
 REM ART INFO
@@ -275,8 +275,8 @@ IF /I EXIST %~dp0ART\*.* (
 	set /P @art_file=<%~dp0TMP\artfiles.txt
 	set /P @art_size=<%~dp0TMP\artsizeMB.txt
 	del %~dp0TMP\artfiles.txt %~dp0TMP\artsize.txt %~dp0TMP\artsizeMB.txt >nul 2>&1
-	echo         ART - Files: !@art_file! Size: !@art_size! Mb
-	) else ( echo         ART - Source Not Detected... )
+	echo         ART - Archivos: !@art_file! Tamano: !@art_size! Mb
+	) else ( echo         ART - Esta vacia... )
 )
 
 REM CFG INFO
@@ -290,8 +290,8 @@ IF %@pfs_cfg%==yes (
 	set /P @cfg_file=<%~dp0TMP\cfgfiles.txt
 	set /P @cfg_size=<%~dp0TMP\cfgsizeMB.txt
 	del %~dp0TMP\cfgfiles.txt %~dp0TMP\cfgsize.txt %~dp0TMP\cfgsizeMB.txt >nul 2>&1
-	echo         CFG - Files: !@cfg_file! Size: !@cfg_size! Mb
-	) else ( echo         CFG - Source Not Detected... )
+	echo         CFG - Archivos: !@cfg_file! Tamano: !@cfg_size! Mb
+	) else ( echo         CFG - No se detectan archivos .cfg ... )
 )
 
 REM CHT INFO
@@ -305,8 +305,8 @@ IF %@pfs_cht%==yes (
 	set /P @cht_file=<%~dp0TMP\chtfiles.txt
 	set /P @cht_size=<%~dp0TMP\chtsizeMB.txt
 	del %~dp0TMP\chtfiles.txt %~dp0TMP\chtsize.txt %~dp0TMP\chtsizeMB.txt >nul 2>&1
-	echo         CHT - Files: !@cht_file! Size: !@cht_size! Mb
-	) else ( echo         CHT - Source Not Detected... )
+	echo         CHT - Archivos: !@cht_file! Tamano: !@cht_size! Mb
+	) else ( echo         CHT - Esta vacio... )
 )
 
 REM VMC INFO
@@ -320,8 +320,8 @@ IF /I EXIST %~dp0VMC\*.bin (
 	set /P @vmc_file=<%~dp0TMP\vmcfiles.txt
 	set /P @vmc_size=<%~dp0TMP\vmcsizeMB.txt
 	del %~dp0TMP\vmcfiles.txt %~dp0TMP\vmcsize.txt %~dp0TMP\vmcsizeMB.txt >nul 2>&1
-	echo         VMC - Files: !@vmc_file! Size: !@vmc_size! Mb
-	) else ( echo         VMC - Source Not Detected... )
+	echo         VMC - Archivos: !@vmc_file! Tamano: !@vmc_size! Mb
+	) else ( echo         VMC - No se detectan archivos .bin... )
 )
 
 REM THM INFO
@@ -335,8 +335,8 @@ IF %@pfs_thm%==yes (
 	set /P @thm_file=<%~dp0TMP\thmfiles.txt
 	set /P @thm_size=<%~dp0TMP\thmsizeMB.txt
 	del %~dp0TMP\thmfiles.txt %~dp0TMP\thmsize.txt %~dp0TMP\thmsizeMB.txt >nul 2>&1
-	echo         THM - Files: !@thm_file! Size: !@thm_size! Mb
-	) else ( echo         THM - Source Not Detected... )
+	echo         THM - Archivos: !@thm_file! Tamano: !@thm_size! Mb
+	) else ( echo         THM - Esta vacia... )
 )
 
 REM TOTAL INFO
@@ -348,7 +348,7 @@ echo         TTL - Files: !@ttl_file! Size: !@ttl_size! Mb
 
 echo\
 echo\
-echo Detecting +OPL Partition:
+echo Detectando particion +OPL
 echo ----------------------------------------------------
 
 
@@ -362,13 +362,13 @@ echo ----------------------------------------------------
 
 	IF "!@hdd_avl!"=="+OPL" (
 	"%~dp0BAT\Diagbox.EXE" gd 0a
-		echo         +OPL - Partition Detected
+		echo         +OPL - Particion Detectada
 		"%~dp0BAT\Diagbox.EXE" gd 07
 		) else (
 		"%~dp0BAT\Diagbox.EXE" gd 0c
-		echo         +OPL - Partition NOT Detected
+		echo         +OPL - Particion NO Detectada
 		"%~dp0BAT\Diagbox.EXE" gd 07
-		echo         Partition Must Be Formatted First
+		echo         la particion debe estar en formato PFS
 		echo\
 		echo\
 		rmdir /Q/S %~dp0TMP >nul 2>&1
@@ -388,13 +388,13 @@ IF %@pfs_apps%==yes (
 
 echo\
 echo\
-echo Installing Applications:
+echo Instalando Applicaciones:
 echo ----------------------------------------------------
 echo\
 
 IF /I EXIST %~dp0APPS\* (
 	cd %~dp0APPS
-	echo         Creating Que
+	echo         Creando lista de Archivos
 
 	REM MOUNT OPL
 
@@ -448,10 +448,10 @@ IF /I EXIST %~dp0APPS\* (
 	echo umount >> %~dp0TMP\pfs-apps.txt
 	echo exit >> %~dp0TMP\pfs-apps.txt
 
-	echo         Installing Que
+	echo         Instalando archivos
 	type %~dp0TMP\pfs-apps.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-apps.txt >nul 2>&1
-	echo         Creating Log
+	echo         Creando Log
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
 	echo mount +OPL >> %~dp0TMP\pfs-log.txt
 	echo cd APPS >> %~dp0TMP\pfs-log.txt
@@ -462,9 +462,9 @@ IF /I EXIST %~dp0APPS\* (
 	mkdir %~dp0LOG >nul 2>&1
 	"%~dp0BAT\busybox" grep -e "apps_" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-APPS.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
-	echo         APPS Completed...	
+	echo         APPS Completado...	
 	cd %~dp0
-	) else ( echo         APPS - Source Not Detected... )
+	) else ( echo         APPS - está vacio... )
 )
 
 
@@ -474,13 +474,13 @@ IF %@pfs_art%==yes (
 
 echo\
 echo\
-echo Installing Artwork:
+echo Installando Caratulas:
 echo ----------------------------------------------------
 echo\
 
 IF /I EXIST %~dp0ART\*.* (
 	cd %~dp0ART
-	echo         Creating Que
+	echo         Creando Lista
 	echo device !@hdl_path! > %~dp0TMP\pfs-art.txt
 	echo mount +OPL >> %~dp0TMP\pfs-art.txt
 	echo mkdir ART >> %~dp0TMP\pfs-art.txt
@@ -488,10 +488,10 @@ IF /I EXIST %~dp0ART\*.* (
 	for %%f in (*) do (echo put "%%f") >> %~dp0TMP\pfs-art.txt
 	echo umount >> %~dp0TMP\pfs-art.txt
 	echo exit >> %~dp0TMP\pfs-art.txt
-	echo         Installing Que
+	echo         Instalando caratulas
 	type %~dp0TMP\pfs-art.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-art.txt >nul 2>&1
-	echo         Creating Log
+	echo         Creando Log
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
 	echo mount +OPL >> %~dp0TMP\pfs-log.txt
 	echo cd ART >> %~dp0TMP\pfs-log.txt
@@ -502,9 +502,9 @@ IF /I EXIST %~dp0ART\*.* (
 	mkdir %~dp0LOG >nul 2>&1
 	"%~dp0BAT\busybox" grep -e ".png" -e ".jpg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-ART.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
-	echo         ART Completed...	
+	echo         ART Completado...	
 	cd %~dp0
-	) else ( echo         ART - Source Not Detected... )
+	) else ( echo         ART - esta vacia... )
 )
 
 
@@ -514,13 +514,13 @@ IF %@pfs_cfg%==yes (
 
 echo\
 echo\
-echo Installing Configs:
+echo Instalando Configuraciones:
 echo ----------------------------------------------------
 echo\
 
 IF /I EXIST %~dp0CFG\*.* (
 	cd %~dp0CFG
-	echo         Creating Que
+	echo         Creando lista
 	echo device !@hdl_path! > %~dp0TMP\pfs-cfg.txt
 	echo mount +OPL >> %~dp0TMP\pfs-cfg.txt
 	echo mkdir CFG >> %~dp0TMP\pfs-cfg.txt
@@ -528,10 +528,10 @@ IF /I EXIST %~dp0CFG\*.* (
 	for %%f in (*.cfg) do (echo put "%%f") >> %~dp0TMP\pfs-cfg.txt
 	echo umount >> %~dp0TMP\pfs-cfg.txt
 	echo exit >> %~dp0TMP\pfs-cfg.txt
-	echo         Installing Que
+	echo         Instalando Configuraciones
 	type %~dp0TMP\pfs-cfg.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-cfg.txt >nul 2>&1
-	echo         Creating Log
+	echo         Creando Log
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
 	echo mount +OPL >> %~dp0TMP\pfs-log.txt
 	echo cd CFG >> %~dp0TMP\pfs-log.txt
@@ -542,9 +542,9 @@ IF /I EXIST %~dp0CFG\*.* (
 	mkdir %~dp0LOG >nul 2>&1
 	"%~dp0BAT\busybox" grep -e ".cfg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CFG.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
-	echo         CFG Completed...	
+	echo         CFG Completado...	
 	cd %~dp0
-	) else ( echo         CFG - Source Not Detected... )
+	) else ( echo         CFG - esta vacia... )
 )
 
 REM OPL CHEATS
@@ -553,13 +553,13 @@ IF %@pfs_cht%==yes (
 
 echo\
 echo\
-echo Installing Cheats:
+echo Instalando Cheats:
 echo ----------------------------------------------------
 echo\
 
 IF /I EXIST %~dp0CHT\*.* (
 	cd %~dp0CHT
-	echo         Creating Que
+	echo         Creando lista
 	echo device !@hdl_path! > %~dp0TMP\pfs-cht.txt
 	echo mount +OPL >> %~dp0TMP\pfs-cht.txt
 	echo mkdir CHT >> %~dp0TMP\pfs-cht.txt
@@ -567,10 +567,10 @@ IF /I EXIST %~dp0CHT\*.* (
 	for %%f in (*.cht) do (echo put "%%f") >> %~dp0TMP\pfs-cht.txt
 	echo umount >> %~dp0TMP\pfs-cht.txt
 	echo exit >> %~dp0TMP\pfs-cht.txt
-	echo         Installing Que
+	echo         Instalando cheats
 	type %~dp0TMP\pfs-cht.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-cht.txt >nul 2>&1
-	echo         Creating Log
+	echo         Creando Log
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
 	echo mount +OPL >> %~dp0TMP\pfs-log.txt
 	echo cd CHT >> %~dp0TMP\pfs-log.txt
@@ -581,9 +581,9 @@ IF /I EXIST %~dp0CHT\*.* (
 	mkdir %~dp0LOG >nul 2>&1
 	"%~dp0BAT\busybox" grep -e ".cht" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CHT.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
-	echo         CHT Completed...	
+	echo         CHT Completado...	
 	cd %~dp0
-	) else ( echo         CHT - Source Not Detected... )
+	) else ( echo         CHT - esta vacio... )
 )
 
 
@@ -593,13 +593,13 @@ IF %@pfs_vmc%==yes (
 
 echo\
 echo\
-echo Installing VirtualMC:
+echo Instalando VMC:
 echo ----------------------------------------------------
 echo\
 
 IF /I EXIST %~dp0VMC\*.* (
 	cd %~dp0VMC
-	echo         Creating Que
+	echo         Creando lista
 	echo device !@hdl_path! > %~dp0TMP\pfs-vmc.txt
 	echo mount +OPL >> %~dp0TMP\pfs-vmc.txt
 	echo mkdir VMC >> %~dp0TMP\pfs-vmc.txt
@@ -607,10 +607,10 @@ IF /I EXIST %~dp0VMC\*.* (
 	for %%f in (*.bin) do (echo put "%%f") >> %~dp0TMP\pfs-vmc.txt
 	echo umount >> %~dp0TMP\pfs-vmc.txt
 	echo exit >> %~dp0TMP\pfs-vmc.txt
-	echo         Installing Que
+	echo         Instalando Lista
 	type %~dp0TMP\pfs-vmc.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-vmc.txt >nul 2>&1
-	echo         Creating Log
+	echo         Creando Log
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
 	echo mount +OPL >> %~dp0TMP\pfs-log.txt
 	echo cd VMC >> %~dp0TMP\pfs-log.txt
@@ -621,9 +621,9 @@ IF /I EXIST %~dp0VMC\*.* (
 	mkdir %~dp0LOG >nul 2>&1
 	"%~dp0BAT\busybox" grep -e ".bin" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-VMC.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
-	echo         VMC Completed...	
+	echo         VMC Completadod...	
 	cd %~dp0
-	) else ( echo         VMC - Source Not Detected... )
+	) else ( echo         VMC - Esta vacio... )
 )
 
 
@@ -633,13 +633,13 @@ IF %@pfs_thm%==yes (
 
 echo\
 echo\
-echo Installing Themes:
+echo instalando Themes:
 echo ----------------------------------------------------
 echo\
 
 IF /I EXIST %~dp0THM\* (
 	cd %~dp0THM
-	echo         Creating Que
+	echo         Creando Lista
 
 	REM MOUNT OPL
 
@@ -693,10 +693,10 @@ IF /I EXIST %~dp0THM\* (
 	echo umount >> %~dp0TMP\pfs-thm.txt
 	echo exit >> %~dp0TMP\pfs-thm.txt
 
-	echo         Installing Que
+	echo         instalando Temas
 	type %~dp0TMP\pfs-thm.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-thm.txt >nul 2>&1
-	echo         Creating Log
+	echo         Creando Log
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
 	echo mount +OPL >> %~dp0TMP\pfs-log.txt
 	echo cd THM >> %~dp0TMP\pfs-log.txt
@@ -707,9 +707,9 @@ IF /I EXIST %~dp0THM\* (
 	mkdir %~dp0LOG >nul 2>&1
 	"%~dp0BAT\busybox" grep -e "thm_" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-THM.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
-	echo         THM Completed...	
+	echo         THM Completado...	
 	cd %~dp0
-	) else ( echo         THM - Source Not Detected... )
+	) else ( echo         THM - esta vacio... )
 )
 
 rmdir /Q/S %~dp0TMP >nul 2>&1
@@ -718,7 +718,7 @@ del info.sys >nul 2>&1
 echo\
 echo\
 echo ----------------------------------------------------
-echo Installations Completed...
+echo Instalacion Completada...
 echo\
 echo\
 
