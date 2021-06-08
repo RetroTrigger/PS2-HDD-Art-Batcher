@@ -123,6 +123,13 @@ IF %@pfs_lib3%==fail ( cmd /k )
 IF %@pfs_lib4%==fail ( cmd /k )
 
 
+IF NOT EXIST APPS\ MD APPS
+IF NOT EXIST ART\ MD ART
+IF NOT EXIST CHT\ MD CHT
+IF NOT EXIST CFG\ MD CFG
+IF NOT EXIST VMC\ MD VMC
+IF NOT EXIST THM\ MD THM
+
 cls
 
 mkdir %~dp0TMP >nul 2>&1
