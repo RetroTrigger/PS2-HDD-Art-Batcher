@@ -160,7 +160,7 @@ echo         1) Si
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) No
 "%~dp0BAT\Diagbox.EXE" gd 0e
-echo		3) convertir apps a formato title.cfg antes de transferir (se verán en OPL automaticamente)
+echo		3) convertir apps a formato title.cfg antes de transferir (se veran en OPL automaticamente)
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 123 /M "Seleccione:"
