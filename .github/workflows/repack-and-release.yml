@@ -46,6 +46,6 @@ jobs:
       with:
         repo_token: "${{ secrets.GITHUB_TOKEN }}"
         automatic_release_tag: ${{ matrix.package }}
-        title:  " HDLAB ${{ matrix.package }}"
+        title:  " HDD Art Batcher ${{ matrix.package }}"
         files: |
                 HDD_Art_Batcher*.zip
