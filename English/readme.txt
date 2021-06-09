@@ -129,7 +129,7 @@ NOTE: You must always select the number 3 to select the hdd4 or hdd5 hard drive 
 ======================================================================================================= 
 [ CREDIT ]
 
-These scripts are not mine (GDX) I just have them look and modify to add some functionality like
+These scripts are not mine (GDX) I just have them modify and combine to add features like
 - More ID in gameid.txt (+ some translation for French games)
 - The possibility of adding the Cheats (CHT) in the +OPL partition
 - The possibility of adding the Applications (APPS) in the +OPL partition
