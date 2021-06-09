@@ -1,4 +1,4 @@
-name: Release HDL Batch Installer
+name: Release PS2-HDD-Art-Batcher
 on:
   workflow_dispatch:
   push:
