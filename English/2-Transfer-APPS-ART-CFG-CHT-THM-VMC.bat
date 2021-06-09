@@ -412,7 +412,7 @@ IF /I EXIST %~dp0APPS\* (
 	echo mkdir APPS >> %~dp0TMP\pfs-apps.txt
 	echo cd APPS >> %~dp0TMP\pfs-apps.txt
 	
-        REM APPS FILES (OPL\APPS\APP\files.xxx)
+    REM APPS FILES (OPL\APPS\APP\files.xxx)
 
  	for %%e in (*) do (echo put "%%e") >> %~dp0TMP\pfs-apps.txt
 
@@ -440,7 +440,7 @@ IF /I EXIST %~dp0APPS\* (
 
 	for %%l in (*) do (echo put "%%l") >> %~dp0TMP\pfs-apps.txt
 	
-	 REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR)
+	REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR)
 
 	for /D %%z in (*) do (
 	echo mkdir "%%~nz" >> %~dp0TMP\pfs-apps.txt
@@ -452,17 +452,29 @@ IF /I EXIST %~dp0APPS\* (
 	
 	for %%k in (*) do (echo put "%%k") >> %~dp0TMP\pfs-apps.txt
 	
-        REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR)
+        REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR)
 
-	for /D %%w in (*) do (
-	echo mkdir "%%~nw" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~nw" >> %~dp0TMP\pfs-apps.txt
-	echo cd "%%~nw" >> %~dp0TMP\pfs-apps.txt
-	cd "%%~nw"
+	for /D %%v in (*) do (
+	echo mkdir "%%~nv" >> %~dp0TMP\pfs-apps.txt
+	echo lcd "%%~nv" >> %~dp0TMP\pfs-apps.txt
+	echo cd "%%~nv" >> %~dp0TMP\pfs-apps.txt
+	cd "%%~nv"
 	
 	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\files.xxx)
 	
-	for %%j in (*) do (echo put "%%j") >> %~dp0TMP\pfs-apps.txt
+	for %%h in (*) do (echo put "%%h") >> %~dp0TMP\pfs-apps.txt
+	
+	REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\)
+
+	for /D %%u in (*) do (
+	echo mkdir "%%~nu" >> %~dp0TMP\pfs-apps.txt
+	echo lcd "%%~nu" >> %~dp0TMP\pfs-apps.txt
+	echo cd "%%~nu" >> %~dp0TMP\pfs-apps.txt
+	cd "%%~nu"
+	
+	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\files.xxx)
+	
+	for %%g in (*) do (echo put "%%g") >> %~dp0TMP\pfs-apps.txt
 
 	REM EXIT SUBDIR
 
@@ -483,6 +495,12 @@ IF /I EXIST %~dp0APPS\* (
  	cd ..
 	
 	)
+	
+	echo lcd .. >> %~dp0TMP\pfs-apps.txt
+	echo cd .. >> %~dp0TMP\pfs-apps.txt
+ 	cd ..
+
+       )
 	
 	echo lcd .. >> %~dp0TMP\pfs-apps.txt
 	echo cd .. >> %~dp0TMP\pfs-apps.txt
