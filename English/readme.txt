@@ -29,6 +29,8 @@ Speeds Installation: PS2 HDD via ethernet				             5MB/s
 
 The first thing to do is to cleanly formatted your hard drive with the latest version of wLaunchELF.
 https://github.com/ps2homebrew/wLaunchELF/releases/tag/latest
+(I recommend to download the version of wLaunchELF from krHACKen because it allows to launch the .VCD)
+https://cdn.discordapp.com/attachments/652863740370485258/742327866854998116/wLE_kHn_20200810.7z
 
 At the same time Download the latest version of OPL
 https://github.com/ps2homebrew/Open-PS2-Loader/releases/tag/latest
