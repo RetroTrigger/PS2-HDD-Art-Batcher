@@ -54,7 +54,7 @@ A window opens, Create the partitions with the following name
 Choose a partition size that will suit your needs. example: 512Mb
 (In this score you will find your APPS, ART, CFG, CHT, THM, VMC. So it's up to you to put a size that will suit your needs)
 
-(Optional if you don't want to install games from PS1 Do not create the __.POPS partition)
+(Optional if you don't want to install games PS1 Do not create the __.POPS partition)
 __.POPS
 Choose a partition size that will suit your needs. example: 20096Mb = (20Gb)
 (More info about POPStarter) = https://bitbucket.org/ShaolinAssassin/popstarter-documentation-stuff/wiki/Home
