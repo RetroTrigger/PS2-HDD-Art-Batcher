@@ -1,17 +1,12 @@
 @echo off
 cd APPS
-set BatchDir=%CD%
-:QUICKMODE
-FOR %%x in (%*) do (
-move %%x %BatchDir%
-)
 ::
 echo title.cfg maker by matias israelson
 set q=echo ------------------------------------------------------------------------------------------------------------------------
 set w=echo ========================================================================================================================
 :GET_ELF
 echo checking for ELF files...
-dir /b /o:n *.ELF >ISR.ETL
+dir /b /o:n *.ELF >ISR.ETL 2>nul || echo no ELF Files found
 set dea=true
 for /f "delims=" %%a in (ISR.ETL) do (
 ::timeout /t 2 >nul

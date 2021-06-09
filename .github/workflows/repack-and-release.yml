@@ -23,14 +23,19 @@ jobs:
       run: |
         SCH=${GITHUB_SHA::7}
         PKG=${{ matrix.package }}
-        cd $PKG
+        
+        cd HDD_ART_Batcher
         cd BAT
         echo commit $SCH>commit.sys
         echo `date`>>commit.sys
+        rm -f LANG2.BAT
+        cd LANGUAGES
+        cp $PKG.BAT ../LANG2.BAT
+        cd ..
         cd ..
         cd ..
         DATEE=`date '+[%Y-%m-%d]'`
-        mv $PKG HDD_ART_BATCHER-$PKG-$DATEE
+        mv HDD_ART_Batcher HDD_ART_BATCHER-$PKG-$DATEE
         zip -r HDD_Art_Batcher\[$SCH\] HDD_ART_BATCHER-$PKG-*/*
         ls -R
     - name: Upload artifacts
