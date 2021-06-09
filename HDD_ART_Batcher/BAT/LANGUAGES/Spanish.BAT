@@ -34,10 +34,10 @@ set CHT_EMPTY=No hay archivos .CHT dentro...
 set VMC_EMPTY=No hay archivos .BIN dentro...
 
 set VMC_SIZE_ASK=Elegir tamano
-set VMC_NAME_ASK=Escribir nombre VMC (sin extension)...
+set VMC_NAME_ASK=Escribir nombre VMC sin extension
 
 
-set SEARCHING_OPLPART=Detectando Particion:
+set SEARCHING_OPLPART=Detectando Particion
 set DETECTED_OPLPART=Particion Detectada
 set MISSING_OPLPART=Particion NO Detectada
 
