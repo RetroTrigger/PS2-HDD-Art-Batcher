@@ -131,6 +131,8 @@ if "%TEST%"=="NO" (
 	)
 )
 
+copy "BAT\DB\gameidENG.txt" "%~dp0"
+ren gameidENG.txt gameid.txt
 cls
 echo Choice language Game title
 echo.
