@@ -131,7 +131,40 @@ if "%TEST%"=="NO" (
 	)
 )
 
+cls
+echo Choice language Game title
+echo.
+echo 1 English
+echo 2 French
+echo 3 Spanish
+echo.
+choice /c:123
+if errorlevel 3 goto spanish
+if errorlevel 2 goto french
+if errorlevel 1 goto english
+:english
+del gameid.txt
+copy "BAT\DB\gameidENG.txt" "%~dp0"
+cls
+ren gameidENG.txt gameid.txt
+echo English Language selected !
+goto Fin
+:french
+del gameid.txt
+copy "BAT\DB\gameidFRA.txt" "%~dp0"
+cls
+ren gameidFRA.txt gameid.txt
+echo French Language selected !
+goto Fin
+:spanish
+del gameid.txt
+copy "BAT\DB\gameidSPA.txt" "%~dp0"
+cls
+ren gameidSPA.txt gameid.txt
+echo Spanish Language selected !
+goto Fin
 
+:Fin
 set usedb=no
 if exist gameid.txt (
 	echo.
