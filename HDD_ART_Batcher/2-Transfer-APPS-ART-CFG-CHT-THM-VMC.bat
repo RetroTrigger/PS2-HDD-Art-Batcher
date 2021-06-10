@@ -156,10 +156,12 @@ IF NOT EXIST THM\  MD THM
 cls
 
 mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
 echo %HDD_SCAN%
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 08
 "%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
@@ -263,7 +265,9 @@ IF ERRORLEVEL 1 set @pfs_vmc=yes
 IF ERRORLEVEL 2 set @pfs_vmc=no
 IF ERRORLEVEL 3 (
 	echo %VMC_NAME_ASK%
-	set /p VMC_NAME=
+	SET /p VMC_NAM=
+	echo .
+	echo .
 	echo 			%VMC_SIZE_ASK%
 	echo -------------------------
 	echo         	1\ 8  Mb
@@ -273,9 +277,9 @@ IF ERRORLEVEL 3 (
 	IF ERRORLEVEL 1 set VMC_SIZE=8
 	IF ERRORLEVEL 2 set VMC_SIZE=16
 	IF ERRORLEVEL 3 set VMC_SIZE=32
-	cd /d %~dp0VMC\
-	..\BAT\genvmc.exe %VMC_SIZE% %VMC_NAME%.bin
-	cd /d %~dp0
+	cd %~dp0\VMC
+	..\BAT\genvmc.exe !VMC_SIZE! !VMC_NAM!.bin
+	cd %~dp0
 	set @pfs_vmc=yes
 )
 "%~dp0BAT\Diagbox.EXE" gd 0f
@@ -439,7 +443,7 @@ IF %@pfs_apps%==yes (
 
 echo\
 echo\
-echo Installing Applications:
+echo %INSTALLING% %Applications%
 echo ----------------------------------------------------
 echo\
 
@@ -450,95 +454,76 @@ IF /I EXIST %~dp0APPS\* (
 	REM MOUNT OPL
 
 	echo device !@hdl_path! > %~dp0TMP\pfs-apps.txt
-	echo mount +OPL >> %~dp0TMP\pfs-apps.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-apps.txt
 
 	REM PARENT DIR (OPL\APPS)
 
 	echo mkdir APPS >> %~dp0TMP\pfs-apps.txt
 	echo cd APPS >> %~dp0TMP\pfs-apps.txt
 	
-        REM APPS FILES (OPL\APPS\files.xxx)
- 	for %%0 in (*) do (echo put "%%0") >> %~dp0TMP\pfs-apps.txt
+    REM APPS FILES (OPL\APPS\APP\files.xxx)
+
+ 	for %%e in (*) do (echo put "%%e") >> %~dp0TMP\pfs-apps.txt
 
 	REM APPS DIR (OPL\APPS\APP)
-	for /D %%a in (*) do (
-	echo mkdir "%%~na" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~na" >> %~dp0TMP\pfs-apps.txt
- 	echo cd "%%~na" >> %~dp0TMP\pfs-apps.txt
- 	cd "%%~na"
+
+	for /D %%x in (*) do (
+	echo mkdir "%%~nx" >> %~dp0TMP\pfs-apps.txt
+	echo lcd "%%~nx" >> %~dp0TMP\pfs-apps.txt
+ 	echo cd "%%~nx" >> %~dp0TMP\pfs-apps.txt
+ 	cd "%%~nx"
 
 	REM APPS FILES (OPL\APPS\APP\files.xxx)
- 	for %%1 in (*) do (echo put "%%1") >> %~dp0TMP\pfs-apps.txt
+
+ 	for %%f in (*) do (echo put "%%f") >> %~dp0TMP\pfs-apps.txt
 
 	REM APPS SUBDIR (OPL\APPS\APP\SUBDIR)
-	for /D %%b in (*) do (
-	echo mkdir "%%~nb" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~nb" >> %~dp0TMP\pfs-apps.txt
-	echo cd "%%~nb" >> %~dp0TMP\pfs-apps.txt
-	cd "%%~nb"
+
+	for /D %%y in (*) do (
+	echo mkdir "%%~ny" >> %~dp0TMP\pfs-apps.txt
+	echo lcd "%%~ny" >> %~dp0TMP\pfs-apps.txt
+	echo cd "%%~ny" >> %~dp0TMP\pfs-apps.txt
+	cd "%%~ny"
 
 	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\files.xxx)
-	for %%2 in (*) do (echo put "%%2") >> %~dp0TMP\pfs-apps.txt
+
+	for %%l in (*) do (echo put "%%l") >> %~dp0TMP\pfs-apps.txt
 	
 	REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR)
-	for /D %%c in (*) do (
-	echo mkdir "%%~nc" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~nc" >> %~dp0TMP\pfs-apps.txt
-	echo cd "%%~nc" >> %~dp0TMP\pfs-apps.txt
-	cd "%%~nc"
+
+	for /D %%z in (*) do (
+	echo mkdir "%%~nz" >> %~dp0TMP\pfs-apps.txt
+	echo lcd "%%~nz" >> %~dp0TMP\pfs-apps.txt
+	echo cd "%%~nz" >> %~dp0TMP\pfs-apps.txt
+	cd "%%~nz"
 	
 	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\SUBDIR\files.xxx)
-	for %%3 in (*) do (echo put "%%3") >> %~dp0TMP\pfs-apps.txt
+	
+	for %%k in (*) do (echo put "%%k") >> %~dp0TMP\pfs-apps.txt
 	
         REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR)
-	for /D %%d in (*) do (
-	echo mkdir "%%~nd" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~nd" >> %~dp0TMP\pfs-apps.txt
-	echo cd "%%~nd" >> %~dp0TMP\pfs-apps.txt
-	cd "%%~nd"
+
+	for /D %%v in (*) do (
+	echo mkdir "%%~nv" >> %~dp0TMP\pfs-apps.txt
+	echo lcd "%%~nv" >> %~dp0TMP\pfs-apps.txt
+	echo cd "%%~nv" >> %~dp0TMP\pfs-apps.txt
+	cd "%%~nv"
 	
 	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\files.xxx)
-	for %%4 in (*) do (echo put "%%4") >> %~dp0TMP\pfs-apps.txt
+	
+	for %%h in (*) do (echo put "%%h") >> %~dp0TMP\pfs-apps.txt
 	
 	REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\)
-	for /D %%e in (*) do (
-	echo mkdir "%%~ne" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~ne" >> %~dp0TMP\pfs-apps.txt
-	echo cd "%%~ne" >> %~dp0TMP\pfs-apps.txt
-	cd "%%~ne"
+
+	for /D %%u in (*) do (
+	echo mkdir "%%~nu" >> %~dp0TMP\pfs-apps.txt
+	echo lcd "%%~nu" >> %~dp0TMP\pfs-apps.txt
+	echo cd "%%~nu" >> %~dp0TMP\pfs-apps.txt
+	cd "%%~nu"
 	
 	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\files.xxx)
-	for %%5 in (*) do (echo put "%%5") >> %~dp0TMP\pfs-apps.txt
 	
-	REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\)
-	for /D %%f in (*) do (
-	echo mkdir "%%~nf" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~nf" >> %~dp0TMP\pfs-apps.txt
-	echo cd "%%~nf" >> %~dp0TMP\pfs-apps.txt
-	cd "%%~nf"
-	
-	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\files.xxx)
-	for %%6 in (*) do (echo put "%%6") >> %~dp0TMP\pfs-apps.txt
-	
-	REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR)
-	for /D %%g in (*) do (
-	echo mkdir "%%~ng" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~ng" >> %~dp0TMP\pfs-apps.txt
-	echo cd "%%~ng" >> %~dp0TMP\pfs-apps.txt
-	cd "%%~ng"
-	
-	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\files.xxx)
-	for %%7 in (*) do (echo put "%%7") >> %~dp0TMP\pfs-apps.txt
-	
-	REM APPS SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\)
-	for /D %%h in (*) do (
-	echo mkdir "%%~nh" >> %~dp0TMP\pfs-apps.txt
-	echo lcd "%%~nh" >> %~dp0TMP\pfs-apps.txt
-	echo cd "%%~nh" >> %~dp0TMP\pfs-apps.txt
-	cd "%%~nh"
-	
-	REM APPS SUBDIR FILES (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\SUBDIR\files.xxx)
-	for %%8 in (*) do (echo put "%%8") >> %~dp0TMP\pfs-apps.txt
+	for %%g in (*) do (echo put "%%g") >> %~dp0TMP\pfs-apps.txt
 
 	REM EXIT SUBDIR
 
@@ -564,25 +549,7 @@ IF /I EXIST %~dp0APPS\* (
 	echo cd .. >> %~dp0TMP\pfs-apps.txt
  	cd ..
 
-   )
-	
-	echo lcd .. >> %~dp0TMP\pfs-apps.txt
-	echo cd .. >> %~dp0TMP\pfs-apps.txt
- 	cd ..
-	
-	)
-	
-	echo lcd .. >> %~dp0TMP\pfs-apps.txt
-	echo cd .. >> %~dp0TMP\pfs-apps.txt
- 	cd ..
-	
-	)
-	
-	echo lcd .. >> %~dp0TMP\pfs-apps.txt
-	echo cd .. >> %~dp0TMP\pfs-apps.txt
- 	cd ..
-	
-	)
+       )
 	
 	echo lcd .. >> %~dp0TMP\pfs-apps.txt
 	echo cd .. >> %~dp0TMP\pfs-apps.txt
