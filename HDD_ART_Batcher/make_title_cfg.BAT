@@ -1,7 +1,9 @@
 @echo off
 cd APPS
 ::
+..\BAT\DiagBox.EXE gd 0f
 echo title.cfg maker by matias israelson
+..\BAT\DiagBox.EXE gd 07
 set q=echo ------------------------------------------------------------------------------------------------------------------------
 set w=echo ========================================================================================================================
 :GET_ELF
@@ -17,13 +19,14 @@ IF NOT EXIST "%CD%\%%~na\title.cfg" (
 																		Echo title=%%~na
 																		Echo boot=%%a
 																		)>title.cfg
+																	echo [%%a]
 																	Cd..
 																	Move "%%a" "%CD%\%%~na\%%a"
 															) ELSE (
-															..\DiagBox.EXE gd 0c
+															..\BAT\DiagBox.EXE gd 0c
 															echo error.
 															echo ya existe una aplicacion llamada [%%a]
-															..\DiagBox.EXE gd 07
+															..\BAT\DiagBox.EXE gd 07
 															)
 )
 ::LOOP###############################################################################################################
