@@ -57,4 +57,4 @@ set CREAT_LOG=Creando Log
 
 set EXTRACTING_WIDE=Extrayendo Hacks de Pantalla Panoramica...
 set EXTRACTED_WIDE=Extraidos en total:
-set INST_WIDE=Download/Install widescreen cheats
+set INST_WIDE=Instalar Hacks de Pantalla Panoramica
