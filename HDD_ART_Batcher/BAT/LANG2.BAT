@@ -54,3 +54,7 @@ set HDD_NOT_FOUND2=Make sure HDD Is well connected and formatted
 
 set COMPLETED=Completed...
 set CREAT_LOG=Creating Log
+
+set EXTRACTING_WIDE=Extracting Widescreen Hacks...
+set EXTRACTED_WIDE=recovered a total of:
+set INST_WIDE=Download/Install widescreen cheats

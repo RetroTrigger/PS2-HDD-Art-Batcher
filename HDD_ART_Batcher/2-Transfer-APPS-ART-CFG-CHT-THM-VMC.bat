@@ -240,12 +240,33 @@ echo ----------------------------------------------------
 echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo         3) %INST_WIDE%
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
-CHOICE /C 12 /M %BASIC_CHOICE%
+CHOICE /C 123 /M %BASIC_CHOICE%
 
 IF ERRORLEVEL 1 set @pfs_cht=yes
 IF ERRORLEVEL 2 set @pfs_cht=no
+IF ERRORLEVEL 3 (
+"%~dp0BAT\Diagbox.EXE" gd 0e
+	echo %EXTRACTING_WIDE%
+	timeout 2 >nul
+"%~dp0BAT\Diagbox.EXE" gd 07
+	echo %EXTRACTED_WIDE%
+"%~dp0BAT\Diagbox.EXE" gd 0f
+SETLOCAL DisableDelayedExpansion
+	7z x BAT\WIDE.ZIP *.cht -r -xr!BROKEN | findstr Files:
+  ::7z x BAT\WIDE.ZIP *.cht -r -xr!BROKEN | findstr Files:
+SETLOCAL EnableDelayedExpansion
+	echo .
+"%~dp0BAT\Diagbox.EXE" gd 07
+	echo Loading hacks
+	move %~dp0OpenPS2Loader_Widescreen_Cheats-master\*.CHT %~dp0CHT >nul
+	echo Cleaning cache
+	rmdir /Q OpenPS2Loader_Widescreen_Cheats-master
+set @pfs_cht=yes
+)
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\

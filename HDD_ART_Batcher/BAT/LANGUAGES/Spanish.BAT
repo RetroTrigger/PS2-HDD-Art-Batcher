@@ -54,3 +54,7 @@ set HDD_NOT_FOUND2=Comprobar conexion y formato del HDD
 
 set COMPLETED=Completado...
 set CREAT_LOG=Creando Log
+
+set EXTRACTING_WIDE=Extrayendo Hacks de Pantalla Panoramica...
+set EXTRACTED_WIDE=Extraidos en total:
+set INST_WIDE=Download/Install widescreen cheats
