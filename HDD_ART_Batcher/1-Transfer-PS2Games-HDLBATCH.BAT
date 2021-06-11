@@ -131,6 +131,7 @@ if "%TEST%"=="NO" (
 	)
 )
 
+del gameid.txt
 copy "BAT\DB\gameidENG.txt" "%~dp0"
 ren gameidENG.txt gameid.txt
 cls
