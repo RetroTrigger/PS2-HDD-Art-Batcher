@@ -27,42 +27,57 @@ Speeds Installation: PS2 HDD via ethernet				             5MB/s
 =======================================================================================================
 [ How to formatted hard drive cleanly ]
 
-The first thing to do is to cleanly formatted your hard drive with the latest version of wLaunchELF.
-https://github.com/ps2homebrew/wLaunchELF/releases/tag/latest
-(I recommend to download the version of wLaunchELF from krHACKen because it allows to launch the .VCD)
+The first thing to do is to cleanly formatted your hard drive with wLaunchELF 4.43a 41e4ebe, this versions is aproximately 2years old, but it is the best version for HDD Management.
+https://github.com/israpps/FreeMcBoot-Installer/raw/master/MASS/APPS/ULE-41e4ebe/ULE-41e4ebe.ELF
+
+For Popstarter users, we also reccomend you to download wLaunchELF 4.43a_khn, since it can launch PS1 games easily
 https://cdn.discordapp.com/attachments/652863740370485258/742327866854998116/wLE_kHn_20200810.7z
 
-At the same time Download the latest version of OPL
-https://github.com/ps2homebrew/Open-PS2-Loader/releases/tag/latest
+We also recommend you tu use the latest stable OPL Build
+https://github.com/ps2homebrew/Open-PS2-Loader/releases/latest
 
 Transfer everything to your USB key
 Start your PS2 then go to wLaunchELF (If your USB key is recognized correctly), go to the MASS tab (MASS corresponds to the peripherals connected to USB.)
-Then start (BOOT.ELF) which should normally be wLaunchELF that you downloaded above
+Then start wLaunchELF that you downloaded above
 
 Once in wLaunchELF go to > /MISC/HddManager
 (Why restart wLaunchELF ?. Because you downloaded a more recent version on the github which contains the last updated drivers.)
 
 Once in HddManager, do R1 to display the Menu, choose Format and confirm this choice.
-This operation may take several minutes.
+This operation may take between 30 secconds up to 3 minutes (Depending on your HDD and Network adaptor).
 During the process your PS2 activates an orange led which flashes to indicate to you that it is working with the hard disk.
 
-Once formatting is complete, (There the HDD is properly formatted) Press R1 to display the Menu, choose Create.
+Once formatting is complete you'll see that some names appeared at the right side of the screen:
+```
+__mbr
+__net
+__system
+__sysconf
+__common
+```
+__(There the HDD is properly formatted)__
+
+
+ Press __R1__ to display the Menu, choose Create.
 A window opens, Create the partitions with the following name 
 
 
-+OPL
+`+OPL`
 Choose a partition size that will suit your needs. example: 512Mb
 (In this score you will find your APPS, ART, CFG, CHT, THM, VMC. So it's up to you to put a size that will suit your needs)
+Pro tip: since partition extension is discouraged create +OPL with enough space, so you'll never need to extend it!
 
 (Optional if you don't want to install games PS1 Do not create the __.POPS partition)
-__.POPS
+`__.POPS`
 Choose a partition size that will suit your needs. example: 20096Mb = (20Gb)
 (More info about POPStarter) = https://bitbucket.org/ShaolinAssassin/popstarter-documentation-stuff/wiki/Home
 
 IMPORTANT
-Warning If you have installed FreeHDBoot "FHDB" You will have to reinstall it After formatting without turning off the console
+Warning If you have installed FreeHDBoot "FHDB" You will have to reinstall it After formatting __before turning off the console__
 If you don't have a memory card with FreeMcBoot "FMCB".
-(I recommend that you install FreeMcBoot on the memory card rather than on the hard drive because it is faster to load at startup.)
+We recomend you to use FreeMcBoot (from memory card), however, Keeping FreeHdBoot as a backup is an excellent idea (in case something happens on your mc)
+
+You can use El_isra's Custom FreeMcBoot/FreeHd Installers: https://github.com/israpps/FreeMcBoot-Installer/releases
 
 IMPORTANT
 Warning If the size of your partition is too small to copy your PS1 games, your ART, CFG, CHT, THM, VMC
@@ -72,8 +87,8 @@ Delete the affected partition (DO NOT EXPAND IT)
 Exit HddManager with the Triangle key, then turn off your PS2
 Reconnect your hard drive in PS2 format to your PC
 
-=======================================================================================================
-[ Operation & Explanation of batch ]
+
+# Operation & Explanation of batch
 
 The batch 1-Transfer-PS2Games-HDLBATCH
 Allows you to install PS2 games in .iso/.bin/.cue format which will automatically rename with the gameid of the game found in the gameid.txt
@@ -95,8 +110,8 @@ Allows you to install PS1 games in .VCD format in the __.POPS partition
 However, it does not automatically rename it, it is up to you to rename them.
 (Place the .VCD in the POPS folder)
 
-=======================================================================================================
-[ FAQ ]
+
+# FAQ 
 
 **HDD error
 * 0000045d (1117) The resquest could not be performed because of an I/O device error.
@@ -128,8 +143,8 @@ NOTE: You must always select the number 3 to select the hdd4 or hdd5 hard drive 
 * With NotePAD ++ modify the batch 3-Transfer-PS1Games-HDDPOPS.bat
 * Do " CTRL + F " Go to the "Replace" tab search for __.POPS in replace by put: __.POPS0 , or __.POPS1 etc .. press "Replace all"
 
-======================================================================================================= 
-[ CREDIT ]
+
+# CREDIT 
 
 These scripts are not mine (GDX) I just have them modify and combine to add features like
 - More ID in gameid.txt (+ some translation for French games)
