@@ -1,9 +1,11 @@
-https://github.com/israpps/PS2-HDD-Art-Batcher
+# https://github.com/israpps/PS2-HDD-Art-Batcher
 
 # NO LONGER USING WINHIIP 
 
 WinHiip has been obsolete for a long time, it does not support hard drives of 1TB and above.
 The maximum number of installable games is 255, and it formats the hard drive incorrectly
+
+As an alternative you can use The Scripts provided here or []() Instead
 
 
 # HDLBATCH 
