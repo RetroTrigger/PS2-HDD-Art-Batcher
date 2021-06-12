@@ -1,4 +1,4 @@
-# [PS2 HDD ArtnBatcher]( https://github.com/israpps/PS2-HDD-Art-Batcher )
+# [PS2 HDD Art Batcher]( https://github.com/israpps/PS2-HDD-Art-Batcher )
 
 # NO LONGER USING WINHIIP 
 
