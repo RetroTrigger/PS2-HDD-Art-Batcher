@@ -33,22 +33,26 @@ cls
 setlocal EnableDelayedExpansion
 setlocal EnableExtensions
 
-
+"%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
 echo Checking Batch Dependencies...
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 07
 
 IF NOT EXIST %~dp0BAT\busybox.exe (
 	set @dep_bbx=fail
+"%~dp0BAT\Diagbox.EXE" gd 0c
 	echo DEP "busybox.exe" Missing
 	) else ( 
 	set @dep_bbx=good
+"%~dp0BAT\Diagbox.EXE" gd 0a
 	echo DEP "busybox.exe" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
 	set @dep_hdl=fail
+"%~dp0BAT\Diagbox.EXE" gd 0c
 	echo DEP "hdl_dump_093.exe" Missing
 	) else ( 
 	set @dep_hdl=good
@@ -57,46 +61,58 @@ IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	set @dep_pfs=fail
+"%~dp0BAT\Diagbox.EXE" gd 0c
 	echo DEP "pfsshell.exe" Missing
 	) else ( 
 	set @dep_pfs=good
+"%~dp0BAT\Diagbox.EXE" gd 0a
 	echo DEP "pfsshell.exe" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\libapa.dll (
 	set @pfs_lib1=fail
+"%~dp0BAT\Diagbox.EXE" gd 0c
 	echo DEP "libapa.dll" Missing
 	) else ( 
 	set @pfs_lib1=good
+"%~dp0BAT\Diagbox.EXE" gd 0a
 	echo DEP "libapa.dll" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
 	set @pfs_lib2=fail
+"%~dp0BAT\Diagbox.EXE" gd 0c
 	echo DEP "libfakeps2sdk.dll" Missing
 	) else ( 
 	set @pfs_lib2=good
+"%~dp0BAT\Diagbox.EXE" gd 0a
 	echo DEP "libfakeps2sdk.dll" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\libiomanX.dll (
 	set @pfs_lib3=fail
+"%~dp0BAT\Diagbox.EXE" gd 0c
 	echo DEP "libiomanX.dll" Missing
 	) else ( 
 	set @pfs_lib3=good
+"%~dp0BAT\Diagbox.EXE" gd 0a
 	echo DEP "libiomanX.dll" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\libpfs.dll (
 	set @pfs_lib4=fail
+"%~dp0BAT\Diagbox.EXE" gd 0c
 	echo DEP "libpfs.dll" Missing
 	) else ( 
 	set @pfs_lib4=good
+"%~dp0BAT\Diagbox.EXE" gd 0a
 	echo DEP "libpfs.dll" Confirmed
 	)
+"%~dp0BAT\Diagbox.EXE" gd 0e
 
 echo\
 echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
 
 IF %@dep_bbx%==fail ( cmd /k )
 IF %@dep_hdl%==fail ( cmd /k )
@@ -109,41 +125,49 @@ IF %@pfs_lib4%==fail ( cmd /k )
 cls
 
 mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0e
 
 echo\
 echo\
 echo Scanning for Playstation 2 HDDs:
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 08
 "%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
+"%~dp0BAT\Diagbox.EXE" gd 0c
 		echo         Playstation 2 HDD Not Detected
 		echo         Drive Must Be Formatted First
 		echo\
 		echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		cmd /k
 		)
-
+"%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
 echo Transfer POPS:
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
 echo         1) Yes
+"%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) No
+"%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 12 /M "Select Option:"
 
 IF ERRORLEVEL 1 set @pfs_pop=yes
 IF ERRORLEVEL 2 set @pfs_pop=no
-
+"%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
 echo Estimating File Size:
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 07
 IF %@pfs_pop%==yes (
 IF /I EXIST %~dp0POPS\*.VCD (
 	dir /s /a %~dp0POPS\*.VCD | "%~dp0BAT\busybox" grep "File(s)" | "%~dp0BAT\busybox" head -1 | "%~dp0BAT\busybox" sed "s/ File(s).*//" | "%~dp0BAT\busybox" tr -d " " > %~dp0TMP\popfiles.txt
@@ -157,12 +181,12 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	) else ( echo         POPS - Source Not Detected... )
 )
 
-
+"%~dp0BAT\Diagbox.EXE" gd 0e
 echo\
 echo\
 echo Detecting POPS Partition:
 echo ----------------------------------------------------
-
+"%~dp0BAT\Diagbox.EXE" gd 07
 
 echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
 echo ls >> %~dp0TMP\pfs-prt.txt
@@ -173,12 +197,16 @@ set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
 REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
 
 IF "!@hdd_avl!"=="__.POPS" (
+"%~dp0BAT\Diagbox.EXE" gd 0a
 	echo         POPS - Partition Detected
+	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else (
+	"%~dp0BAT\Diagbox.EXE" gd 0c
 	echo         POPS - Partition NOT Detected
 	echo         Partition Must Be Formatted First
 	echo\
 	echo\
+	"%~dp0BAT\Diagbox.EXE" gd 07
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
 	cmd /k
@@ -189,13 +217,13 @@ echo\
 echo\
 pause
 cls
-
+"%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
 echo Installing POPS:
 echo ----------------------------------------------------
 echo\
-
+"%~dp0BAT\Diagbox.EXE" gd 07
 IF %@pfs_pop%==yes (
 IF /I EXIST %~dp0POPS\*.VCD (
 	cd %~dp0POPS
@@ -225,14 +253,15 @@ IF /I EXIST %~dp0POPS\*.VCD (
 
 rmdir /Q/S %~dp0TMP >nul 2>&1
 del info.sys >nul 2>&1
-
+"%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
 echo ----------------------------------------------------
 echo Installation Completed...
 echo\
 echo\
-
+"%~dp0BAT\Diagbox.EXE" gd 07
+pause
 cmd /k
 
 pause
