@@ -1,12 +1,12 @@
 https://github.com/israpps/PS2-HDD-Art-Batcher
 
-[ NO LONGER USING WINHIIP ]
+# NO LONGER USING WINHIIP 
 
 WinHiip has been obsolete for a long time, it does not support hard drives of 1TB and above.
 The maximum number of installable games is 255, and it formats the hard drive incorrectly
 
-=======================================================================================================
-[ HDLBATCH ]
+
+# HDLBATCH 
 
 All the tutorials on youtube that explain how to add games to your PS2 hard drive are 99% out of date and totally misinformed
 
@@ -24,8 +24,8 @@ Speeds Installation: PS2 HDD attached to PC motherboard via SATA	100MB/s  - 150M
 Speeds Installation: PS2 HDD via USB3 adapter (varies by adapter)	 70MB/s  - 100MB/s
 Speeds Installation: PS2 HDD via ethernet				             5MB/s
 
-=======================================================================================================
-[ How to formatted hard drive cleanly ]
+
+# How to formatted hard drive cleanly 
 
 The first thing to do is to cleanly formatted your hard drive with wLaunchELF 4.43a 41e4ebe, this versions is aproximately 2years old, but it is the best version for HDD Management.
 https://github.com/israpps/FreeMcBoot-Installer/raw/master/MASS/APPS/ULE-41e4ebe/ULE-41e4ebe.ELF
