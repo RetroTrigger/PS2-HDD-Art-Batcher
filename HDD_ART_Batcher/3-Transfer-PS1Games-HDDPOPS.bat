@@ -122,6 +122,8 @@ IF %@pfs_lib2%==fail ( cmd /k )
 IF %@pfs_lib3%==fail ( cmd /k )
 IF %@pfs_lib4%==fail ( cmd /k )
 
+IF NOT EXIST POPS\ MD POPS
+
 cls
 
 mkdir %~dp0TMP >nul 2>&1
@@ -218,13 +220,13 @@ echo\
 pause
 cls
 "%~dp0BAT\Diagbox.EXE" gd 0f
+IF %@pfs_pop%==yes (
 echo\
 echo\
 echo Installing POPS:
 echo ----------------------------------------------------
 echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
-IF %@pfs_pop%==yes (
 IF /I EXIST %~dp0POPS\*.VCD (
 	cd %~dp0POPS
 	echo         Creating Que
