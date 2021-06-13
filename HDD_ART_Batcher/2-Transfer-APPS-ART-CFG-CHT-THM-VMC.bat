@@ -146,10 +146,12 @@ IF %@pfs_lib3%==fail ( pause & cmd /k )
 IF %@pfs_lib4%==fail ( pause & cmd /k )
 IF %@CFG_FILE%==fail ( pause & cmd /k )
 IF %@LANG_FILE%==fail ( pause & cmd /k )
+
 IF NOT EXIST APPS\ MD APPS
 IF NOT EXIST ART\  MD ART
-IF NOT EXIST CHT\  MD CHT
 IF NOT EXIST CFG\  MD CFG
+IF NOT EXIST CHT\  MD CHT
+IF NOT EXIST POPS\ MD POPS
 IF NOT EXIST VMC\  MD VMC
 IF NOT EXIST THM\  MD THM
 
