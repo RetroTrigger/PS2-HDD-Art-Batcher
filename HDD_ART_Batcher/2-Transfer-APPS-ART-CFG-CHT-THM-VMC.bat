@@ -484,7 +484,7 @@ IF /I EXIST %~dp0APPS\* (
 	echo mkdir APPS >> %~dp0TMP\pfs-apps.txt
 	echo cd APPS >> %~dp0TMP\pfs-apps.txt
 	
-    REM APPS FILES (OPL\APPS\APP\files.xxx)
+        REM APPS FILES (OPL\APPS\files.xxx)
 
  	for %%e in (*) do (echo put "%%e") >> %~dp0TMP\pfs-apps.txt
 
