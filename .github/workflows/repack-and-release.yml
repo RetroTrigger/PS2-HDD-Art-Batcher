@@ -23,7 +23,7 @@ jobs:
       
     - name: Update Widescreen Hacks Package
       run: |
-        cp README.md HDD_ART_Batcher/README.MD
+        cp README.md HDD_PFS_Batch_Kit_Manager/README.MD
         cd HDD_PFS_Batch_Kit_Manager
         cd BAT
         rm -f WIDE.ZIP
