@@ -27,7 +27,7 @@ jobs:
         cd HDD_PFS_Batch_Kit_Manager
         cd BAT
         rm -f WIDE.ZIP
-        wget https://github.com/madmodder123/OpenPS2Loader_Widescreen_Cheats/archive/refs/heads/master.zip -O $PWD/WIDE.ZIP
+        wget https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O $PWD/WIDE.ZIP
     - name: Zip Folder
       run: |
         SCH=${GITHUB_SHA::7}

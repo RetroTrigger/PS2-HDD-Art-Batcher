@@ -11,6 +11,6 @@ rmdir /Q TMP && echo erased TMP folder
 rmdir /Q POPS && echo erased POPS folder
 echo Updating Widescreen hacks file
 echo downloading from: "https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip"
-BAT\wget.exe -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O WIDE.ZIP
-
+cd BAT
+wget.exe -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O WIDE.ZIP
 timeout 15
