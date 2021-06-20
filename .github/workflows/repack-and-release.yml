@@ -5,8 +5,8 @@ on:
 #    paths:
 #      - '.github/workflows/repack-and-release.yml'
 
-#  schedule:
-#   - cron: "0 15 * * 5,2"
+  schedule:
+   - cron: "0 15 * * 5"
 jobs:
 
   Repack_and_Release:
