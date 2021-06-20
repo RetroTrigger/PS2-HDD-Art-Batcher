@@ -36,8 +36,6 @@ jobs:
         cd BAT
         echo commit $SCH>commit.sys
         echo `date`>>commit.sys
-        rm -f LANG2.BAT
-        cp $PWD/LANGUAGES/$PKG.BAT $PWD/LANG2.BAT
         cd ..
         cd ..
         DATEE=`date '+[%Y-%m-%d]'`
