@@ -939,6 +939,7 @@ SCES_540.23 Bible Game
 SLES_540.23 Bible Game, The
 SLUS_211.75 Bible Game, The
 SLPM_623.89 Big Bass : Bass Tsuri Kanzen Kouryaku (SuperLite 2000 Series)
+SLUS_202.91 Big Mutha Truckers
 SLUS_206.05 Big Mutha Truckers
 SLES_513.55 Big Mutha Truckers
 SCES_513.55 Big Mutha Truckers
@@ -2594,6 +2595,7 @@ SLES_547.35 Disney-Pixar's Ratatouille
 SLES_547.47 Disney-Pixar's Ratatouille
 SCUS_901.74 Disney-Pixar's Toy Story 3
 SLES_556.22 Disney-Pixar's Toy Story 3
+SLUS_219.31 Disney-Pixar's Toy Story 3
 SLES_555.23 Disney-Pixar's Up
 SLES_555.24 Disney-Pixar's Up
 SLES_555.31 Disney-Pixar's Up
@@ -8021,6 +8023,7 @@ SLUS_218.01 Need for Speed : Undercover
 SLES_553.50 Need for Speed : Undercover
 SLES_553.51 Need for Speed : Undercover
 SLES_553.52 Need for Speed : Undercover (Scandinavia)
+SLES_553.53 Need for Speed : Undercover
 SLES_519.67 Need for Speed : Underground
 SCES_519.67 Need for Speed : Underground
 SLUS_208.11 Need for Speed : Underground
@@ -12375,7 +12378,7 @@ SCUS_973.62 Syphon Filter : Dark Mirror
 SCUS_976.20 Syphon Filter : Dark Mirror
 SCES_547.94 Syphon Filter : Dark Mirror
 SCUS_975.84 Syphon Filter : Logan's Shadow
-HDUS_975.84 Syphon Filter - Logan's Shadow
+HDUS_975.84 Syphon Filter : Logan's Shadow
 TCES_520.33 Syphon Filter : The Omega Strain
 SCUS_972.64 Syphon Filter : The Omega Strain
 SLES_520.33 Syphon Filter : The Omega Strain
