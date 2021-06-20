@@ -636,7 +636,7 @@ IF ERRORLEVEL 3 (
 		
 	) else (
 	"%~dp0BAT\Diagbox.EXE" gd 0d
-		BAT\wget.exe -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O WIDE.ZIP
+		BAT\wget.exe -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O BAT\WIDE.ZIP
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	)) 
 	
@@ -647,7 +647,7 @@ IF ERRORLEVEL 3 (
 		echo %EXTRACTED_WIDE%
 	"%~dp0BAT\Diagbox.EXE" gd 0f
 	SETLOCAL DisableDelayedExpansion
-		7z x -bso0 BAT\WIDE.ZIP *.cht -r
+	%~dp0BAT\7z.exe x -bso0 BAT\WIDE.ZIP *.cht -r
 	SETLOCAL EnableDelayedExpansion
 		echo .
 	"%~dp0BAT\Diagbox.EXE" gd 07
