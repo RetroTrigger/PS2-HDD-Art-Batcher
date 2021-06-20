@@ -1,7 +1,9 @@
+%~dp0BAT\Diagbox.exe gd 07
 @echo off
 chcp 1252
 ::color 03
-
+call "%~dp0BAT\LANG2.BAT" || PAUSE
+call "%~dp0BAT\CFG2.BAT" || PAUSE
 echo\
 echo\
 
@@ -9,7 +11,9 @@ REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
 if '%errorlevel%' NEQ '0' (
-    echo Requesting Administrative Privileges...
+%~dp0BAT\Diagbox.exe gd 0e
+    echo %ADMIN_PRIV%
+	%~dp0BAT\Diagbox.exe gd 07
     goto UACPrompt
 ) else ( goto gotAdmin )
 
@@ -36,27 +40,32 @@ setlocal enableDelayedExpansion
 @ECHO off
 cls
 :start
-                  
+                  %~dp0BAT\Diagbox.exe gd 0f
 title PFS Batch Kit Manager by GDX and El_isra
-echo.Welcome in PFS Batch Kit Manager
+echo.Welcome to PFS Batch Kit Manager
 echo.------------------------------------------
 echo.
-ECHO 1. Transfer PS1 Games - (POPS Binaries Required)
-ECHO 2. Transfer PS2 Games
-ECHO 3. Transfer APPS,ART,CFG,CHT,VMC,THM
-ECHO 4. Transfer POPS Binaries
+ECHO %MENU_1%
+ECHO %MENU_2%
+ECHO %MENU_3%
+ECHO %MENU_4%
+%~dp0BAT\Diagbox.exe gd 00
 ECHO.
 ECHO. 
-ECHO 7. Backup PS1 Games - (Backup All .VCD in __.POPS)
-ECHO 8. Backup PS2 Games - (Backup All .iso)
-ECHO 9. Backup ART,CFG,CHT,VMC
+%~dp0BAT\Diagbox.exe gd 0f
+ECHO %MENU_7%
+ECHO %MENU_8%
+ECHO %MENU_9%
+%~dp0BAT\Diagbox.exe gd 00
 ECHO. 
-ECHO 10. Exit
+%~dp0BAT\Diagbox.exe gd 0f
+ECHO %MENU_10%
 ECHO.
 set choice=
 echo.
 echo.------------------------------------------
 echo.
+%~dp0BAT\Diagbox.exe gd 07
 set /p choice=Select Option:.
 if not '%choice%'=='' set choice=%choice:~0,10%
 cd "%~dp0"
@@ -113,7 +122,7 @@ REM  --> Check for permissions
 
 REM --> If error flag set, we do not have admin.
 if '%errorlevel%' NEQ '0' (
-    echo Requesting administrative privileges...
+    echo %ADMIN_PRIV%
     goto UACPrompt
 ) else ( goto gotAdmin )
 
@@ -373,8 +382,6 @@ REM ############################################################################
 @echo off
 ::cls
 "%~dp0BAT\Diagbox.EXE" gd 07
-call "%~dp0BAT\LANG2.BAT" || PAUSE
-call "%~dp0BAT\CFG2.BAT" || PAUSE
 echo\
 echo\
 
@@ -1331,7 +1338,9 @@ REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
 if '%errorlevel%' NEQ '0' (
-    echo Requesting Administrative Privileges...
+	"%~dp0BAT\Diagbox.EXE" gd 0e
+    echo %ADMIN_PRIV%
+	"%~dp0BAT\Diagbox.EXE" gd 07
     goto UACPrompt
 ) else ( goto gotAdmin )
 
@@ -1365,70 +1374,70 @@ echo ----------------------------------------------------
 IF NOT EXIST %~dp0BAT\busybox.exe (
 	set @dep_bbx=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "busybox.exe" Missing
+	echo DEP "busybox.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_bbx=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "busybox.exe" Confirmed
+	echo DEP "busybox.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
 	set @dep_hdl=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "hdl_dump_093.exe" Missing
+	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" Confirmed
+	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	set @dep_pfs=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "pfsshell.exe" Missing
+	echo DEP "pfsshell.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_pfs=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "pfsshell.exe" Confirmed
+	echo DEP "pfsshell.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libapa.dll (
 	set @pfs_lib1=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libapa.dll" Missing
+	echo DEP "libapa.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib1=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libapa.dll" Confirmed
+	echo DEP "libapa.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
 	set @pfs_lib2=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libfakeps2sdk.dll" Missing
+	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib2=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libfakeps2sdk.dll" Confirmed
+	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libiomanX.dll (
 	set @pfs_lib3=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libiomanX.dll" Missing
+	echo DEP "libiomanX.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib3=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libiomanX.dll" Confirmed
+	echo DEP "libiomanX.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libpfs.dll (
 	set @pfs_lib4=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libpfs.dll" Missing
+	echo DEP "libpfs.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib4=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libpfs.dll" Confirmed
+	echo DEP "libpfs.dll" %DEPS_FOUND%
 	)
 "%~dp0BAT\Diagbox.EXE" gd 0e
 
@@ -1478,11 +1487,11 @@ echo\
 echo Transfer VCD:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
-echo         2) No
+echo         2) %NO%
 "%~dp0BAT\Diagbox.EXE" gd 07
-echo         3) Yes (Unzip and Convert .bin/.cue to .VCD) 
+echo         3) %YES% (Unzip and Convert .bin/.cue to .VCD) 
 "%~dp0BAT\Diagbox.EXE" gd 06
 echo            After installation the .vcd will be deleted from the POPS folder
 "%~dp0BAT\Diagbox.EXE" gd 07
@@ -1527,11 +1536,11 @@ echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
 echo ls >> %~dp0TMP\pfs-prt.txt
 echo exit >> %~dp0TMP\pfs-prt.txt
 type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
-"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "__.POPS" | "%~dp0BAT\busybox" sed "s/.*__.POPS/__.POPS/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%POPSPART%" | "%~dp0BAT\busybox" sed "s/.*%POPSPART%/%POPSPART%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
 set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
 REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
 
-IF "!@hdd_avl!"=="__.POPS" (
+IF "!@hdd_avl!"=="%POPSPART%" (
 "%~dp0BAT\Diagbox.EXE" gd 0a
 	echo         POPS - Partition Detected
 	"%~dp0BAT\Diagbox.EXE" gd 07
@@ -1564,7 +1573,7 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	cd %~dp0POPS
 	echo         Creating Que
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops.txt
-	echo mount __.POPS >> %~dp0TMP\pfs-pops.txt
+	echo mount %POPSPART% >> %~dp0TMP\pfs-pops.txt
 	for %%f in (*.VCD) do (echo put "%%f") >> %~dp0TMP\pfs-pops.txt
 	echo umount >> %~dp0TMP\pfs-pop.txt
 	echo exit >> %~dp0TMP\pfs-pop.txt
@@ -1573,7 +1582,7 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	del %~dp0TMP\pfs-pops.txt >nul 2>&1
 	echo         Creating Log
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount __.POPS >> %~dp0TMP\pfs-log.txt
+	echo mount %POPSPART% >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	echo umount >> %~dp0TMP\pfs-log.txt
 	echo exit >> %~dp0TMP\pfs-log.txt
@@ -1658,7 +1667,7 @@ REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
 if '%errorlevel%' NEQ '0' (
-    echo Requesting Administrative Privileges...
+    echo %ADMIN_PRIV%
     goto UACPrompt
 ) else ( goto gotAdmin )
 
@@ -1690,58 +1699,58 @@ echo ----------------------------------------------------
 
 IF NOT EXIST %~dp0BAT\busybox.exe (
 	set @dep_bbx=fail
-	echo DEP "busybox.exe" Missing
+	echo DEP "busybox.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_bbx=good
-	echo DEP "busybox.exe" Confirmed
+	echo DEP "busybox.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
 	set @dep_hdl=fail
-	echo DEP "hdl_dump_093.exe" Missing
+	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" Confirmed
+	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	set @dep_pfs=fail
-	echo DEP "pfsshell.exe" Missing
+	echo DEP "pfsshell.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_pfs=good
-	echo DEP "pfsshell.exe" Confirmed
+	echo DEP "pfsshell.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libapa.dll (
 	set @pfs_lib1=fail
-	echo DEP "libapa.dll" Missing
+	echo DEP "libapa.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib1=good
-	echo DEP "libapa.dll" Confirmed
+	echo DEP "libapa.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
 	set @pfs_lib2=fail
-	echo DEP "libfakeps2sdk.dll" Missing
+	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib2=good
-	echo DEP "libfakeps2sdk.dll" Confirmed
+	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libiomanX.dll (
 	set @pfs_lib3=fail
-	echo DEP "libiomanX.dll" Missing
+	echo DEP "libiomanX.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib3=good
-	echo DEP "libiomanX.dll" Confirmed
+	echo DEP "libiomanX.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libpfs.dll (
 	set @pfs_lib4=fail
-	echo DEP "libpfs.dll" Missing
+	echo DEP "libpfs.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib4=good
-	echo DEP "libpfs.dll" Confirmed
+	echo DEP "libpfs.dll" %DEPS_FOUND%
 	)
 
 echo\
@@ -1787,8 +1796,8 @@ echo\
 echo\
 echo Extract Artwork:
 echo ----------------------------------------------------
-echo         1) Yes
-echo         2) No
+echo         1) %YES%
+echo         2) %NO%
 echo\
 CHOICE /C 12 /M "Select Option:"
 
@@ -1799,8 +1808,8 @@ echo\
 echo\
 echo Extract Configs:
 echo ----------------------------------------------------
-echo         1) Yes
-echo         2) No
+echo         1) %YES%
+echo         2) %NO%
 echo\
 CHOICE /C 12 /M "Select Option:"
 
@@ -1811,8 +1820,8 @@ echo\
 echo\
 echo Extract Cheats:
 echo ----------------------------------------------------
-echo         1) Yes
-echo         2) No
+echo         1) %YES%
+echo         2) %NO%
 echo\
 CHOICE /C 12 /M "Select Option:"
 
@@ -1823,8 +1832,8 @@ echo\
 echo\
 echo Extract VMCs:
 echo ----------------------------------------------------
-echo         1) Yes
-echo         2) No
+echo         1) %YES%
+echo         2) %NO%
 echo\
 CHOICE /C 12 /M "Select Option:"
 
@@ -1833,7 +1842,7 @@ IF ERRORLEVEL 2 set @pfs_vmc=no
 
 echo\
 echo\
-echo Detecting +OPL Partition:
+echo Detecting %OPLPART% Partition:
 echo ----------------------------------------------------
 
 
@@ -1846,9 +1855,9 @@ echo ----------------------------------------------------
 	del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
 
 	IF "!@hdd_avl!"=="+OPL" (
-		echo         +OPL - Partition Detected
+		echo         %OPLPART% - Partition Detected
 		) else (
-		echo         +OPL - Partition NOT Detected
+		echo         %OPLPART% - Partition NOT Detected
 		echo         Partition Must Be Formatted First
 		echo\
 		echo\
@@ -1876,7 +1885,7 @@ echo\
 	cd %~dp0ART
     echo         Files scan...
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount +OPL >> %~dp0TMP\pfs-log.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-log.txt
 	echo cd ART >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
@@ -1893,7 +1902,7 @@ echo\
 	cd %~dp0ART
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-art.txt
-	echo mount +OPL >> %~dp0TMP\pfs-art.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-art.txt
 	echo cd ART >> %~dp0TMP\pfs-art.txt
 	for /f %%f in (PFS-ART-NEW.txt) do echo get %%f >> %~dp0TMP\pfs-art.txt
 	echo umount >> %~dp0TMP\pfs-art.txt
@@ -1918,7 +1927,7 @@ echo\
 	cd %~dp0CFG
     echo         Files scan...
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount +OPL >> %~dp0TMP\pfs-log.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-log.txt
 	echo cd CFG >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
@@ -1935,7 +1944,7 @@ echo\
 	cd %~dp0CFG
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-cfg.txt
-	echo mount +OPL >> %~dp0TMP\pfs-cfg.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-cfg.txt
 	echo cd CFG >> %~dp0TMP\pfs-cfg.txt
 	for /f %%f in (PFS-CFG-NEW.txt) do echo get %%f >> %~dp0TMP\pfs-cfg.txt
 	echo umount >> %~dp0TMP\pfs-cfg.txt
@@ -1959,7 +1968,7 @@ echo\
 	cd %~dp0CHT
     echo         Files scan...
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount +OPL >> %~dp0TMP\pfs-log.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-log.txt
 	echo cd CHT >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
@@ -1976,7 +1985,7 @@ echo\
 	cd %~dp0CHT
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-cht.txt
-	echo mount +OPL >> %~dp0TMP\pfs-cht.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-cht.txt
 	echo cd CHT >> %~dp0TMP\pfs-cht.txt
 	for /f %%f in (PFS-CHT-NEW.txt) do echo get %%f >> %~dp0TMP\pfs-cht.txt
 	echo umount >> %~dp0TMP\pfs-cht.txt
@@ -2001,7 +2010,7 @@ echo\
 	cd %~dp0VMC
     echo         Files scan...
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount +OPL >> %~dp0TMP\pfs-log.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-log.txt
 	echo cd VMC >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
@@ -2018,7 +2027,7 @@ echo\
 	cd %~dp0VMC
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-vmc.txt
-	echo mount +OPL >> %~dp0TMP\pfs-vmc.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-vmc.txt
 	echo cd VMC >> %~dp0TMP\pfs-vmc.txt
 	for /f %%f in (PFS-VMC-NEW.txt) do echo get %%f >> %~dp0TMP\pfs-vmc.txt
 	echo umount >> %~dp0TMP\pfs-vmc.txt
@@ -2057,7 +2066,7 @@ REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
 if '%errorlevel%' NEQ '0' (
-    echo Requesting Administrative Privileges...
+    echo %ADMIN_PRIV%
     goto UACPrompt
 ) else ( goto gotAdmin )
 
@@ -2089,58 +2098,58 @@ echo ----------------------------------------------------
 
 IF NOT EXIST %~dp0BAT\busybox.exe (
 	set @dep_bbx=fail
-	echo DEP "busybox.exe" Missing
+	echo DEP "busybox.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_bbx=good
-	echo DEP "busybox.exe" Confirmed
+	echo DEP "busybox.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
 	set @dep_hdl=fail
-	echo DEP "hdl_dump_093.exe" Missing
+	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" Confirmed
+	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	set @dep_pfs=fail
-	echo DEP "pfsshell.exe" Missing
+	echo DEP "pfsshell.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_pfs=good
-	echo DEP "pfsshell.exe" Confirmed
+	echo DEP "pfsshell.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libapa.dll (
 	set @pfs_lib1=fail
-	echo DEP "libapa.dll" Missing
+	echo DEP "libapa.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib1=good
-	echo DEP "libapa.dll" Confirmed
+	echo DEP "libapa.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
 	set @pfs_lib2=fail
-	echo DEP "libfakeps2sdk.dll" Missing
+	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib2=good
-	echo DEP "libfakeps2sdk.dll" Confirmed
+	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libiomanX.dll (
 	set @pfs_lib3=fail
-	echo DEP "libiomanX.dll" Missing
+	echo DEP "libiomanX.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib3=good
-	echo DEP "libiomanX.dll" Confirmed
+	echo DEP "libiomanX.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libpfs.dll (
 	set @pfs_lib4=fail
-	echo DEP "libpfs.dll" Missing
+	echo DEP "libpfs.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib4=good
-	echo DEP "libpfs.dll" Confirmed
+	echo DEP "libpfs.dll" %DEPS_FOUND%
 	)
 
 echo\
@@ -2188,9 +2197,9 @@ echo\
 echo Extract All .VCD:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
-echo         2) No
+echo         2) %NO%
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 12 /M "Select Option:"
@@ -2208,11 +2217,11 @@ echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
 echo ls >> %~dp0TMP\pfs-prt.txt
 echo exit >> %~dp0TMP\pfs-prt.txt
 type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
-"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "__.POPS" | "%~dp0BAT\busybox" sed "s/.*__.POPS/__.POPS/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%POPSPART%" | "%~dp0BAT\busybox" sed "s/.*%POPSPART%/%POPSPART%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
 set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
 REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
 
-IF "!@hdd_avl!"=="__.POPS" (
+IF "!@hdd_avl!"=="%POPSPART%" (
 "%~dp0BAT\Diagbox.EXE" gd 0a
 	echo         POPS - Partition Detected
 	"%~dp0BAT\Diagbox.EXE" gd 07
@@ -2242,7 +2251,7 @@ echo\
     cd %~dp0POPS
     echo         Files scan...
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount __.POPS >> %~dp0TMP\pfs-log.txt
+	echo mount %POPSPART% >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
@@ -2258,7 +2267,7 @@ echo\
 	cd %~dp0POPS
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops.txt
-	echo mount __.POPS >> %~dp0TMP\pfs-pops.txt
+	echo mount %POPSPART% >> %~dp0TMP\pfs-pops.txt
 	call PFS-POPS-NEW.bat >> %~dp0TMP\pfs-pops.txt
 	echo umount >> %~dp0TMP\pfs-pops.txt
 	echo exit >> %~dp0TMP\pfs-pops.txt
@@ -2300,7 +2309,7 @@ REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
 if '%errorlevel%' NEQ '0' (
-    echo Requesting Administrative Privileges...
+    echo %ADMIN_PRIV%
     goto UACPrompt
 ) else ( goto gotAdmin )
 
@@ -2333,70 +2342,70 @@ echo ----------------------------------------------------
 IF NOT EXIST %~dp0BAT\busybox.exe (
 	set @dep_bbx=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "busybox.exe" Missing
+	echo DEP "busybox.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_bbx=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "busybox.exe" Confirmed
+	echo DEP "busybox.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
 	set @dep_hdl=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "hdl_dump_093.exe" Missing
+	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" Confirmed
+	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	set @dep_pfs=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "pfsshell.exe" Missing
+	echo DEP "pfsshell.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_pfs=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "pfsshell.exe" Confirmed
+	echo DEP "pfsshell.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libapa.dll (
 	set @pfs_lib1=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libapa.dll" Missing
+	echo DEP "libapa.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib1=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libapa.dll" Confirmed
+	echo DEP "libapa.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
 	set @pfs_lib2=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libfakeps2sdk.dll" Missing
+	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib2=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libfakeps2sdk.dll" Confirmed
+	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libiomanX.dll (
 	set @pfs_lib3=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libiomanX.dll" Missing
+	echo DEP "libiomanX.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib3=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libiomanX.dll" Confirmed
+	echo DEP "libiomanX.dll" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\libpfs.dll (
 	set @pfs_lib4=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libpfs.dll" Missing
+	echo DEP "libpfs.dll" %DEPS_MISSING%
 	) else ( 
 	set @pfs_lib4=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libpfs.dll" Confirmed
+	echo DEP "libpfs.dll" %DEPS_FOUND%
 	)
 "%~dp0BAT\Diagbox.EXE" gd 0e
 
@@ -2446,9 +2455,9 @@ echo\
 echo Transfer POPS Binaries:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) Yes
+echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
-echo         2) No
+echo         2) %NO%
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 12 /M "Select Option:"
@@ -2595,7 +2604,7 @@ REM POPS FOR OPL
 	cd %~dp0POPS
 ::	echo         Creating Que
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops-binaries.txt
-	echo mount +OPL >> %~dp0TMP\pfs-pops-binaries.txt
+	echo mount %OPLPART% >> %~dp0TMP\pfs-pops-binaries.txt
 	echo mkdir POPS >> %~dp0TMP\pfs-pops-binaries.txt
 	echo cd POPS >> %~dp0TMP\pfs-pops-binaries.txt
 	for %%g in (POPSTARTER.ELF) do (echo put "%%g") >> %~dp0TMP\pfs-pops-binaries.txt
@@ -2655,7 +2664,7 @@ REM  --> Check for permissions
 
 REM --> If error flag set, we do not have admin.
 if '%errorlevel%' NEQ '0' (
-    echo Requesting administrative privileges...
+    echo %ADMIN_PRIV%
     goto UACPrompt
 ) else ( goto gotAdmin )
 

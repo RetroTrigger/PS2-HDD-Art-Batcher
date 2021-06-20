@@ -62,3 +62,14 @@ set INST_WIDE=Download/Install widescreen cheats
 set NO_INTERNET=Can't determine internet connection
 set INTERNET_CHECK=checking internet connection
 set DOWNLOAD_CHEATS=Download Latest Widescreen Cheats?
+
+set MENU_1=1. Transfer PS1 Games - (POPS Binaries Required)
+set MENU_2=2. Transfer PS2 Games
+set MENU_3=3. Transfer APPS,ART,CFG,CHT,VMC,THM
+set MENU_4=4. Transfer POPS Binaries
+
+set MENU_7=7. Backup PS1 Games - (Backup All .VCD in __.POPS)
+set MENU_8=8. Backup PS2 Games - (Backup All .iso)
+set MENU_9=9. Backup ART,CFG,CHT,VMC
+set MENU_10=10. Exit
+
