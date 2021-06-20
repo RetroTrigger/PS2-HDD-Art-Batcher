@@ -24,7 +24,7 @@ jobs:
     - name: Update Widescreen Hacks Package
       run: |
         cp README.md HDD_ART_Batcher/README.MD
-        cd HDD_ART_Batcher
+        cd HDD_PFS_Batch_Kit_Manager
         cd BAT
         rm -f WIDE.ZIP
         wget https://github.com/madmodder123/OpenPS2Loader_Widescreen_Cheats/archive/refs/heads/master.zip -O $PWD/WIDE.ZIP
@@ -33,7 +33,7 @@ jobs:
         SCH=${GITHUB_SHA::7}
         PKG=${{ matrix.package }}
         
-        cd HDD_ART_Batcher
+        cd HDD_PFS_Batch_Kit_Manager
         cd BAT
         echo commit $SCH>commit.sys
         echo `date`>>commit.sys
@@ -44,8 +44,8 @@ jobs:
         cd ..
         cd ..
         DATEE=`date '+[%Y-%m-%d]'`
-        mv HDD_ART_Batcher HDD_ART_BATCHER-$PKG-$DATEE
-        zip -r HDD_Art_Batcher\[$SCH\] HDD_ART_BATCHER-$PKG-*/*
+        mv HDD_PFS_Batch_Kit_Manager HDD_PFS_Batch_Kit_Manager-$PKG-$DATEE
+        zip -r HDD_PFS_Batch_Kit_Manager\[$SCH\] HDD_PFS_Batch_Kit_Manager-$PKG-*/*
         ls -R
     - name: Upload artifacts
       if: ${{ success() }}
@@ -53,7 +53,7 @@ jobs:
       with:
         name:  ${{ matrix.package }}
         path: |
-             HDD_Art_Batcher*.zip
+             HDD_PFS_Batch_Kit_Manager*.zip
     - name: Create release
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
       uses: marvinpinto/action-automatic-releases@latest
@@ -62,4 +62,4 @@ jobs:
         automatic_release_tag: ${{ matrix.package }}
         title:  " HDD Art Batcher ${{ matrix.package }}"
         files: |
-                HDD_Art_Batcher*.zip
+                HDD_PFS_Batch_Kit_Manager*.zip
