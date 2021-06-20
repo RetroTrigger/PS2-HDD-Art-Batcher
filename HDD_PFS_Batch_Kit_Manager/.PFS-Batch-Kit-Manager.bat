@@ -38,6 +38,7 @@ cls
 setlocal enableDelayedExpansion
 
 @ECHO off
+:CLSstart
 cls
 :start
                   %~dp0BAT\Diagbox.exe gd 0f
@@ -49,6 +50,7 @@ ECHO %MENU_1%
 ECHO %MENU_2%
 ECHO %MENU_3%
 ECHO %MENU_4%
+ECHO %DOWNLOAD_HDLBINST%
 %~dp0BAT\Diagbox.exe gd 00
 ECHO.
 ECHO. 
@@ -73,6 +75,7 @@ if '%choice%'=='1' goto 3-Transfer-PS1Games-HDDPOPS
 if '%choice%'=='2' goto 1-Transfer-PS2Games-HDLBATCH
 if '%choice%'=='3' goto 2-Transfer-APPS-ART-CFG-CHT-THM-VMC
 if '%choice%'=='4' goto 6-POPS-Binaries     
+if '%choice%'=='5' start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart
 if '%choice%'=='7' goto 5-BackupPS1Games
 if '%choice%'=='8' goto 7-BackupPS2Games
 if '%choice%'=='9' goto 4-Backup-ART-CFG-CHT-VMC

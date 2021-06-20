@@ -63,6 +63,8 @@ set NO_INTERNET=Can't determine internet connection
 set INTERNET_CHECK=checking internet connection
 set DOWNLOAD_CHEATS=Download Latest Widescreen Cheats?
 
+set DOWNLOAD_HDLBINST=5. Download HDL Batch Installer
+
 set MENU_1=1. Transfer PS1 Games - (POPS Binaries Required)
 set MENU_2=2. Transfer PS2 Games
 set MENU_3=3. Transfer APPS,ART,CFG,CHT,VMC,THM
