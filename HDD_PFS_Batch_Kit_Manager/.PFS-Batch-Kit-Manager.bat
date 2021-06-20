@@ -671,21 +671,21 @@ CHOICE /C 123 /M %BASIC_CHOICE%
 IF ERRORLEVEL 1 set @pfs_vmc=yes
 IF ERRORLEVEL 2 set @pfs_vmc=no
 IF ERRORLEVEL 3 (
-	echo %VMC_NAME_ASK%
-	SET /p VMC_NAM=
-	echo .
-	echo .
-	echo 			%VMC_SIZE_ASK%
-	echo -------------------------
-	echo         	1\ 8  Mb
-	echo         	2\ 16 Mb
-	echo         	3\ 32 Mb
-	CHOICE /C 123 
-	IF ERRORLEVEL 1 set VMC_SIZE=8
-	IF ERRORLEVEL 2 set VMC_SIZE=16
-	IF ERRORLEVEL 3 set VMC_SIZE=32
-	"%~dp0BAT\genvmc.exe" !VMC_SIZE! !VMC_NAM!.bin
-	move "%~dp0BAT\!VMC_NAM!.bin" "%~dp0VMC\!VMC_NAM!.bin"
+::	echo %VMC_NAME_ASK%
+::	SET /p VMC_NAM=
+::	echo .
+::	echo .
+::	echo 			%VMC_SIZE_ASK%
+::	echo -------------------------
+::	echo         	1\ 8  Mb
+::	echo         	2\ 16 Mb
+::	echo         	3\ 32 Mb
+::	CHOICE /C 123 
+::	IF ERRORLEVEL 1 set VMC_SIZE=8
+::	IF ERRORLEVEL 2 set VMC_SIZE=16
+::	IF ERRORLEVEL 3 set VMC_SIZE=32
+::	"%~dp0BAT\genvmc.exe" !VMC_SIZE! !VMC_NAM!.bin
+::	move "%~dp0BAT\!VMC_NAM!.bin" "%~dp0VMC\!VMC_NAM!.bin"
 	set @pfs_vmc=yes
 )
 "%~dp0BAT\Diagbox.EXE" gd 0f
