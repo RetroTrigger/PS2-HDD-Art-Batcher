@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        package: [English, Spanish]
+        package: [English]
     steps:
 
     - name: checkout code for release
