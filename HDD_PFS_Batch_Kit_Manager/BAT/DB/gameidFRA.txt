@@ -12375,6 +12375,7 @@ SCUS_973.62 Syphon Filter : Dark Mirror
 SCUS_976.20 Syphon Filter : Dark Mirror
 SCES_547.94 Syphon Filter : Dark Mirror
 SCUS_975.84 Syphon Filter : Logan's Shadow
+HDUS_975.84 Syphon Filter - Logan's Shadow
 TCES_520.33 Syphon Filter : The Omega Strain
 SCUS_972.64 Syphon Filter : The Omega Strain
 SLES_520.33 Syphon Filter : The Omega Strain
