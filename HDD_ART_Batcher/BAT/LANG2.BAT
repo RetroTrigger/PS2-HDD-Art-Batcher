@@ -58,3 +58,7 @@ set CREAT_LOG=Creating Log
 set EXTRACTING_WIDE=Extracting Widescreen Hacks...
 set EXTRACTED_WIDE=recovered a total of:
 set INST_WIDE=Download/Install widescreen cheats
+
+set NO_INTERNET=Can't determine internet connection
+set INTERNET_CHECK=checking internet connection
+set DOWNLOAD_CHEATS=Download Latest Widescreen Cheats?

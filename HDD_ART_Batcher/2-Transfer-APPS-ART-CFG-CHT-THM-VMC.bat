@@ -252,22 +252,33 @@ IF ERRORLEVEL 1 set @pfs_cht=yes
 IF ERRORLEVEL 2 set @pfs_cht=no
 IF ERRORLEVEL 3 (
 "%~dp0BAT\Diagbox.EXE" gd 0e
-	echo %EXTRACTING_WIDE%
-	timeout 2 >nul
-"%~dp0BAT\Diagbox.EXE" gd 07
-	echo %EXTRACTED_WIDE%
-"%~dp0BAT\Diagbox.EXE" gd 0f
-SETLOCAL DisableDelayedExpansion
-	7z x BAT\WIDE.ZIP *.cht -r -xr!BROKEN | findstr Files:
-  ::7z x BAT\WIDE.ZIP *.cht -r -xr!BROKEN | findstr Files:
-SETLOCAL EnableDelayedExpansion
-	echo .
-"%~dp0BAT\Diagbox.EXE" gd 07
-	echo Loading hacks
-	move %~dp0OpenPS2Loader_Widescreen_Cheats-master\*.CHT %~dp0CHT >nul
-	echo Cleaning cache
-	rmdir /Q OpenPS2Loader_Widescreen_Cheats-master
-set @pfs_cht=yes
+	echo %DOWNLOAD_CHEATS%
+	choice
+	if ERRORLEVEL 1 (
+	echo %INTERNET_CHECK%
+	Ping www.google.nl -n 1 -w 1000
+	if errorlevel 1 (
+		
+		echo %NO_INTERNET%
+		
+	) else (
+	"%~dp0BAT\Diagbox.EXE" gd 0d
+		BAT\wget.exe -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O WIDE.ZIP
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	)) 
+	
+	"%~dp0BAT\Diagbox.EXE" gd 0e
+		echo %EXTRACTING_WIDE%
+		timeout 2 >nul
+	"%~dp0BAT\Diagbox.EXE" gd 07
+		echo %EXTRACTED_WIDE%
+	"%~dp0BAT\Diagbox.EXE" gd 0f
+	SETLOCAL DisableDelayedExpansion
+		7z x -bso0 BAT\WIDE.ZIP *.cht -r
+	SETLOCAL EnableDelayedExpansion
+		echo .
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	set @pfs_cht=yes
 )
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
@@ -300,9 +311,8 @@ IF ERRORLEVEL 3 (
 	IF ERRORLEVEL 1 set VMC_SIZE=8
 	IF ERRORLEVEL 2 set VMC_SIZE=16
 	IF ERRORLEVEL 3 set VMC_SIZE=32
-	cd %~dp0\VMC
-	..\BAT\genvmc.exe !VMC_SIZE! !VMC_NAM!.bin
-	cd %~dp0
+	"%~dp0BAT\genvmc.exe" !VMC_SIZE! !VMC_NAM!.bin
+	move "%~dp0BAT\!VMC_NAM!.bin" "%~dp0VMC\!VMC_NAM!.bin"
 	set @pfs_vmc=yes
 )
 "%~dp0BAT\Diagbox.EXE" gd 0f
