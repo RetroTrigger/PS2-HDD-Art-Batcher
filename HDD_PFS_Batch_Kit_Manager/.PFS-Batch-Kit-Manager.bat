@@ -59,7 +59,6 @@ ECHO.
 ECHO %MENU_7%
 ECHO %MENU_8%
 ECHO %MENU_9%
-%~dp0BAT\Diagbox.exe gd 00
 ECHO. 
 ECHO %MENU_10%
 ECHO.
