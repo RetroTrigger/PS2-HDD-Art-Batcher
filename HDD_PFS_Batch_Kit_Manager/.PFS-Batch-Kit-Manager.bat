@@ -2304,7 +2304,7 @@ REM ############################################################################
 :6-POPS-Binaries
 
 @echo off
-::color 03
+color 03
 echo\
 echo\
 
@@ -2312,7 +2312,7 @@ REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
 if '%errorlevel%' NEQ '0' (
-    echo %ADMIN_PRIV%
+    echo Requesting Administrative Privileges...
     goto UACPrompt
 ) else ( goto gotAdmin )
 
@@ -2345,70 +2345,70 @@ echo ----------------------------------------------------
 IF NOT EXIST %~dp0BAT\busybox.exe (
 	set @dep_bbx=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "busybox.exe" %DEPS_MISSING%
+	echo DEP "busybox.exe" Missing
 	) else ( 
 	set @dep_bbx=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "busybox.exe" %DEPS_FOUND%
+	echo DEP "busybox.exe" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
 	set @dep_hdl=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
+	echo DEP "hdl_dump_093.exe" Missing
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
+	echo DEP "hdl_dump_093.exe" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	set @dep_pfs=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "pfsshell.exe" %DEPS_MISSING%
+	echo DEP "pfsshell.exe" Missing
 	) else ( 
 	set @dep_pfs=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "pfsshell.exe" %DEPS_FOUND%
+	echo DEP "pfsshell.exe" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\libapa.dll (
 	set @pfs_lib1=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libapa.dll" %DEPS_MISSING%
+	echo DEP "libapa.dll" Missing
 	) else ( 
 	set @pfs_lib1=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libapa.dll" %DEPS_FOUND%
+	echo DEP "libapa.dll" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
 	set @pfs_lib2=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
+	echo DEP "libfakeps2sdk.dll" Missing
 	) else ( 
 	set @pfs_lib2=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
+	echo DEP "libfakeps2sdk.dll" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\libiomanX.dll (
 	set @pfs_lib3=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libiomanX.dll" %DEPS_MISSING%
+	echo DEP "libiomanX.dll" Missing
 	) else ( 
 	set @pfs_lib3=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libiomanX.dll" %DEPS_FOUND%
+	echo DEP "libiomanX.dll" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\libpfs.dll (
 	set @pfs_lib4=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libpfs.dll" %DEPS_MISSING%
+	echo DEP "libpfs.dll" Missing
 	) else ( 
 	set @pfs_lib4=good
 "%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libpfs.dll" %DEPS_FOUND%
+	echo DEP "libpfs.dll" Confirmed
 	)
 "%~dp0BAT\Diagbox.EXE" gd 0e
 
@@ -2449,8 +2449,7 @@ IF "!@hdl_path!"=="" (
 "%~dp0BAT\Diagbox.EXE" gd 07
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
-		::cmd /k
-		call %~dp0.PFS-Batch-Kit-Manager.bat
+		cmd /k
 		)
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
@@ -2458,15 +2457,15 @@ echo\
 echo Transfer POPS Binaries:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 0a
-echo         1) %YES%
+echo         1) Yes
 "%~dp0BAT\Diagbox.EXE" gd 0c
-echo         2) %NO%
+echo         2) No
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 12 /M "Select Option:"
 
 IF ERRORLEVEL 1 set @pfs_pops=yes
-IF ERRORLEVEL 2 call .PFS-Batch-Kit-Manager
+IF ERRORLEVEL 2 goto start
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -2557,10 +2556,8 @@ IF "!@hdd_avl!"=="__common" (
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
-	::cmd /k
-	call %~dp.PFS-Batch-Kit-Manager.bat
 	)
-	)
+)
 
 echo\
 echo\
@@ -2607,7 +2604,7 @@ REM POPS FOR OPL
 	cd %~dp0POPS
 ::	echo         Creating Que
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops-binaries.txt
-	echo mount %OPLPART% >> %~dp0TMP\pfs-pops-binaries.txt
+	echo mount +OPL >> %~dp0TMP\pfs-pops-binaries.txt
 	echo mkdir POPS >> %~dp0TMP\pfs-pops-binaries.txt
 	echo cd POPS >> %~dp0TMP\pfs-pops-binaries.txt
 	for %%g in (POPSTARTER.ELF) do (echo put "%%g") >> %~dp0TMP\pfs-pops-binaries.txt
@@ -2643,7 +2640,6 @@ echo\
 echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
 pause
-::cmd /k
 call .PFS-Batch-Kit-Manager.bat
 
 REM ########################################################################################################################################################################
