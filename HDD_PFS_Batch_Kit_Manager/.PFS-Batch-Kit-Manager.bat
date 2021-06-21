@@ -41,7 +41,8 @@ setlocal enableDelayedExpansion
 :CLSstart
 cls
 :start
-                  %~dp0BAT\Diagbox.exe gd 0f
+cls
+%~dp0BAT\Diagbox.exe gd 0f
 title PFS Batch Kit Manager by GDX and El_isra
 echo.Welcome to PFS Batch Kit Manager
 echo.------------------------------------------
