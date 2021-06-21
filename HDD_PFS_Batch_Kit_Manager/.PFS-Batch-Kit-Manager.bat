@@ -1661,14 +1661,14 @@ md temp >NUL
 
 for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "%%f"
 echo off
-copy *.cue.cue "%~dp0POPS\temp" >NUL
-copy *.cue.bin "%~dp0POPS\temp" >NUL
+move *.cue.cue "%~dp0POPS\temp" >NUL
+move *.cue.bin "%~dp0POPS\temp" >NUL
 
 del *.bin >NUL
 del *.cue >NUL
 
-copy "temp\*.bin" %~dp0POPS >NUL
-copy "temp\*.cue" %~dp0POPS >NUL
+move "temp\*.bin" %~dp0POPS >NUL
+move "temp\*.cue" %~dp0POPS >NUL
 rmdir /s /q temp
 %~d0
 cd %~dp0BAT
