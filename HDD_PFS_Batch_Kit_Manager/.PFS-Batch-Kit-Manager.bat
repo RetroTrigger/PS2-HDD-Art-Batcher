@@ -80,7 +80,8 @@ if '%choice%'=='5' start https://github.com/israpps/HDL-Batch-installer/releases
 if '%choice%'=='7' goto 5-BackupPS1Games
 if '%choice%'=='8' goto 7-BackupPS2Games
 if '%choice%'=='9' goto 4-Backup-ART-CFG-CHT-VMC
-if '%choice%'=='10' exit
+if '%choice%'=='10' goto Advanced-Menu
+if '%choice%'=='11' exit
 
 
 
@@ -112,7 +113,43 @@ PAUSE
 cls
 (goto start)
 
-                     
+@ECHO off
+:Advanced-Menu
+cls                  
+title PFS Batch Kit Manager by GDX and El_isra
+echo.Welcome in PFS Batch Kit Manager
+echo.------------------------------------------
+ECHO Advanced Menu 
+ECHO.
+ECHO 1. Convert .VCD to .BIN/.CUE
+ECHO.
+ECHO.
+ECHO.
+ECHO.
+ECHO 10. Back to main menu
+ECHO.
+ECHO 11. Exit
+ECHO.
+set choice=
+echo.
+echo.------------------------------------------
+echo.
+set /p choice=Select Option:.
+if not '%choice%'=='' set choice=%choice:~0,10%
+cd "%~dp0"
+if '%choice%'=='1'  goto VCD2BIN
+if '%choice%'=='2'  goto 
+if '%choice%'=='10' goto start
+if '%choice%'=='11' exit
+
+
+
+if '%choice%'=='99' (goto FPH)
+ECHO "%choice%" is not valid, try again
+cls
+(goto start)
+           
+	   
 REM ########################################################################################################################################################################
 
 :1-Transfer-PS2Games-HDLBATCH
@@ -1634,20 +1671,20 @@ copy "temp\*.cue" %~dp0POPS >NUL
 rmdir /s /q temp
 %~d0
 cd %~dp0BAT
-if EXIST "%~dp0POPS" (goto checkBIN) else (if exist *.cue (for %%i in (*.cue) do %~dp0BAT\CUE2POPS_2_3.EXE "%~p0%%i") else goto failVCD)
+if EXIST "%~dp0POPS" (goto checkBIN) else (if exist *.cue (for %%i in (*.cue) do %~dp0BAT\CUE2POPS_2_3.EXE "%~p0%%i") else goto failBIN)
 pause
 goto terminateVCD
 :checkBIN
 if not exist "%~dp0POPS\*.*" goto convertVCD
 cd "%~dp0POPS"
-if not exist *.cue goto failVCD
+if not exist *.cue goto failBIN
 for %%i in (*.cue) do "%~dp0BAT\CUE2POPS_2_3.EXE" "%~dp0POPS\%%i"
 del *.bin >NUL
 del *.cue >NUL
 ren *.vcd *. >NUL
 ren *.cue *.VCD >NUL
 goto terminateVCD
-:failVCD
+:failBIN
 echo. 
 "%~dp0BAT\Diagbox.EXE" gd 06
 echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POPS folder.
@@ -3086,6 +3123,37 @@ call %~dp0.PFS-Batch-Kit-Manager.bat
 exit 
 
 REM #########################################################################################################
+
+:VCD2BIN
+cls
+@echo off
+%~d0
+cd %~dp0BAT
+if EXIST "%~dp0POPS" (goto checkVCD) else (if exist *.vcd (for %%i in (*.vcd) do %~dp0BAT\POPS2CUE.EXE "%~p0%%i") else goto failVCD)
+pause
+goto terminateBIN
+:checkVCD
+if not exist "%~dp0POPS\*.*" goto convertBIN
+cd "%~dp0POPS"
+if not exist *.vcd goto failVCD
+for %%i in (*.vcd) do "%~dp0BAT\POPS2CUE.EXE" "%~dp0POPS\%%i"
+pause
+goto terminateBIN
+:failVCD
+echo. 
+echo Error: Please drag/drop a cuesheet or a dir to the batch file.
+echo. 
+pause
+goto terminateBIN
+:convertBIN
+POPS2CUE.EXE "%~dp0POPS"
+:terminateBIN
+goto Advanced-Menu
+
+REM #######################################################################################################################################################
+
+
+
 
 :FPH
 cls
