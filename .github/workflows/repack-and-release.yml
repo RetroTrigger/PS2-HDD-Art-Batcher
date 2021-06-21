@@ -25,6 +25,7 @@ jobs:
       run: |
         cp README.md HDD_PFS_Batch_Kit_Manager/README.MD
         cd HDD_PFS_Batch_Kit_Manager
+        cd hdl_hdd
         cd BAT
         rm -f WIDE.ZIP
         wget https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O $PWD/WIDE.ZIP
@@ -33,6 +34,7 @@ jobs:
         SCH=${GITHUB_SHA::7}
         PKG=${{ matrix.package }}
         cd HDD_PFS_Batch_Kit_Manager
+        cd hdl_hdd
         cd BAT
         echo commit $SCH>commit.sys
         echo `date`>>commit.sys

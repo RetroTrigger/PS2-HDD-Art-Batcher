@@ -1,6 +1,7 @@
 @echo off
 cd /d %~dp0
 cd HDD_PFS_Batch_Kit_Manager
+cd hdl_hdd
 rmdir /Q APPS && echo erased APPS folder
 rmdir /Q CHT && echo erased CHT folder
 rmdir /Q ART && echo erased ART folder
