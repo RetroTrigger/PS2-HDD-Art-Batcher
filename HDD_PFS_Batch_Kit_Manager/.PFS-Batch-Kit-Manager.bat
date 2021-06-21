@@ -3141,9 +3141,10 @@ for %%i in (*.vcd) do "%~dp0BAT\POPS2CUE.EXE" "%~dp0POPS\%%i"
 pause
 goto terminateBIN
 :failVCD
-echo. 
-echo ERROR: NOT .VCD DETECTED ON POPS FOLDER.
-echo. 
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo .VCD NOT DETECTED: Please drop .VCD ON POPS FOLDER.
+echo.
+"%~dp0BAT\Diagbox.EXE" gd 0f
 pause
 goto terminateBIN
 :convertBIN
