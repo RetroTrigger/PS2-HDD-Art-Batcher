@@ -3142,7 +3142,7 @@ pause
 goto terminateBIN
 :failVCD
 "%~dp0BAT\Diagbox.EXE" gd 0c
-echo .VCD NOT DETECTED: Please drop .VCD ON POPS FOLDER.
+echo .VCD NOT DETECTED: Please drop .VCD IN POPS FOLDER.
 echo.
 "%~dp0BAT\Diagbox.EXE" gd 0f
 pause
