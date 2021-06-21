@@ -73,5 +73,6 @@ set MENU_4=4. Transfer POPS Binaries
 set MENU_7=7. Backup PS1 Games - (Backup All .VCD in __.POPS)
 set MENU_8=8. Backup PS2 Games - (Backup All .iso)
 set MENU_9=9. Backup ART,CFG,CHT,VMC
-set MENU_10=10. Exit
+set MENU_10=10. Advanced Menu
+set MENU_11=11. Exit
 
