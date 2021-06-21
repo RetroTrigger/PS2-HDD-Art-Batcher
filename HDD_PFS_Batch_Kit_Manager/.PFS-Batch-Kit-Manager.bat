@@ -3142,7 +3142,7 @@ pause
 goto terminateBIN
 :failVCD
 echo. 
-echo Error: Please drag/drop a cuesheet or a dir to the batch file.
+echo ERROR: NOT .VCD DETECTED ON POPS FOLDER.
 echo. 
 pause
 goto terminateBIN
