@@ -61,8 +61,9 @@ ECHO %MENU_8%
 ECHO %MENU_9%
 %~dp0BAT\Diagbox.exe gd 00
 ECHO. 
+ECHO 10. Advanced Menu
 %~dp0BAT\Diagbox.exe gd 0f
-ECHO %MENU_10%
+ECHO 11. %MENU_10%
 ECHO.
 set choice=
 echo.
