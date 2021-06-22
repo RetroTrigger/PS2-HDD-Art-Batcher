@@ -122,7 +122,7 @@ echo.Welcome in PFS Batch Kit Manager
 echo.------------------------------------------
 ECHO Advanced Menu 
 ECHO.
-ECHO 1. Convert .VCD to .BIN/.CUE
+ECHO 1. Convert .VCD to .BIN/.CUE (Restore the original Multiple .Bin)
 ECHO.
 ECHO.
 ECHO.
@@ -1533,7 +1533,7 @@ echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
 "%~dp0BAT\Diagbox.EXE" gd 07
-echo         3) %YES% (Unzip and Convert .bin/.cue to .VCD) 
+echo         3) %YES% (Unzip and Convert Multiple .bin/.cue to .VCD)
 "%~dp0BAT\Diagbox.EXE" gd 06
 echo            After installation the .vcd will be deleted from the POPS folder
 "%~dp0BAT\Diagbox.EXE" gd 07
@@ -1655,39 +1655,48 @@ call %~dp0.PFS-Batch-Kit-Manager.bat
 
 :convVCD
 cd %~dp0POPS
-rmdir /s /q temp >NUL
-md temp >NUL
+@echo off
+if exist rmdir /s /q temp >nul 2>&1
+md temp >nul 2>&1
 %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+%~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 
 for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "%%f"
-echo off
-copy *.cue.cue "%~dp0POPS\temp" >NUL
-copy *.cue.bin "%~dp0POPS\temp" >NUL
 
-del *.bin >NUL
-del *.cue >NUL
+move *.cue.cue "%~dp0POPS\temp" >nul 2>&1
+move *.cue.bin "%~dp0POPS\temp" >nul 2>&1
 
-copy "temp\*.bin" %~dp0POPS >NUL
-copy "temp\*.cue" %~dp0POPS >NUL
-rmdir /s /q temp
+del *.bin >nul 2>&1
+del *.cue >nul 2>&1
+
+move "temp\*.bin" %~dp0POPS >nul 2>&1
+move "temp\*.cue" %~dp0POPS >nul 2>&1
+move *.vcd temp >nul 2>&1
 %~d0
 cd %~dp0BAT
 if EXIST "%~dp0POPS" (goto checkBIN) else (if exist *.cue (for %%i in (*.cue) do %~dp0BAT\CUE2POPS_2_3.EXE "%~p0%%i") else goto failBIN)
 pause
 goto terminateVCD
 :checkBIN
+@echo off
 if not exist "%~dp0POPS\*.*" goto convertVCD
 cd "%~dp0POPS"
 if not exist *.cue goto failBIN
 for %%i in (*.cue) do "%~dp0BAT\CUE2POPS_2_3.EXE" "%~dp0POPS\%%i"
-del *.bin >NUL
-del *.cue >NUL
-ren *.vcd *. >NUL
-ren *.cue *.VCD >NUL
+md temp >nul 2>&1
+del *.bin >nul 2>&1
+del *.cue >nul 2>&1
+ren *.vcd *. >nul 2>&1
+ren *.cue *.VCD >nul 2>&1
+move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
+rmdir /s /q temp >nul 2>&1
 goto terminateVCD
 :failBIN
+@echo off
 echo. 
 "%~dp0BAT\Diagbox.EXE" gd 06
+move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
+rmdir /s /q temp >nul 2>&1
 echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POPS folder.
 echo Also check that the name matches inside the .cue
 echo. 
@@ -3138,11 +3147,10 @@ if not exist "%~dp0POPS\*.*" goto convertBIN
 cd "%~dp0POPS"
 if not exist *.vcd goto failVCD
 for %%i in (*.vcd) do "%~dp0BAT\POPS2CUE.EXE" "%~dp0POPS\%%i"
-pause
 goto terminateBIN
 :failVCD
 "%~dp0BAT\Diagbox.EXE" gd 0c
-echo .VCD NOT DETECTED: Please drop .VCD IN POPS FOLDER.
+echo .VCD NOT DETECTED: Please drop .VCD ON POPS FOLDER.
 echo.
 "%~dp0BAT\Diagbox.EXE" gd 0f
 pause
@@ -3150,11 +3158,154 @@ goto terminateBIN
 :convertBIN
 POPS2CUE.EXE "%~dp0POPS"
 :terminateBIN
+cd "%~dp0POPS"	
+@echo off
+md temp >nul 2>&1
+ren *.cue *.cuetemp >nul 2>&1
+for %%f in (*.cuetemp) do %~dp0BAT\binmerge.exe -s "%%f" "%%~nf"
+
+del *.cuetemp >nul 2>&1
+move *.cue temp >nul 2>&1
+
+REM TRACKS 
+move *1).bin temp >nul 2>&1
+move *2).bin temp >nul 2>&1
+move *3).bin temp >nul 2>&1
+move *4).bin temp >nul 2>&1
+move *5).bin temp >nul 2>&1
+move *6).bin temp >nul 2>&1
+move *7).bin temp >nul 2>&1
+move *8).bin temp >nul 2>&1
+move *9).bin temp >nul 2>&1
+move *01).bin temp >nul 2>&1
+move *02).bin temp >nul 2>&1
+move *03).bin temp >nul 2>&1
+move *04).bin temp >nul 2>&1
+move *05).bin temp >nul 2>&1
+move *06).bin temp >nul 2>&1
+move *07).bin temp >nul 2>&1
+move *08).bin temp >nul 2>&1
+move *09).bin temp >nul 2>&1
+move *10).bin temp >nul 2>&1
+move *11).bin temp >nul 2>&1
+move *12).bin temp >nul 2>&1
+move *13).bin temp >nul 2>&1
+move *14).bin temp >nul 2>&1
+move *15).bin temp >nul 2>&1
+move *16).bin temp >nul 2>&1
+move *17).bin temp >nul 2>&1
+move *18).bin temp >nul 2>&1
+move *19).bin temp >nul 2>&1
+move *20).bin temp >nul 2>&1
+move *21).bin temp >nul 2>&1
+move *22).bin temp >nul 2>&1
+move *23).bin temp >nul 2>&1
+move *24).bin temp >nul 2>&1
+move *25).bin temp >nul 2>&1
+move *26).bin temp >nul 2>&1
+move *27).bin temp >nul 2>&1
+move *28).bin temp >nul 2>&1
+move *29).bin temp >nul 2>&1
+move *30).bin temp >nul 2>&1
+move *31).bin temp >nul 2>&1
+move *32).bin temp >nul 2>&1
+move *33).bin temp >nul 2>&1
+move *34).bin temp >nul 2>&1
+move *35).bin temp >nul 2>&1
+move *36).bin temp >nul 2>&1
+move *37).bin temp >nul 2>&1
+move *38).bin temp >nul 2>&1
+move *39).bin temp >nul 2>&1
+move *40).bin temp >nul 2>&1
+move *41).bin temp >nul 2>&1
+move *42).bin temp >nul 2>&1
+move *43).bin temp >nul 2>&1
+move *44).bin temp >nul 2>&1
+move *45).bin temp >nul 2>&1
+move *46).bin temp >nul 2>&1
+move *47).bin temp >nul 2>&1
+move *48).bin temp >nul 2>&1
+move *49).bin temp >nul 2>&1
+move *50).bin temp >nul 2>&1
+move *51).bin temp >nul 2>&1
+move *52).bin temp >nul 2>&1
+move *53).bin temp >nul 2>&1
+move *54).bin temp >nul 2>&1
+move *55).bin temp >nul 2>&1
+move *56).bin temp >nul 2>&1
+move *57).bin temp >nul 2>&1
+move *58).bin temp >nul 2>&1
+move *59).bin temp >nul 2>&1
+move *60).bin temp >nul 2>&1
+move *61).bin temp >nul 2>&1
+move *62).bin temp >nul 2>&1
+move *63).bin temp >nul 2>&1
+move *64).bin temp >nul 2>&1
+move *65).bin temp >nul 2>&1
+move *66).bin temp >nul 2>&1
+move *67).bin temp >nul 2>&1
+move *68).bin temp >nul 2>&1
+move *69).bin temp >nul 2>&1
+move *70).bin temp >nul 2>&1
+move *71).bin temp >nul 2>&1
+move *70).bin temp >nul 2>&1
+move *71).bin temp >nul 2>&1
+move *72).bin temp >nul 2>&1
+move *73).bin temp >nul 2>&1
+move *74).bin temp >nul 2>&1
+move *75).bin temp >nul 2>&1
+move *76).bin temp >nul 2>&1
+move *77).bin temp >nul 2>&1
+move *78).bin temp >nul 2>&1
+move *79).bin temp >nul 2>&1
+move *80).bin temp >nul 2>&1
+move *81).bin temp >nul 2>&1
+move *82).bin temp >nul 2>&1
+move *83).bin temp >nul 2>&1
+move *84).bin temp >nul 2>&1
+move *85).bin temp >nul 2>&1
+move *86).bin temp >nul 2>&1
+move *87).bin temp >nul 2>&1
+move *88).bin temp >nul 2>&1
+move *89).bin temp >nul 2>&1
+move *90).bin temp >nul 2>&1
+move *91).bin temp >nul 2>&1
+move *92).bin temp >nul 2>&1
+move *93).bin temp >nul 2>&1
+move *94).bin temp >nul 2>&1
+move *95).bin temp >nul 2>&1
+move *96).bin temp >nul 2>&1
+move *97).bin temp >nul 2>&1
+move *98).bin temp >nul 2>&1
+move *99).bin temp >nul 2>&1
+move *100).bin temp >nul 2>&1
+
+del *.bin >nul 2>&1
+del *.vcd >nul 2>&1
+
+move "%~dp0POPS\temp\*.bin" "%~dp0POPS" >nul 2>&1
+move "%~dp0POPS\temp\*.cue" "%~dp0POPS" >nul 2>&1
+rmdir /s /q temp >nul 2>&1
+
+pause
+
+::@echo off
+::chcp 1252 > nul
+::
+:::: Put the path to the folder where the .CUE files are here:
+::set Folder=%userprofile%\desktop\My CUE
+::
+::pushd "%Folder%"
+::for /f "delims=" %%a in ('dir /a-d /o-e /b *.cue *.bin') do (
+::IF /i "%%~xa"==".cue" IF /i not Exist "%%~na" md "%%~na"
+::IF /i exist "%%~na" move "%%a" "%%~na"
+::)
+::popd
+::
+
 goto Advanced-Menu
 
 REM #######################################################################################################################################################
-
-
 
 
 :FPH
