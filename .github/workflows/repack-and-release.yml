@@ -40,6 +40,7 @@ jobs:
         echo `date`>>commit.sys
         cd ..
         cd ..
+        cd ..
         DATEE=`date '+[%Y-%m-%d]'`
         mv HDD_PFS_Batch_Kit_Manager HDD_PFS_Batch_Kit_Manager-$PKG-$DATEE
         zip -r HDD_PFS_Batch_Kit_Manager\[$SCH\] HDD_PFS_Batch_Kit_Manager-$PKG-*/*
