@@ -1659,6 +1659,7 @@ cd %~dp0POPS
 if exist rmdir /s /q temp >nul 2>&1
 md temp >nul 2>&1
 %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+%~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 
 for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "%%f"
 
