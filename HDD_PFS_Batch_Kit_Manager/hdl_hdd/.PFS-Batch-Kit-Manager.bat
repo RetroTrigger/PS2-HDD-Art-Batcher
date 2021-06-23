@@ -346,7 +346,7 @@ if exist gameid.txt (
 cls
 set /a gamecount=0
 
-for %%f in (*.iso *.cue) do (
+for %%f in (*.iso *.cue *.nrg *.gi *.iml) do (
 	set /a gamecount+=1
 	echo.
 	echo !gamecount! - %%f
