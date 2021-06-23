@@ -122,8 +122,8 @@ echo.Welcome in PFS Batch Kit Manager
 echo.------------------------------------------
 ECHO Advanced Menu 
 ECHO.
-ECHO 1. Convert .VCD to .BIN/.CUE (Restore the original Multiple .Bin)
-ECHO.
+ECHO 1. Convert .BIN to .VCD
+ECHO 2. Convert .VCD to .BIN (Restore the original Multiple .Bin)
 ECHO.
 ECHO.
 ECHO.
@@ -138,14 +138,12 @@ echo.
 set /p choice=Select Option:.
 if not '%choice%'=='' set choice=%choice:~0,10%
 cd "%~dp0"
-if '%choice%'=='1'  goto VCD2BIN
-if '%choice%'=='2'  goto 
+if '%choice%'=='1'  goto convONLYVCD
+if '%choice%'=='2'  goto VCD2BIN
 if '%choice%'=='10' goto start
 if '%choice%'=='11' exit
-
-
-
 if '%choice%'=='99' (goto FPH)
+
 ECHO "%choice%" is not valid, try again
 cls
 (goto start)
@@ -346,7 +344,7 @@ if exist gameid.txt (
 cls
 set /a gamecount=0
 
-for %%f in (*.iso *.cue *.nrg *.gi *.iml) do (
+for %%f in (*.iso *.cue) do (
 	set /a gamecount+=1
 	echo.
 	echo !gamecount! - %%f
@@ -1694,15 +1692,14 @@ rmdir /s /q temp >nul 2>&1
 goto terminateVCD
 :failBIN
 @echo off
-echo. 
 "%~dp0BAT\Diagbox.EXE" gd 06
 move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
 rmdir /s /q temp >nul 2>&1
+echo.
 echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POPS folder.
 echo Also check that the name matches inside the .cue
 echo. 
 "%~dp0BAT\Diagbox.EXE" gd 07
-pause
 goto terminateVCD
 :convertVCD
 CUE2POPS_2_3.EXE "%~dp0POPS"
@@ -3161,7 +3158,67 @@ del RenameISO.bat
 call %~dp0.PFS-Batch-Kit-Manager.bat
 exit 
 
-REM #########################################################################################################
+REM ####################################################################################################################################################
+
+:convONLYVCD
+cls
+cd %~dp0POPS
+@echo off
+if exist rmdir /s /q temp >nul 2>&1
+md temp >nul 2>&1
+if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
+if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+
+for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "%%f"
+
+move *.cue.cue "%~dp0POPS\temp" >nul 2>&1
+move *.cue.bin "%~dp0POPS\temp" >nul 2>&1
+
+del *.bin >nul 2>&1
+del *.cue >nul 2>&1
+
+move "temp\*.bin" %~dp0POPS >nul 2>&1
+move "temp\*.cue" %~dp0POPS >nul 2>&1
+move *.vcd temp >nul 2>&1
+%~d0
+cd %~dp0BAT
+if EXIST "%~dp0POPS" (goto checkBIN2) else (if exist *.cue (for %%i in (*.cue) do %~dp0BAT\CUE2POPS_2_3.EXE "%~p0%%i") else goto failBIN2)
+pause
+goto terminateVCD2
+:checkBIN2
+@echo off
+if not exist "%~dp0POPS\*.*" goto convertVCD2
+cd "%~dp0POPS"
+if not exist *.cue goto failBIN2
+for %%i in (*.cue) do "%~dp0BAT\CUE2POPS_2_3.EXE" "%~dp0POPS\%%i"
+md temp >nul 2>&1
+del *.bin >nul 2>&1
+del *.cue >nul 2>&1
+ren *.vcd *. >nul 2>&1
+ren *.cue *.VCD >nul 2>&1
+move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
+rmdir /s /q temp >nul 2>&1
+goto terminateVCD2
+:failBIN2
+@echo off
+"%~dp0BAT\Diagbox.EXE" gd 06
+move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
+rmdir /s /q temp >nul 2>&1
+echo. 
+echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POPS folder.
+echo Also check that the name matches inside the .cue
+echo. 
+"%~dp0BAT\Diagbox.EXE" gd 07
+goto terminateVCD2
+:convertVCD2
+CUE2POPS_2_3.EXE "%~dp0POPS"
+goto terminateVCD2
+:terminateVCD2
+pause
+goto Advanced-Menu
+
+REM ####################################################################################################################################################
 
 :VCD2BIN
 cls
@@ -3178,11 +3235,11 @@ if not exist *.vcd goto failVCD
 for %%i in (*.vcd) do "%~dp0BAT\POPS2CUE.EXE" "%~dp0POPS\%%i"
 goto terminateBIN
 :failVCD
-"%~dp0BAT\Diagbox.EXE" gd 0c
+"%~dp0BAT\Diagbox.EXE" gd 06
+echo.
 echo .VCD NOT DETECTED: Please drop .VCD ON POPS FOLDER.
 echo.
 "%~dp0BAT\Diagbox.EXE" gd 0f
-pause
 goto terminateBIN
 :convertBIN
 POPS2CUE.EXE "%~dp0POPS"
