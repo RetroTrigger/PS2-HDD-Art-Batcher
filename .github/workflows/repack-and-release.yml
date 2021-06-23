@@ -52,7 +52,7 @@ jobs:
         cd ..
         DATEE=`date '+[%Y-%m-%d]'`
         mv HDD_PFS_Batch_Kit_Manager HDD_PFS_Batch_Kit_Manager-$PKG-$DATEE
-        zip -r HDD_PFS_Batch_Kit_Manager\[$SCH\] HDD_PFS_Batch_Kit_Manager-$PKG-*/*
+        7z a -t7z -r  HDD_PFS_Batch_Kit_Manager\[$SCH\].7z HDD_PFS_Batch_Kit_Manager-$PKG-*/*
         ls -R
     - name: Upload artifacts
       if: ${{ success() }}
@@ -60,7 +60,7 @@ jobs:
       with:
         name:  ${{ matrix.package }}
         path: |
-             HDD_PFS_Batch_Kit_Manager*.zip
+             HDD_PFS_Batch_Kit_Manager*.7z
     - name: Create release
       if: github.ref == 'refs/heads/master' || github.ref == 'refs/heads/main'
       uses: marvinpinto/action-automatic-releases@latest
@@ -69,4 +69,4 @@ jobs:
         automatic_release_tag: ${{ matrix.package }}
         title:  " HDD Art Batcher ${{ matrix.package }}"
         files: |
-                HDD_PFS_Batch_Kit_Manager*.zip
+                HDD_PFS_Batch_Kit_Manager*.7z
