@@ -29,6 +29,15 @@ jobs:
         cd BAT
         rm -f WIDE.ZIP
         wget https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O $PWD/WIDE.ZIP
+    
+    - name: update HDL.EXE
+      run: |
+        cd HDD_PFS_Batch_Kit_Manager
+        cd hdl_hdd
+        cd BAT
+        wget https://github.com/israpps/hdl-dump/releases/download/hdlinst/HDL.EXE -O $PWD/HDL.EXE
+
+    
     - name: Zip Folder
       run: |
         SCH=${GITHUB_SHA::7}
