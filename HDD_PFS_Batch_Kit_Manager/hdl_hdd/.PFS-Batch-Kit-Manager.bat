@@ -122,7 +122,7 @@ echo.Welcome in PFS Batch Kit Manager
 echo.------------------------------------------
 ECHO Advanced Menu 
 ECHO.
-ECHO 1. Convert .BIN to .VCD
+ECHO 1. Convert .BIN to .VCD (Multi .BIN Compatible)
 ECHO 2. Convert .VCD to .BIN (Restore the original Multiple .Bin)
 ECHO.
 ECHO.
