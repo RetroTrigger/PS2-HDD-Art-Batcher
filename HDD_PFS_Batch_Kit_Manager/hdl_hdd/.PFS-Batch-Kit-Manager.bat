@@ -2789,22 +2789,26 @@ For %%Z in (PARTITION_GAMES_NEW.txt) do (
 
 echo on & call PARTITION_GAMES_NEW.bat
 
-@echo Off
+@ECHO OFF
 setlocal enabledelayedexpansion
 
-set FileToCheck=Rename.txt
-set OutputFile=RenameISO.bat
-
-if exist "%OutputFile%" del "%OutputFile%"
-for /f "usebackq delims=*" %%T in ("%FileToCheck%") do (
-  echo %%T
-  Set TempVar=%%T
-  set TempVar=!TempVar::=-!
-  set TempVar=!TempVar:?=-!
-  echo !TempVar!>>"%OutputFile%"
-  )
-  
+set "FileName=Rename.txt"
+set "OutFile=RenameISO.bat"
+(
+for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
+ set "line=%%a"
+ set "line=!line::=-!"
+ set "line=!line:?=-!"
+ set "line=!line:/=-!"
+ set "line=!line:\=-!"
+ set "line=!line:>=-!"
+ set "line=!line:<=-!"
+ echo !line!
+)
+)>"%OutFile%"
 call RenameISO.bat
+ren *. *.iso
+
 pause
 del gameid.txt
 del hdl_dump.exe
@@ -2841,22 +2845,26 @@ For %%Z in (PARTITION_GAMES_NEW.txt) do (
 
 echo on & call PARTITION_GAMES_NEW.bat
 
-@echo Off
+@ECHO OFF
 setlocal enabledelayedexpansion
 
-set FileToCheck=Rename.txt
-set OutputFile=RenameISO.bat
-
-if exist "%OutputFile%" del "%OutputFile%"
-for /f "usebackq delims=*" %%T in ("%FileToCheck%") do (
-  echo %%T
-  Set TempVar=%%T
-  set TempVar=!TempVar::=-!
-  set TempVar=!TempVar:?=-!
-  echo !TempVar!>>"%OutputFile%"
-  )
-  
+set "FileName=Rename.txt"
+set "OutFile=RenameISO.bat"
+(
+for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
+ set "line=%%a"
+ set "line=!line::=-!"
+ set "line=!line:?=-!"
+ set "line=!line:/=-!"
+ set "line=!line:\=-!"
+ set "line=!line:>=-!"
+ set "line=!line:<=-!"
+ echo !line!
+)
+)>"%OutFile%"
 call RenameISO.bat
+ren *. *.iso
+
 pause
 del gameid.txt
 del hdl_dump.exe
@@ -2893,22 +2901,26 @@ For %%Z in (PARTITION_GAMES_NEW.txt) do (
 
 echo on & call PARTITION_GAMES_NEW.bat
 
-@echo Off
+@ECHO OFF
 setlocal enabledelayedexpansion
 
-set FileToCheck=Rename.txt
-set OutputFile=RenameISO.bat
-
-if exist "%OutputFile%" del "%OutputFile%"
-for /f "usebackq delims=*" %%T in ("%FileToCheck%") do (
-  echo %%T
-  Set TempVar=%%T
-  set TempVar=!TempVar::=-!
-  set TempVar=!TempVar:?=-!
-  echo !TempVar!>>"%OutputFile%"
-  )
-  
+set "FileName=Rename.txt"
+set "OutFile=RenameISO.bat"
+(
+for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
+ set "line=%%a"
+ set "line=!line::=-!"
+ set "line=!line:?=-!"
+ set "line=!line:/=-!"
+ set "line=!line:\=-!"
+ set "line=!line:>=-!"
+ set "line=!line:<=-!"
+ echo !line!
+)
+)>"%OutFile%"
 call RenameISO.bat
+ren *. *.iso
+
 pause
 del gameid.txt
 del hdl_dump.exe
@@ -2947,22 +2959,26 @@ For %%Z in (PARTITION_GAMES_NEW.txt) do (
 
 echo on & call PARTITION_GAMES_NEW.bat
 
-@echo Off
+@ECHO OFF
 setlocal enabledelayedexpansion
 
-set FileToCheck=Rename.txt
-set OutputFile=RenameISO.bat
-
-if exist "%OutputFile%" del "%OutputFile%"
-for /f "usebackq delims=*" %%T in ("%FileToCheck%") do (
-  echo %%T
-  Set TempVar=%%T
-  set TempVar=!TempVar::=-!
-  set TempVar=!TempVar:?=-!
-  echo !TempVar!>>"%OutputFile%"
-  )
-  
+set "FileName=Rename.txt"
+set "OutFile=RenameISO.bat"
+(
+for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
+ set "line=%%a"
+ set "line=!line::=-!"
+ set "line=!line:?=-!"
+ set "line=!line:/=-!"
+ set "line=!line:\=-!"
+ set "line=!line:>=-!"
+ set "line=!line:<=-!"
+ echo !line!
+)
+)>"%OutFile%"
 call RenameISO.bat
+ren *. *.iso
+
 pause
 del gameid.txt
 del hdl_dump.exe
@@ -3000,22 +3016,26 @@ For %%Z in (PARTITION_GAMES_NEW.txt) do (
 
 echo on & call PARTITION_GAMES_NEW.bat
 
-@echo Off
+@ECHO OFF
 setlocal enabledelayedexpansion
 
-set FileToCheck=Rename.txt
-set OutputFile=RenameISO.bat
-
-if exist "%OutputFile%" del "%OutputFile%"
-for /f "usebackq delims=*" %%T in ("%FileToCheck%") do (
-  echo %%T
-  Set TempVar=%%T
-  set TempVar=!TempVar::=-!
-  set TempVar=!TempVar:?=-!
-  echo !TempVar!>>"%OutputFile%"
-  )
-  
+set "FileName=Rename.txt"
+set "OutFile=RenameISO.bat"
+(
+for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
+ set "line=%%a"
+ set "line=!line::=-!"
+ set "line=!line:?=-!"
+ set "line=!line:/=-!"
+ set "line=!line:\=-!"
+ set "line=!line:>=-!"
+ set "line=!line:<=-!"
+ echo !line!
+)
+)>"%OutFile%"
 call RenameISO.bat
+ren *. *.iso
+
 pause
 del gameid.txt
 del hdl_dump.exe
@@ -3052,22 +3072,26 @@ For %%Z in (PARTITION_GAMES_NEW.txt) do (
 
 echo on & call PARTITION_GAMES_NEW.bat
 
-@echo Off
+@ECHO OFF
 setlocal enabledelayedexpansion
 
-set FileToCheck=Rename.txt
-set OutputFile=RenameISO.bat
-
-if exist "%OutputFile%" del "%OutputFile%"
-for /f "usebackq delims=*" %%T in ("%FileToCheck%") do (
-  echo %%T
-  Set TempVar=%%T
-  set TempVar=!TempVar::=-!
-  set TempVar=!TempVar:?=-!
-  echo !TempVar!>>"%OutputFile%"
-  )
-  
+set "FileName=Rename.txt"
+set "OutFile=RenameISO.bat"
+(
+for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
+ set "line=%%a"
+ set "line=!line::=-!"
+ set "line=!line:?=-!"
+ set "line=!line:/=-!"
+ set "line=!line:\=-!"
+ set "line=!line:>=-!"
+ set "line=!line:<=-!"
+ echo !line!
+)
+)>"%OutFile%"
 call RenameISO.bat
+ren *. *.iso
+
 pause
 del gameid.txt
 del hdl_dump.exe
@@ -3106,23 +3130,27 @@ For %%Z in (PARTITION_GAMES_NEW.txt) do (
 
 echo on & call PARTITION_GAMES_NEW.bat
 
-@echo Off
+@ECHO OFF
 setlocal enabledelayedexpansion
 
-set FileToCheck=Rename.txt
-set OutputFile=RenameISO.bat
-
-if exist "%OutputFile%" del "%OutputFile%"
-for /f "usebackq delims=*" %%T in ("%FileToCheck%") do (
-  echo %%T
-  Set TempVar=%%T
-  set TempVar=!TempVar::=-!
-  set TempVar=!TempVar:?=-!
-  echo !TempVar!>>"%OutputFile%"
-  )
-
+set "FileName=Rename.txt"
+set "OutFile=RenameISO.bat"
+(
+for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
+ set "line=%%a"
+ set "line=!line::=-!"
+ set "line=!line:?=-!"
+ set "line=!line:/=-!"
+ set "line=!line:\=-!"
+ set "line=!line:>=-!"
+ set "line=!line:<=-!"
+ echo !line!
+)
+)>"%OutFile%"
 call RenameISO.bat
+ren *. *.iso
 pause
+
 del gameid.txt
 del hdl_dump.exe
 del hdl_svr_093.elf
@@ -3286,24 +3314,15 @@ del *.vcd >nul 2>&1
 
 move "%~dp0POPS\temp\*.bin" "%~dp0POPS" >nul 2>&1
 move "%~dp0POPS\temp\*.cue" "%~dp0POPS" >nul 2>&1
+
+for %%# in (*.cue) do %~dp0BAT\7z.exe a -bso0 "%%~n#.zip" "%%#" "%%~n# (Track ?).bin" "%%~n# (Track ??).bin"
+
+del *.bin >nul 2>&1
+del *.cue >nul 2>&1
+
 rmdir /s /q temp >nul 2>&1
 
 pause
-
-::@echo off
-::chcp 1252 > nul
-::
-:::: Put the path to the folder where the .CUE files are here:
-::set Folder=%userprofile%\desktop\My CUE
-::
-::pushd "%Folder%"
-::for /f "delims=" %%a in ('dir /a-d /o-e /b *.cue *.bin') do (
-::IF /i "%%~xa"==".cue" IF /i not Exist "%%~na" md "%%~na"
-::IF /i exist "%%~na" move "%%a" "%%~na"
-::)
-::popd
-::
-
 goto Advanced-Menu
 
 REM #######################################################################################################################################################
