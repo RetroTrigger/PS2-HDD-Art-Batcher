@@ -86,7 +86,7 @@ if '%choice%'=='11' exit
 
 
 
-if '%choice%'=='99' (goto FPH)
+if '%choice%'=='99' goto FPH
 ECHO "%choice%" is not valid, try again
 ECHO
 
@@ -112,7 +112,7 @@ echo\
 echo\                                   
 PAUSE
 cls
-(goto start)
+goto start
 
 @ECHO off
 :Advanced-Menu
@@ -142,11 +142,10 @@ if '%choice%'=='1'  goto convONLYVCD
 if '%choice%'=='2'  goto VCD2BIN
 if '%choice%'=='10' goto start
 if '%choice%'=='11' exit
-if '%choice%'=='99' (goto FPH)
 
 ECHO "%choice%" is not valid, try again
 cls
-(goto start)
+goto start
            
 	   
 REM ########################################################################################################################################################################
@@ -252,7 +251,7 @@ cd /d "%~dp0CD-DVD"
 
 del gameid.txt
 copy "%~dp0BAT\DB\gameidENG.txt" "%~dp0CD-DVD"
-copy "%~dp0BAT\hdl_dump_093.exe" "%~dp0CD-DVD\hdl_dump.exe"
+copy "%~dp0BAT\hdl_dump.exe" "%~dp0CD-DVD\hdl_dump.exe"
 copy "%~dp0BAT\hdl_svr_093.elf" "%~dp0CD-DVD"
 ren gameidENG.txt gameid.txt
 cls
@@ -344,7 +343,7 @@ if exist gameid.txt (
 cls
 set /a gamecount=0
 
-for %%f in (*.iso *.cue) do (
+for %%f in (*.iso *.cue *.nrg *.gi *.iml) do (
 	set /a gamecount+=1
 	echo.
 	echo !gamecount! - %%f
@@ -473,14 +472,14 @@ IF NOT EXIST %~dp0BAT\busybox.exe (
 	echo DEP "busybox.exe" %DEPS_FOUND%
 	)
 
-IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
+IF NOT EXIST %~dp0BAT\hdl_dump.exe (
 	set @dep_hdl=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
+	echo DEP "hdl_dump.exe" %DEPS_MISSING%
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
+	echo DEP "hdl_dump.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
@@ -583,8 +582,8 @@ echo\
 echo %HDD_SCAN%
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -1421,13 +1420,13 @@ IF NOT EXIST %~dp0BAT\busybox.exe (
 	echo DEP "busybox.exe" %DEPS_FOUND%
 	)
 
-IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
+IF NOT EXIST %~dp0BAT\hdl_dump.exe (
 	set @dep_hdl=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
+	echo DEP "hdl_dump.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
+	echo DEP "hdl_dump.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
@@ -1505,8 +1504,8 @@ echo\
 echo Scanning for Playstation 2 HDDs:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -1754,12 +1753,12 @@ IF NOT EXIST %~dp0BAT\busybox.exe (
 	echo DEP "busybox.exe" %DEPS_FOUND%
 	)
 
-IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
+IF NOT EXIST %~dp0BAT\hdl_dump.exe (
 	set @dep_hdl=fail
-	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
+	echo DEP "hdl_dump.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
+	echo DEP "hdl_dump.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
@@ -1826,8 +1825,8 @@ echo\
 echo\
 echo Scanning for Playstation 2 HDDs:
 echo ----------------------------------------------------
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -2153,12 +2152,12 @@ IF NOT EXIST %~dp0BAT\busybox.exe (
 	echo DEP "busybox.exe" %DEPS_FOUND%
 	)
 
-IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
+IF NOT EXIST %~dp0BAT\hdl_dump.exe (
 	set @dep_hdl=fail
-	echo DEP "hdl_dump_093.exe" %DEPS_MISSING%
+	echo DEP "hdl_dump.exe" %DEPS_MISSING%
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" %DEPS_FOUND%
+	echo DEP "hdl_dump.exe" %DEPS_FOUND%
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
@@ -2224,8 +2223,8 @@ echo\
 echo Scanning for Playstation 2 HDDs:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -2398,13 +2397,13 @@ IF NOT EXIST %~dp0BAT\busybox.exe (
 	echo DEP "busybox.exe" Confirmed
 	)
 
-IF NOT EXIST %~dp0BAT\hdl_dump_093.exe (
+IF NOT EXIST %~dp0BAT\hdl_dump.exe (
 	set @dep_hdl=fail
 "%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "hdl_dump_093.exe" Missing
+	echo DEP "hdl_dump.exe" Missing
 	) else ( 
 	set @dep_hdl=good
-	echo DEP "hdl_dump_093.exe" Confirmed
+	echo DEP "hdl_dump.exe" Confirmed
 	)
 
 IF NOT EXIST %~dp0BAT\pfsshell.exe (
@@ -2482,8 +2481,8 @@ echo\
 echo Scanning for Playstation 2 HDDs:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
-"%~dp0BAT\hdl_dump_093" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -2696,7 +2695,7 @@ IF NOT EXIST CD-DVD\  MD CD-DVD
 cd "%~dp0CD-DVD"
 
 del gameid.txt
-copy "%~dp0BAT\hdl_dump_093.exe" "%~dp0CD-DVD\hdl_dump.exe"
+copy "%~dp0BAT\hdl_dump.exe" "%~dp0CD-DVD\hdl_dump.exe"
 copy "%~dp0BAT\hdl_svr_093.elf" "%~dp0CD-DVD"
 
 @echo off 
@@ -2759,7 +2758,7 @@ if /I "%choix%"=="4" (goto :hdd4)
 if /I "%choix%"=="5" (goto :hdd5)
 if /I "%choix%"=="6" (goto :hdd6)
 if /I "%choix%"=="7" (goto :network)
-if /I "%choix%"=="8" (goto :end)
+if /I "%choix%"=="8" (goto :start)
 
 :hdd1
 echo.
@@ -2778,10 +2777,10 @@ set /a "LastLine=!LastLine!-1"
 for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
 	
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo hdl_dump.exe extract hdd1: "%%D" %%C.iso) > "PARTITION_GAMES_NEW.bat")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
 
 
 echo on & call PARTITION_GAMES_NEW.bat
@@ -2803,10 +2802,10 @@ for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
  echo !line!
 )
 )>"%OutFile%"
+ren *. *.iso >nul 2>&1
 call RenameISO.bat
-ren *. *.iso
-
 pause
+
 del gameid.txt
 del hdl_dump.exe
 del hdl_svr_093.elf
@@ -2834,10 +2833,10 @@ set /a "LastLine=!LastLine!-1"
 for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
 	
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%D" %%C.iso) > "PARTITION_GAMES_NEW.bat")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
 
 
 echo on & call PARTITION_GAMES_NEW.bat
@@ -2859,10 +2858,10 @@ for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
  echo !line!
 )
 )>"%OutFile%"
+ren *. *.iso >nul 2>&1
 call RenameISO.bat
-ren *. *.iso
-
 pause
+
 del gameid.txt
 del hdl_dump.exe
 del hdl_svr_093.elf
@@ -2890,10 +2889,10 @@ set /a "LastLine=!LastLine!-1"
 for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
 	
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo hdl_dump.exe extract hdd3: "%%D" %%C.iso) > "PARTITION_GAMES_NEW.bat")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
 
 
 echo on & call PARTITION_GAMES_NEW.bat
@@ -2915,10 +2914,10 @@ for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
  echo !line!
 )
 )>"%OutFile%"
+ren *. *.iso >nul 2>&1
 call RenameISO.bat
-ren *. *.iso
-
 pause
+
 del gameid.txt
 del hdl_dump.exe
 del hdl_svr_093.elf
@@ -2948,10 +2947,10 @@ set /a "LastLine=!LastLine!-1"
 for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
 	
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo hdl_dump.exe extract hdd4: "%%D" %%C.iso) > "PARTITION_GAMES_NEW.bat")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
 
 
 echo on & call PARTITION_GAMES_NEW.bat
@@ -2973,10 +2972,10 @@ for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
  echo !line!
 )
 )>"%OutFile%"
+ren *. *.iso >nul 2>&1
 call RenameISO.bat
-ren *. *.iso
-
 pause
+
 del gameid.txt
 del hdl_dump.exe
 del hdl_svr_093.elf
@@ -3005,10 +3004,10 @@ set /a "LastLine=!LastLine!-1"
 for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
 	
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo hdl_dump.exe extract hdd5: "%%D" %%C.iso) > "PARTITION_GAMES_NEW.bat")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
 
 
 echo on & call PARTITION_GAMES_NEW.bat
@@ -3030,10 +3029,10 @@ for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
  echo !line!
 )
 )>"%OutFile%"
+ren *. *.iso >nul 2>&1
 call RenameISO.bat
-ren *. *.iso
-
 pause
+
 del gameid.txt
 del hdl_dump.exe
 del hdl_svr_093.elf
@@ -3061,10 +3060,10 @@ set /a "LastLine=!LastLine!-1"
 for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
 	
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo hdl_dump.exe extract hdd6: "%%D" %%C.iso) > "PARTITION_GAMES_NEW.bat")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
 
 
 echo on & call PARTITION_GAMES_NEW.bat
@@ -3086,10 +3085,10 @@ for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
  echo !line!
 )
 )>"%OutFile%"
+ren *. *.iso >nul 2>&1
 call RenameISO.bat
-ren *. *.iso
-
 pause
+
 del gameid.txt
 del hdl_dump.exe
 del hdl_svr_093.elf
@@ -3119,10 +3118,10 @@ set /a "LastLine=!LastLine!-1"
 for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
 	
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo hdl_dump.exe extract IP-HERE "%%D" %%C.iso) > "PARTITION_GAMES_NEW.bat")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
 
 
 echo on & call PARTITION_GAMES_NEW.bat
@@ -3144,8 +3143,8 @@ for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
  echo !line!
 )
 )>"%OutFile%"
+ren *. *.iso >nul 2>&1
 call RenameISO.bat
-ren *. *.iso
 pause
 
 del gameid.txt
