@@ -341,6 +341,7 @@ if exist gameid.txt (
 	pause
 )
 cls
+::%~dp0BAT\7z.exe x -bso0 "%~dp0CD-DVD\*.zip"
 set /a gamecount=0
 
 for %%f in (*.iso *.cue *.nrg *.gi *.iml) do (
@@ -3156,6 +3157,13 @@ del Rename.txt
 del RenameISO.bat
 call %~dp0.PFS-Batch-Kit-Manager.bat
 exit 
+
+:: For HDL_DUMP_093
+::For %%Z in (PARTITION_GAMES_NEW.txt) do (
+:: (for /f "tokens=2-4*" %%A in (%%Z) do echo hdl_dump.exe extract "%%D" %%C.iso) > "PARTITION_GAMES_NEW.bat")
+::
+::For %%Z in (PARTITION_GAMES_NEW.txt) do (
+:: (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
 
 REM ####################################################################################################################################################
 
