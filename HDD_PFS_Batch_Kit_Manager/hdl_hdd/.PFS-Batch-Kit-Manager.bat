@@ -340,10 +340,12 @@ if exist gameid.txt (
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	pause
 )
-REM CHECK IF .CUE IS MISSING FOR .BIN
+
 cls
 @echo off
 ::%~dp0BAT\7z.exe x -bso0 "%~dp0CD-DVD\*.zip"
+
+REM CHECK IF .CUE IS MISSING FOR .BIN IF IT IS NOT DETECTED IT WILL BE CREATED
 
 md temp >nul 2>&1
 move *.bin temp >nul 2>&1
@@ -355,7 +357,6 @@ cd %~dp0CD-DVD
 rmdir /s /q temp >nul 2>&1
 
 set /a gamecount=0
-
 for %%f in (*.iso *.cue *.nrg *.gi *.iml) do (
 	set /a gamecount+=1
 	echo.
