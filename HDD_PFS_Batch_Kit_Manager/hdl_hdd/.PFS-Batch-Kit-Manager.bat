@@ -350,7 +350,7 @@ REM CHECK IF .CUE IS MISSING FOR .BIN IF IT IS NOT DETECTED IT WILL BE CREATED
 md temp >nul 2>&1
 move *.bin temp >nul 2>&1
 cd temp >nul 2>&1
-if not exist *.cue %~dp0BAT\bincue.exe "%%~nf" 
+if not exist *.cue %~dp0BAT\cuemaker.exe "%%~nf" 
 move *.bin %~dp0CD-DVD >nul 2>&1
 move *.cue %~dp0CD-DVD >nul 2>&1
 cd %~dp0CD-DVD
