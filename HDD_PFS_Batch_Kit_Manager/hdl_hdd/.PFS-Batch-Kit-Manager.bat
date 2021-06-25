@@ -73,15 +73,15 @@ echo.
 set /p choice=Select Option:.
 if not '%choice%'=='' set choice=%choice:~0,10%
 cd "%~dp0"
-if '%choice%'=='1' goto 3-Transfer-PS1Games-HDDPOPS
-if '%choice%'=='2' goto 1-Transfer-PS2Games-HDLBATCH
-if '%choice%'=='3' goto 2-Transfer-APPS-ART-CFG-CHT-THM-VMC
-if '%choice%'=='4' goto 6-POPS-Binaries     
-if '%choice%'=='5' start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart
-if '%choice%'=='7' goto 5-BackupPS1Games
-if '%choice%'=='8' goto 7-BackupPS2Games
-if '%choice%'=='9' goto 4-Backup-ART-CFG-CHT-VMC
-if '%choice%'=='10' goto Advanced-Menu
+if '%choice%'=='1' (goto 3-Transfer-PS1Games-HDDPOPS)
+if '%choice%'=='2' (goto 1-Transfer-PS2Games-HDLBATCH)
+if '%choice%'=='3' (goto 2-Transfer-APPS-ART-CFG-CHT-THM-VMC)
+if '%choice%'=='4' (goto 6-POPS-Binaries)     
+if '%choice%'=='5' (start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart)
+if '%choice%'=='7' (goto 5-BackupPS1Games)
+if '%choice%'=='8' (goto 7-BackupPS2Games)
+if '%choice%'=='9' (goto 4-Backup-ART-CFG-CHT-VMC)
+if '%choice%'=='10' (goto Advanced-Menu)
 if '%choice%'=='11' exit
 
 
@@ -138,9 +138,9 @@ echo.
 set /p choice=Select Option:.
 if not '%choice%'=='' set choice=%choice:~0,10%
 cd "%~dp0"
-if '%choice%'=='1'  goto convONLYVCD
-if '%choice%'=='2'  goto VCD2BIN
-if '%choice%'=='10' goto start
+if '%choice%'=='1'  (goto convONLYVCD)
+if '%choice%'=='2'  (goto VCD2BIN)
+if '%choice%'=='10' (goto start)
 if '%choice%'=='11' exit
 
 ECHO "%choice%" is not valid, try again
@@ -340,8 +340,20 @@ if exist gameid.txt (
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	pause
 )
+REM CHECK IF .CUE IS MISSING FOR .BIN
 cls
+@echo off
 ::%~dp0BAT\7z.exe x -bso0 "%~dp0CD-DVD\*.zip"
+
+md temp >nul 2>&1
+move *.bin temp >nul 2>&1
+cd temp >nul 2>&1
+if not exist *.cue %~dp0BAT\bincue.exe "%%~nf" 
+move *.bin %~dp0CD-DVD >nul 2>&1
+move *.cue %~dp0CD-DVD >nul 2>&1
+cd %~dp0CD-DVD
+rmdir /s /q temp >nul 2>&1
+
 set /a gamecount=0
 
 for %%f in (*.iso *.cue *.nrg *.gi *.iml) do (
