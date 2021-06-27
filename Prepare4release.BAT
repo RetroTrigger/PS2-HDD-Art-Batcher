@@ -2,14 +2,14 @@
 cd /d %~dp0
 cd HDD_PFS_Batch_Kit_Manager
 cd hdl_hdd
-rmdir /Q APPS && echo erased APPS folder
-rmdir /Q CHT && echo erased CHT folder
-rmdir /Q ART && echo erased ART folder
-rmdir /Q THM && echo erased THM folder
-rmdir /Q VMC && echo erased VMC folder
-rmdir /Q CFG && echo erased CFG folder
-rmdir /Q TMP && echo erased TMP folder
-rmdir /Q POPS && echo erased POPS folder
+rmdir /Q APPS 2>nul && echo erased APPS folder || echo APPS Folder already gone.
+rmdir /Q CHT  2>nul && echo erased CHT  folder || echo CHT  Folder already gone.
+rmdir /Q ART  2>nul && echo erased ART  folder || echo ART  Folder already gone.
+rmdir /Q THM  2>nul && echo erased THM  folder || echo THM  Folder already gone.
+rmdir /Q VMC  2>nul && echo erased VMC  folder || echo VMC  Folder already gone.
+rmdir /Q CFG  2>nul && echo erased CFG  folder || echo CFG  Folder already gone.
+rmdir /Q TMP  2>nul && echo erased TMP  folder || echo TMP  Folder already gone.
+rmdir /Q POPS 2>nul && echo erased POPS folder || echo POPS Folder already gone.
 echo Updating Widescreen hacks file
 echo downloading from: "https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip"
 cd BAT
