@@ -79,3 +79,4 @@ set MENU_11=11. Exit
 
 
 set DOWNLOAD=Download
+set LATEST_VER=Latest Version
