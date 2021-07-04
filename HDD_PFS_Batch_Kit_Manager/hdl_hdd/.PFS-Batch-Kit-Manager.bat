@@ -629,7 +629,7 @@ CHOICE /C 123 /M %BASIC_CHOICE%
 
 IF ERRORLEVEL 1 set @pfs_apps=yes
 IF ERRORLEVEL 2 set @pfs_apps=no
-IF ERRORLEVEL 3 set @pfs_apps=yes & call make_title_cfg.BAT
+IF ERRORLEVEL 3 set @pfs_apps=yes & call make_title_cfg.BAT & cd /d "%~dp0"
 "%~dp0BAT\Diagbox.EXE" gd 0f
 
 
@@ -689,14 +689,14 @@ IF ERRORLEVEL 3 (
 	choice
 	if ERRORLEVEL 1 (
 	echo %INTERNET_CHECK%
-	Ping www.google.nl -n 1 -w 1000
+	Ping www.google.nl -n 1 -w 1000 >nul
 	if errorlevel 1 (
 		
 		echo %NO_INTERNET%
 		
 	) else (
 	"%~dp0BAT\Diagbox.EXE" gd 0d
-		BAT\wget.exe -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O BAT\WIDE.ZIP
+		"%~dp0BAT\wget.exe" -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O BAT\WIDE.ZIP
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	)) 
 	
@@ -704,10 +704,10 @@ IF ERRORLEVEL 3 (
 		echo %EXTRACTING_WIDE%
 		timeout 2 >nul
 	"%~dp0BAT\Diagbox.EXE" gd 07
-		echo %EXTRACTED_WIDE%
+		::echo %EXTRACTED_WIDE%
 	"%~dp0BAT\Diagbox.EXE" gd 0f
 	SETLOCAL DisableDelayedExpansion
-	%~dp0BAT\7z.exe x -bso0 BAT\WIDE.ZIP *.cht -r
+	%~dp0BAT\7z.exe x -bso0 "%~dp0BAT\WIDE.ZIP" *.cht -r
 	SETLOCAL EnableDelayedExpansion
 		echo .
 	"%~dp0BAT\Diagbox.EXE" gd 07
