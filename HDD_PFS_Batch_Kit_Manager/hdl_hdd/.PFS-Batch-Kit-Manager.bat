@@ -1,45 +1,49 @@
 %~dp0BAT\Diagbox.exe gd 07
 @echo off
 chcp 1252
-::color 03
-call "%~dp0BAT\LANG2.BAT" || PAUSE
-call "%~dp0BAT\CFG2.BAT" || PAUSE
-echo\
-echo\
 
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
+cls
+:-------------------------------------
 REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
 
+REM --> If error flag set, we do not have admin.
 if '%errorlevel%' NEQ '0' (
-%~dp0BAT\Diagbox.exe gd 0e
     echo %ADMIN_PRIV%
-	%~dp0BAT\Diagbox.exe gd 07
     goto UACPrompt
 ) else ( goto gotAdmin )
 
 :UACPrompt
-
     echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
-    echo UAC.ShellExecute "%~s0", "", "", "runas", 1 >> "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
     "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
     exit /B
 
 :gotAdmin
-
-    if exist "%temp%\getadmin.vbs" ( del "%temp%\getadmin.vbs" )
     pushd "%CD%"
     CD /D "%~dp0"
+:--------------------------------------
 
-
-
-cd "%~dp0"
+IF NOT EXIST APPS\ MD APPS
+IF NOT EXIST ART\  MD ART
+IF NOT EXIST CD-DVD\ MD CD-DVD
+IF NOT EXIST CFG\  MD CFG
+IF NOT EXIST CHT\  MD CHT
+IF NOT EXIST POPS\ MD POPS
+IF NOT EXIST POPS-Binaries\ MD POPS-Binaries
+IF NOT EXIST THM\  MD THM
+IF NOT EXIST VMC\  MD VMC
 cls
 
 setlocal enableDelayedExpansion
 
 @ECHO off
-:CLSstart
-cls
 :start
 cls
 %~dp0BAT\Diagbox.exe gd 0f
@@ -51,45 +55,35 @@ ECHO %MENU_1%
 ECHO %MENU_2%
 ECHO %MENU_3%
 ECHO %MENU_4%
-ECHO %DOWNLOAD_HDLBINST%
-%~dp0BAT\Diagbox.exe gd 00
 ECHO.
 ECHO. 
-%~dp0BAT\Diagbox.exe gd 0f
 ECHO %MENU_7%
 ECHO %MENU_8%
 ECHO %MENU_9%
 ECHO. 
 ECHO %MENU_10%
 ECHO.
-%~dp0BAT\Diagbox.exe gd 0f
 ECHO %MENU_11%
 ECHO.
-set choice=
-echo.
 echo.------------------------------------------
-echo.
-%~dp0BAT\Diagbox.exe gd 07
+set choice=
 set /p choice=Select Option:.
 if not '%choice%'=='' set choice=%choice:~0,10%
-cd "%~dp0"
+
 if '%choice%'=='1' (goto 3-Transfer-PS1Games-HDDPOPS)
 if '%choice%'=='2' (goto 1-Transfer-PS2Games-HDLBATCH)
 if '%choice%'=='3' (goto 2-Transfer-APPS-ART-CFG-CHT-THM-VMC)
 if '%choice%'=='4' (goto 6-POPS-Binaries)     
-if '%choice%'=='5' (start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart)
 if '%choice%'=='7' (goto 5-BackupPS1Games)
 if '%choice%'=='8' (goto 7-BackupPS2Games)
 if '%choice%'=='9' (goto 4-Backup-ART-CFG-CHT-VMC)
 if '%choice%'=='10' (goto Advanced-Menu)
 if '%choice%'=='11' exit
 
-
-
-if '%choice%'=='99' goto FPH
+if '%choice%'=='99' (goto FPH)
 ECHO "%choice%" is not valid, try again
 ECHO
-
+(goto start)
 :GDX 
 cls   
 echo\ 
@@ -112,9 +106,11 @@ echo\
 echo\                                   
 PAUSE
 cls
-goto start
+(goto start)
 
 @ECHO off
+:CLSstart
+cls
 :Advanced-Menu
 cls                  
 title PFS Batch Kit Manager by GDX and El_isra
@@ -122,39 +118,77 @@ echo.Welcome in PFS Batch Kit Manager
 echo.------------------------------------------
 ECHO Advanced Menu 
 ECHO.
-ECHO 1. Convert .BIN to .VCD (Multi .BIN Compatible)
-ECHO 2. Convert .VCD to .BIN (Restore the original Multiple .Bin)
+ECHO 1. Conversion Menu
 ECHO.
 ECHO.
+ECHO.
+ECHO %DOWNLOAD_HDLBINST%
 ECHO.
 ECHO 10. Back to main menu
-ECHO.
 ECHO 11. Exit
 ECHO.
-set choice=
-echo.
 echo.------------------------------------------
-echo.
+set choice=
 set /p choice=Select Option:.
 if not '%choice%'=='' set choice=%choice:~0,10%
-cd "%~dp0"
-if '%choice%'=='1'  (goto convONLYVCD)
-if '%choice%'=='2'  (goto VCD2BIN)
+
+if '%choice%'=='1'  (goto Conversion-Menu)
+if '%choice%'=='5'  (start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart)
 if '%choice%'=='10' (goto start)
 if '%choice%'=='11' exit
 
 ECHO "%choice%" is not valid, try again
 cls
-goto start
+(goto Advanced-Menu)
+
+@ECHO off
+:Conversion-Menu
+cls                  
+title PFS Batch Kit Manager by GDX and El_isra
+echo.Welcome in PFS Batch Kit Manager
+echo.------------------------------------------
+ECHO Conversion Menu
+ECHO.
+ECHO 1. Convert .BIN to .VCD (Multi-Tracks .BIN Compatible)
+ECHO 2. Convert .VCD to .BIN (If compatible, it will rebuild the original .bin with the Multi-Track)
+ECHO 3. Convert .BIN to .CHD (Multi-Tracks .BIN Compatible)
+ECHO 4. Convert .CHD to .BIN
+ECHO 5. Convert .ECM to .BIN
+ECHO.
+ECHO 8. Convert Multi-Tracks .BIN to Single .BIN
+ECHO 9. Restore Single .BIN to Multi-Tracks .BIN (If compatible, it will rebuild the original .bin with the Multi-Track)
+ECHO.
+ECHO 10. Back
+ECHO 11. Back to main menu
+ECHO 12. Exit
+ECHO.
+ECHO.
+echo.------------------------------------------
+set choice=
+set /p choice=Select Option:.
+if not '%choice%'=='' set choice=%choice:~0,10%
+
+if '%choice%'=='1'  (goto BIN2VCD)
+if '%choice%'=='2'  (goto VCD2BIN)
+if '%choice%'=='3'  (goto BIN2CHD)
+if '%choice%'=='4'  (goto CHD2BIN)
+if '%choice%'=='5'  (goto ECM2BIN)
+if '%choice%'=='8'  (goto multibin2bin)
+if '%choice%'=='9'  (goto bin2split)
+if '%choice%'=='10' (goto Advanced-Menu)
+if '%choice%'=='11' (goto start)
+if '%choice%'=='12' exit
+
+ECHO "%choice%" is not valid, try again
+cls
+(goto Conversion-Menu)
            
 	   
 REM ########################################################################################################################################################################
 
 :1-Transfer-PS2Games-HDLBATCH
 @echo off
-"%~dp0BAT\Diagbox.EXE" gd 07
-chcp 1252
-:: BatchGotAdmin
+
 :-------------------------------------
 REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
@@ -242,57 +276,69 @@ set TEST=NO
 rem **********************************************************************
 rem * NOTHING TO EDIT BELOW THIS LINE
 
-IF NOT EXIST CD-DVD\  MD CD-DVD
-
 setlocal enableDelayedExpansion
 
 cls
 cd /d "%~dp0CD-DVD"
 
 del gameid.txt
+copy "%~dp0BAT\hdl_dump_093.exe" "%~dp0CD-DVD\hdl_dump.exe"
+::copy "%~dp0BAT\hdl_dump.exe" "%~dp0CD-DVD"
 copy "%~dp0BAT\DB\gameidENG.txt" "%~dp0CD-DVD"
-copy "%~dp0BAT\hdl_dump.exe" "%~dp0CD-DVD\hdl_dump.exe"
+copy "%~dp0BAT\boot.kelf" "%~dp0CD-DVD"
 copy "%~dp0BAT\hdl_svr_093.elf" "%~dp0CD-DVD"
 ren gameidENG.txt gameid.txt
 cls
 
 if "%TEST%"=="NO" (
-	echo WARNING: Make sure to run this program using "Run as Administrator"
-	echo Scanning drives...
-	"%~dp0BAT\Diagbox.EXE" gd 03
-	hdl_dump query
+	::echo WARNING: Make sure to run this program using "Run as Administrator"
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo Scanning for Playstation 2 HDDs:
+echo ----------------------------------------------------
+    "%~dp0BAT\Diagbox.EXE" gd 03
+	%~dp0BAT\hdl_dump query | findstr "hdd1: hdd2: hdd3: hdd4: hdd5: hdd6:"
 	"%~dp0BAT\Diagbox.EXE" gd 07
-
+    echo.
+    echo ----------------------------------------------------
+	"%~dp0BAT\Diagbox.EXE" gd 06
 	echo NOTE: If no PS2 HDDs are found, quit and retry after disconnecting
 	echo all disk drives EXCEPT for your PC boot drive and the PS2 HDDs.
+	"%~dp0BAT\Diagbox.EXE" gd 0f
 	echo. 
 	echo PLAYSTATION 2 HDD INSTALLATION
 	echo 	1. hdd1:
 	echo 	2. hdd2:
 	echo 	3. hdd3:
-	echo 	4. Network
-	echo 	5. QUIT PROGRAM
-	choice /c 12345 /m "Select your PS2 HDD"
+	echo 	4. hdd1:
+	echo 	5. hdd2:
+	echo 	6. hdd3:
+	echo 	7. Network
+	echo 	8. QUIT PROGRAM
+	choice /c 12345678 /m "Select your PS2 HDD"
 
-	if errorlevel 5 call %~dp0.PFS-Batch-Kit-Manager.bat
-	if errorlevel 4 (
+	if errorlevel 8 (goto start)
+	if errorlevel 7 (
 		set /p "hdlhdd=Enter IP of the Playstation 2: "
 		ping -n 1 -w 2000 !hdlhdd!
 		if errorlevel 1 (
 		"%~dp0BAT\Diagbox.EXE" gd 0c
 			echo Unable to ping !hdlhdd! ... ending script.
 			"%~dp0BAT\Diagbox.EXE" gd 07
-			pause
-			call %~dp0.PFS-Batch-Kit-Manager.bat
+			pause & (goto start)
 		)
 	) else (
 		if errorlevel 1 set hdlhdd=hdd1:
 		if errorlevel 2 set hdlhdd=hdd2:
 		if errorlevel 3 set hdlhdd=hdd3:
+		if errorlevel 4 set hdlhdd=hdd4:
+		if errorlevel 5 set hdlhdd=hdd5:
+		if errorlevel 6 set hdlhdd=hdd6:
 	)
 )
 
-			    cls		
+cls		
 echo Choice language Game title
 echo.
 echo 1 English
@@ -346,7 +392,6 @@ cls
 ::%~dp0BAT\7z.exe x -bso0 "%~dp0CD-DVD\*.zip"
 
 REM CHECK IF .CUE IS MISSING FOR .BIN IF IT IS NOT DETECTED IT WILL BE CREATED
-
 md temp >nul 2>&1
 move *.bin temp >nul 2>&1
 cd temp >nul 2>&1
@@ -355,6 +400,7 @@ move *.bin %~dp0CD-DVD >nul 2>&1
 move *.cue %~dp0CD-DVD >nul 2>&1
 cd %~dp0CD-DVD
 rmdir /s /q temp >nul 2>&1
+
 
 set /a gamecount=0
 for %%f in (*.iso *.cue *.nrg *.gi *.iml) do (
@@ -425,6 +471,7 @@ cls
 del %~dp0CD-DVD\gameid.txt
 del %~dp0CD-DVD\hdl_dump.exe
 del %~dp0CD-DVD\hdl_svr_093.elf
+del %~dp0CD-DVD\boot.kelf
 del %~dp0CD-DVD\info.sys
 ::cmd /k
 call %~dp0.PFS-Batch-Kit-Manager.bat
@@ -506,44 +553,14 @@ IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	echo DEP "pfsshell.exe" %DEPS_FOUND%
 	)
 
-IF NOT EXIST %~dp0BAT\libapa.dll (
+IF NOT EXIST %~dp0BAT\libps2hdd.dll (
 	set @pfs_lib1=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libapa.dll" %DEPS_MISSING%
+	echo DEP "libps2hdd.dll" %DEPS_MISSING%
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib1=good
-	echo DEP "libapa.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
-	set @pfs_lib2=fail
-	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
-	"%~dp0BAT\Diagbox.EXE" gd 07
-	) else ( 
-	set @pfs_lib2=good
-	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libiomanX.dll (
-	set @pfs_lib3=fail
-	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libiomanX.dll" %DEPS_MISSING%
-	"%~dp0BAT\Diagbox.EXE" gd 07
-	) else ( 
-	set @pfs_lib3=good
-	echo DEP "libiomanX.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libpfs.dll (
-	set @pfs_lib4=fail
-	"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libpfs.dll" %DEPS_MISSING%
-	"%~dp0BAT\Diagbox.EXE" gd 07
-	) else ( 
-	set @pfs_lib4=good
-	echo DEP "libpfs.dll" %DEPS_FOUND%
+	echo DEP "libps2hdd.dll" %DEPS_FOUND%
 	)
 	
 IF NOT EXIST %~dp0BAT\LANG2.BAT (
@@ -554,7 +571,7 @@ IF NOT EXIST %~dp0BAT\LANG2.BAT (
 	) else ( 
 	set @LANG_FILE=good
 	)
-
+	
 IF NOT EXIST %~dp0BAT\CFG2.BAT (
 	set @CFG_FILE=fail
 	"%~dp0BAT\Diagbox.EXE" gd 0c
@@ -573,24 +590,13 @@ IF %@dep_bbx%==fail ( pause & cmd /k )
 IF %@dep_hdl%==fail ( pause & cmd /k )
 IF %@dep_pfs%==fail ( pause & cmd /k )
 IF %@pfs_lib1%==fail ( pause & cmd /k )
-IF %@pfs_lib2%==fail ( pause & cmd /k )
-IF %@pfs_lib3%==fail ( pause & cmd /k )
-IF %@pfs_lib4%==fail ( pause & cmd /k )
 IF %@CFG_FILE%==fail ( pause & cmd /k )
 IF %@LANG_FILE%==fail ( pause & cmd /k )
-
-IF NOT EXIST APPS\ MD APPS
-IF NOT EXIST ART\  MD ART
-IF NOT EXIST CFG\  MD CFG
-IF NOT EXIST CHT\  MD CHT
-IF NOT EXIST POPS\ MD POPS
-IF NOT EXIST THM\  MD THM
-IF NOT EXIST VMC\  MD VMC
 
 cls
 
 mkdir %~dp0TMP >nul 2>&1
-"%~dp0BAT\Diagbox.EXE" gd 0f
+"%~dp0BAT\Diagbox.EXE" gd 0e
 echo\
 echo\
 echo %HDD_SCAN%
@@ -598,20 +604,39 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+set "search=hdd"
+set "replace=\\.\PhysicalDrive"
+set "search2=:"
+set "replace2="
+set "textFile=hdl-hdd.txt"
+set "rootDir=%~dp0TMP"
+::for /R "%rootDir%" %%j in ("%textFile%") do (
+for %%j in ("%rootDir%\%textFile%") do (
+    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+        set "line=%%i"
+        setlocal EnableDelayedExpansion
+        set "line=!line:%search%=%replace%!"
+		set "line=!line:%search2%=%replace2%!"
+        >>"%%~j" echo(!line!
+        endlocal
+		)
+ )
+
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
-	"%~dp0BAT\Diagbox.EXE" gd 0c
-		echo         %HDD_NOT_FOUND1%
-		echo         %HDD_NOT_FOUND2%
+"%~dp0BAT\Diagbox.EXE" gd 0c
+		echo         Playstation 2 HDD Not Detected
+		echo         Drive Must Be Formatted First
 		echo\
 		echo\
-		rmdir /Q/S %~dp0TMP
+"%~dp0BAT\Diagbox.EXE" gd 07
+		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
-	"%~dp0BAT\Diagbox.EXE" gd 07
-::		pause & cmd /k 
-        pause & call .PFS-Batch-Kit-Manager.bat
-		)
+		::cmd /k
+		pause & call .PFS-Batch-Kit-Manager.bat
+	)
+		
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -696,7 +721,7 @@ IF ERRORLEVEL 3 (
 		
 	) else (
 	"%~dp0BAT\Diagbox.EXE" gd 0d
-		"%~dp0BAT\wget.exe" -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O BAT\WIDE.ZIP
+	"%~dp0BAT\wget.exe" -q --show-progress https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O BAT\WIDE.ZIP
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	)) 
 	
@@ -866,7 +891,7 @@ set /a "@ttl_file=!@art_file!+!@cfg_file!+!@cht_file!+!@vmc_file!+!@thm_file!+!@
 set /a "@ttl_size=!@art_size!+!@cfg_size!+!@cht_size!+!@vmc_size!+!@thm_size!+!@apps_file!+0"
 echo         TTL - %Files% !@ttl_file! %Size% !@ttl_size! Mb
 
-
+"%~dp0BAT\Diagbox.EXE" gd 0e
 echo\
 echo\
 echo %SEARCHING_OPLPART% [%OPLPART%]
@@ -894,7 +919,7 @@ echo ----------------------------------------------------
 		echo\
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
-		pause & cmd /k
+		pause & (goto start)
 		)
 	)
 
@@ -927,7 +952,7 @@ IF /I EXIST %~dp0APPS\* (
 	echo mkdir APPS >> %~dp0TMP\pfs-apps.txt
 	echo cd APPS >> %~dp0TMP\pfs-apps.txt
 	
-        REM APPS FILES (OPL\APPS\files.xxx)
+    REM APPS FILES (OPL\APPS\files.xxx)
 	
  	for %%0 in (*) do (echo put "%%0") >> %~dp0TMP\pfs-apps.txt
 
@@ -967,7 +992,7 @@ IF /I EXIST %~dp0APPS\* (
 	
 	for %%3 in (*) do (echo put "%%3") >> %~dp0TMP\pfs-apps.txt
 	
-        REM APPS 4 SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR)
+    REM APPS 4 SUBDIR (OPL\APPS\APP\SUBDIR\SUBDIR\SUBDIR\SUBDIR)
 
 	for /D %%e in (*) do (
 	echo mkdir "%%~ne" >> %~dp0TMP\pfs-apps.txt
@@ -1453,60 +1478,22 @@ IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	echo DEP "pfsshell.exe" %DEPS_FOUND%
 	)
 
-IF NOT EXIST %~dp0BAT\libapa.dll (
+IF NOT EXIST %~dp0BAT\libps2hdd.dll (
 	set @pfs_lib1=fail
-"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libapa.dll" %DEPS_MISSING%
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo DEP "libps2hdd.dll" %DEPS_MISSING%
+	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib1=good
-"%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libapa.dll" %DEPS_FOUND%
+	echo DEP "libps2hdd.dll" %DEPS_FOUND%
 	)
-
-IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
-	set @pfs_lib2=fail
-"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib2=good
-"%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libiomanX.dll (
-	set @pfs_lib3=fail
-"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libiomanX.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib3=good
-"%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libiomanX.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libpfs.dll (
-	set @pfs_lib4=fail
-"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libpfs.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib4=good
-"%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libpfs.dll" %DEPS_FOUND%
-	)
-"%~dp0BAT\Diagbox.EXE" gd 0e
-
-echo\
-echo\
+	
 "%~dp0BAT\Diagbox.EXE" gd 07
 
 IF %@dep_bbx%==fail ( cmd /k )
 IF %@dep_hdl%==fail ( cmd /k )
 IF %@dep_pfs%==fail ( cmd /k )
 IF %@pfs_lib1%==fail ( cmd /k )
-IF %@pfs_lib2%==fail ( cmd /k )
-IF %@pfs_lib3%==fail ( cmd /k )
-IF %@pfs_lib4%==fail ( cmd /k )
-
-IF NOT EXIST POPS\ MD POPS
 
 cls
 
@@ -1520,6 +1507,23 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+set "search=hdd"
+set "replace=\\.\PhysicalDrive"
+set "search2=:"
+set "replace2="
+set "textFile=hdl-hdd.txt"
+set "rootDir=%~dp0TMP"
+::for /R "%rootDir%" %%j in ("%textFile%") do (
+for %%j in ("%rootDir%\%textFile%") do (
+    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+        set "line=%%i"
+        setlocal EnableDelayedExpansion
+        set "line=!line:%search%=%replace%!"
+		set "line=!line:%search2%=%replace2%!"
+        >>"%%~j" echo(!line!
+        endlocal
+		)
+ )
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -1532,8 +1536,8 @@ IF "!@hdl_path!"=="" (
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		::cmd /k
-		call .PFS-Batch-Kit-Manager.bat
-		)
+		pause & call .PFS-Batch-Kit-Manager.bat
+	)
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -1544,9 +1548,9 @@ echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
 "%~dp0BAT\Diagbox.EXE" gd 07
-echo         3) %YES% (Unzip and Convert Multiple .bin/.cue to .VCD)
+::echo         3) %YES% (Unzip and Convert Multiple .bin/.cue to .VCD)
 "%~dp0BAT\Diagbox.EXE" gd 06
-echo            After installation the .vcd will be deleted from the POPS folder
+::echo            After installation the .vcd will be deleted from the POPS folder
 "%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 123 /M "Select Option:"
@@ -1592,7 +1596,6 @@ type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > 
 "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%POPSPART%" | "%~dp0BAT\busybox" sed "s/.*%POPSPART%/%POPSPART%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
 set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
 REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
-
 IF "!@hdd_avl!"=="%POPSPART%" (
 "%~dp0BAT\Diagbox.EXE" gd 0a
 	echo         POPS - Partition Detected
@@ -1607,7 +1610,7 @@ IF "!@hdd_avl!"=="%POPSPART%" (
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
 	::cmd /k
-	call %~dp0.PFS-Batch-Kit-Manager.bat
+	pause & call %~dp0.PFS-Batch-Kit-Manager.bat
 	)
 
 echo\
@@ -1626,16 +1629,16 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	cd %~dp0POPS
 	echo         Creating Que
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops.txt
-	echo mount %POPSPART% >> %~dp0TMP\pfs-pops.txt
+	echo mount __.POPS >> %~dp0TMP\pfs-pops.txt
 	for %%f in (*.VCD) do (echo put "%%f") >> %~dp0TMP\pfs-pops.txt
-	echo umount >> %~dp0TMP\pfs-pop.txt
-	echo exit >> %~dp0TMP\pfs-pop.txt
-	echo         Installing Que
+	echo umount >> %~dp0TMP\pfs-pops.txt
+	echo exit >> %~dp0TMP\pfs-pops.txt
+	echo         %INSTALLING% Que
 	type %~dp0TMP\pfs-pops.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-pops.txt >nul 2>&1
-	echo         Creating Log
+	echo         %CREAT_LOG%
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount %POPSPART% >> %~dp0TMP\pfs-log.txt
+	echo mount __.POPS >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	echo umount >> %~dp0TMP\pfs-log.txt
 	echo exit >> %~dp0TMP\pfs-log.txt
@@ -1643,9 +1646,9 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	mkdir %~dp0LOG >nul 2>&1
 	"%~dp0BAT\busybox" grep -e ".vcd" -e ".VCD" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
-	echo         VCD Installation Completed...	
-	del *.vcd
-	) else ( echo        .VCD - Source Not Detected... )
+	echo         POPS %COMPLETED%	
+	cd %~dp0
+	) else ( echo         POPS - %POPS_EMPTY% )
 )
 
 rmdir /Q/S %~dp0TMP >nul 2>&1
@@ -1654,7 +1657,7 @@ del info.sys >nul 2>&1
 echo\
 echo\
 echo ----------------------------------------------------
- "%~dp0BAT\Diagbox.EXE" gd 0a
+"%~dp0BAT\Diagbox.EXE" gd 0a
 echo Installation Completed...
 echo\
 echo\
@@ -1673,6 +1676,19 @@ if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
 if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
 
+REM ECM TO .BIN
+move *.ecm temp >nul 2>&1
+cd temp
+for %%f in (*.ecm) do %~dp0BAT\unecm.exe "%%f" "%%~nf"
+if not exist *.cue %~dp0BAT\cuemaker.exe "%%~nf"
+move *.bin %~dp0POPS >nul 2>&1
+move *.cue %~dp0POPS >nul 2>&1
+cd %~dp0POPS
+
+REM CHD TO .BIN
+for %%i in (*.chd) do %~dp0BAT\chdman.exe extractcd -i "%%i" -o "%%~ni.cue"
+
+REM Merge muulti .BIN to one
 for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "%%f"
 
 move *.cue.cue "%~dp0POPS\temp" >nul 2>&1
@@ -1688,10 +1704,10 @@ move *.vcd temp >nul 2>&1
 cd %~dp0BAT
 if EXIST "%~dp0POPS" (goto checkBIN) else (if exist *.cue (for %%i in (*.cue) do %~dp0BAT\CUE2POPS_2_3.EXE "%~p0%%i") else goto failBIN)
 pause
-goto terminateVCD
+(goto terminateVCD)
 :checkBIN
 @echo off
-if not exist "%~dp0POPS\*.*" goto convertVCD
+if not exist "%~dp0POPS\*.*" (goto convertVCD)
 cd "%~dp0POPS"
 if not exist *.cue goto failBIN
 for %%i in (*.cue) do "%~dp0BAT\CUE2POPS_2_3.EXE" "%~dp0POPS\%%i"
@@ -1702,7 +1718,7 @@ ren *.vcd *. >nul 2>&1
 ren *.cue *.VCD >nul 2>&1
 move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
 rmdir /s /q temp >nul 2>&1
-goto terminateVCD
+(goto terminateVCD)
 :failBIN
 @echo off
 "%~dp0BAT\Diagbox.EXE" gd 06
@@ -1713,10 +1729,10 @@ echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POP
 echo Also check that the name matches inside the .cue
 echo. 
 "%~dp0BAT\Diagbox.EXE" gd 07
-goto terminateVCD
+(goto terminateVCD)
 :convertVCD
 CUE2POPS_2_3.EXE "%~dp0POPS"
-goto terminateVCD
+(goto terminateVCD)
 
 
 REM ########################################################################################################################################################################
@@ -1783,36 +1799,14 @@ IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	echo DEP "pfsshell.exe" %DEPS_FOUND%
 	)
 
-IF NOT EXIST %~dp0BAT\libapa.dll (
+IF NOT EXIST %~dp0BAT\libps2hdd.dll (
 	set @pfs_lib1=fail
-	echo DEP "libapa.dll" %DEPS_MISSING%
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo DEP "libps2hdd.dll" %DEPS_MISSING%
+	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib1=good
-	echo DEP "libapa.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
-	set @pfs_lib2=fail
-	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib2=good
-	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libiomanX.dll (
-	set @pfs_lib3=fail
-	echo DEP "libiomanX.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib3=good
-	echo DEP "libiomanX.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libpfs.dll (
-	set @pfs_lib4=fail
-	echo DEP "libpfs.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib4=good
-	echo DEP "libpfs.dll" %DEPS_FOUND%
+	echo DEP "libps2hdd.dll" %DEPS_FOUND%
 	)
 
 echo\
@@ -1822,44 +1816,58 @@ IF %@dep_bbx%==fail ( cmd /k )
 IF %@dep_hdl%==fail ( cmd /k )
 IF %@dep_pfs%==fail ( cmd /k )
 IF %@pfs_lib1%==fail ( cmd /k )
-IF %@pfs_lib2%==fail ( cmd /k )
-IF %@pfs_lib3%==fail ( cmd /k )
-IF %@pfs_lib4%==fail ( cmd /k )
-
-IF NOT EXIST ART\ MD ART
-IF NOT EXIST CHT\ MD CHT
-IF NOT EXIST CFG\ MD CFG
-IF NOT EXIST VMC\ MD VMC
-
 cls
 
 mkdir %~dp0TMP >nul 2>&1
-
+"%~dp0BAT\Diagbox.EXE" gd 0e
 echo\
 echo\
 echo Scanning for Playstation 2 HDDs:
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+set "search=hdd"
+set "replace=\\.\PhysicalDrive"
+set "search2=:"
+set "replace2="
+set "textFile=hdl-hdd.txt"
+set "rootDir=%~dp0TMP"
+::for /R "%rootDir%" %%j in ("%textFile%") do (
+for %%j in ("%rootDir%\%textFile%") do (
+    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+        set "line=%%i"
+        setlocal EnableDelayedExpansion
+        set "line=!line:%search%=%replace%!"
+		set "line=!line:%search2%=%replace2%!"
+        >>"%%~j" echo(!line!
+        endlocal
+		)
+ )
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
+"%~dp0BAT\Diagbox.EXE" gd 0c
 		echo         Playstation 2 HDD Not Detected
-		echo         
+		echo         Drive Must Be Formatted First
 		echo\
 		echo\
-		rmdir /Q/S %~dp0TMP
+"%~dp0BAT\Diagbox.EXE" gd 07
+		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		::cmd /k
-		call .PFS-Batch-Kit-Manager.bat
-		)
-		
+		pause & call .PFS-Batch-Kit-Manager.bat
+	)
+"%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
 echo Extract Artwork:
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
 echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 12 /M "Select Option:"
 
@@ -1870,8 +1878,11 @@ echo\
 echo\
 echo Extract Configs:
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
 echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 12 /M "Select Option:"
 
@@ -1882,8 +1893,11 @@ echo\
 echo\
 echo Extract Cheats:
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
 echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 12 /M "Select Option:"
 
@@ -1894,19 +1908,23 @@ echo\
 echo\
 echo Extract VMCs:
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
 echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
 echo\
 CHOICE /C 12 /M "Select Option:"
 
 IF ERRORLEVEL 1 set @pfs_vmc=yes
 IF ERRORLEVEL 2 set @pfs_vmc=no
 
+"%~dp0BAT\Diagbox.EXE" gd 0e
 echo\
 echo\
 echo Detecting %OPLPART% Partition:
 echo ----------------------------------------------------
-
+"%~dp0BAT\Diagbox.EXE" gd 07
 
 	echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
 	echo ls >> %~dp0TMP\pfs-prt.txt
@@ -1917,15 +1935,20 @@ echo ----------------------------------------------------
 	del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
 
 	IF "!@hdd_avl!"=="+OPL" (
+	"%~dp0BAT\Diagbox.EXE" gd 0a
 		echo         %OPLPART% - Partition Detected
+		"%~dp0BAT\Diagbox.EXE" gd 07
 		) else (
+		"%~dp0BAT\Diagbox.EXE" gd 0c
 		echo         %OPLPART% - Partition NOT Detected
 		echo         Partition Must Be Formatted First
 		echo\
 		echo\
+		"%~dp0BAT\Diagbox.EXE" gd 07
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
-		cmd /k
+		::cmd /k
+		pause & (goto start)
 		)
 	)
 
@@ -1950,11 +1973,11 @@ echo\
 	echo mount %OPLPART% >> %~dp0TMP\pfs-log.txt
 	echo cd ART >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
+    echo umount >> %~dp0TMP\pfs-log.txt
+	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
 	"%~dp0BAT\busybox" grep -e ".png" -e ".jpg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-ART.log
-	echo umount >> %~dp0TMP\pfs-art.txt
-	echo exit >> %~dp0TMP\pfs-art.txt
 	
     cd %~dp0LOG
     @Echo off
@@ -1992,11 +2015,11 @@ echo\
 	echo mount %OPLPART% >> %~dp0TMP\pfs-log.txt
 	echo cd CFG >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
+    echo umount >> %~dp0TMP\pfs-log.txt
+	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
 	"%~dp0BAT\busybox" grep -e ".cfg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CFG.log
-	echo umount >> %~dp0TMP\pfs-cfg.txt
-	echo exit >> %~dp0TMP\pfs-cfg.txt
 	
     cd %~dp0LOG
     @Echo off
@@ -2033,11 +2056,11 @@ echo\
 	echo mount %OPLPART% >> %~dp0TMP\pfs-log.txt
 	echo cd CHT >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
+    echo umount >> %~dp0TMP\pfs-log.txt
+	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
 	"%~dp0BAT\busybox" grep -e ".cht" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CHT.log
-	echo umount >> %~dp0TMP\pfs-cht.txt
-	echo exit >> %~dp0TMP\pfs-cht.txt
 	
     cd %~dp0LOG
     @Echo off
@@ -2075,11 +2098,11 @@ echo\
 	echo mount %OPLPART% >> %~dp0TMP\pfs-log.txt
 	echo cd VMC >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
+	echo umount >> %~dp0TMP\pfs-log.txt
+	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
 	"%~dp0BAT\busybox" grep -e ".bin" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-VMC.log
-	echo umount >> %~dp0TMP\pfs-vmc.txt
-	echo exit >> %~dp0TMP\pfs-vmc.txt
 	
     cd %~dp0LOG
     @Echo off
@@ -2107,6 +2130,7 @@ del info.sys >nul 2>&1
 echo\
 echo\
 echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
 echo Extraction Completed...
 echo\
 echo\
@@ -2118,9 +2142,6 @@ REM ############################################################################
 
 :5-BackupPS1Games
 @echo off
-
-::color 03
-
 echo\
 echo\
 
@@ -2182,36 +2203,14 @@ IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	echo DEP "pfsshell.exe" %DEPS_FOUND%
 	)
 
-IF NOT EXIST %~dp0BAT\libapa.dll (
+IF NOT EXIST %~dp0BAT\libps2hdd.dll (
 	set @pfs_lib1=fail
-	echo DEP "libapa.dll" %DEPS_MISSING%
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo DEP "libps2hdd.dll" %DEPS_MISSING%
+	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib1=good
-	echo DEP "libapa.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
-	set @pfs_lib2=fail
-	echo DEP "libfakeps2sdk.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib2=good
-	echo DEP "libfakeps2sdk.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libiomanX.dll (
-	set @pfs_lib3=fail
-	echo DEP "libiomanX.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib3=good
-	echo DEP "libiomanX.dll" %DEPS_FOUND%
-	)
-
-IF NOT EXIST %~dp0BAT\libpfs.dll (
-	set @pfs_lib4=fail
-	echo DEP "libpfs.dll" %DEPS_MISSING%
-	) else ( 
-	set @pfs_lib4=good
-	echo DEP "libpfs.dll" %DEPS_FOUND%
+	echo DEP "libps2hdd.dll" %DEPS_FOUND%
 	)
 
 echo\
@@ -2221,11 +2220,6 @@ IF %@dep_bbx%==fail ( cmd /k )
 IF %@dep_hdl%==fail ( cmd /k )
 IF %@dep_pfs%==fail ( cmd /k )
 IF %@pfs_lib1%==fail ( cmd /k )
-IF %@pfs_lib2%==fail ( cmd /k )
-IF %@pfs_lib3%==fail ( cmd /k )
-IF %@pfs_lib4%==fail ( cmd /k )
-
-IF NOT EXIST POPS\ MD POPS
 
 cls
 
@@ -2239,6 +2233,24 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+set "search=hdd"
+set "replace=\\.\PhysicalDrive"
+set "search2=:"
+set "replace2="
+set "textFile=hdl-hdd.txt"
+set "rootDir=%~dp0TMP"
+::for /R "%rootDir%" %%j in ("%textFile%") do (
+for %%j in ("%rootDir%\%textFile%") do (
+    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+        set "line=%%i"
+        setlocal EnableDelayedExpansion
+        set "line=!line:%search%=%replace%!"
+		set "line=!line:%search2%=%replace2%!"
+        >>"%%~j" echo(!line!
+        endlocal
+		)
+ )
+
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -2251,8 +2263,8 @@ IF "!@hdl_path!"=="" (
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		::cmd /k
-		call %~dp0.PFS-Batch-Kit-Manager.bat
-		)
+		pause & call .PFS-Batch-Kit-Manager.bat
+	)
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -2273,15 +2285,14 @@ echo\
 echo\
 echo Detecting POPS Partition:
 echo ----------------------------------------------------
-IF %@pfs_pop%==yes (
-
-echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
-echo ls >> %~dp0TMP\pfs-prt.txt
-echo exit >> %~dp0TMP\pfs-prt.txt
-type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
-"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%POPSPART%" | "%~dp0BAT\busybox" sed "s/.*%POPSPART%/%POPSPART%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
-set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
-REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
+    
+    echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
+    echo ls >> %~dp0TMP\pfs-prt.txt
+    echo exit >> %~dp0TMP\pfs-prt.txt
+    type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
+    "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%POPSPART%" | "%~dp0BAT\busybox" sed "s/.*%POPSPART%/%POPSPART%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+    set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
+    REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
 
 IF "!@hdd_avl!"=="%POPSPART%" (
 "%~dp0BAT\Diagbox.EXE" gd 0a
@@ -2293,12 +2304,13 @@ IF "!@hdd_avl!"=="%POPSPART%" (
 	echo         Partition Must Be Formatted First
 	echo\
 	echo\
+	"%~dp0BAT\Diagbox.EXE" gd 07
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
 	::cmd /k
-	call %~dp0.PFS-Batch-Kit-Manager.bat
+	pause & call .PFS-Batch-Kit-Manager.bat
 	)
-	
+)
 echo\
 echo\
 pause
@@ -2315,11 +2327,11 @@ echo\
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
 	echo mount %POPSPART% >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
+	echo umount >> %~dp0TMP\pfs-log.txt
+	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
-	mkdir %~dp0LOG >nul 2>&1
+	mkdir %~dp0LOG >nul 2>&1 
 	"%~dp0BAT\busybox" grep -e ".vcd" -e ".VCD" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
-	echo umount >> %~dp0TMP\pfs-pops.txt
-	echo exit >> %~dp0TMP\pfs-pops.txt
 	
     cd %~dp0LOG
     @Echo off
@@ -2430,45 +2442,16 @@ IF NOT EXIST %~dp0BAT\pfsshell.exe (
 	echo DEP "pfsshell.exe" Confirmed
 	)
 
-IF NOT EXIST %~dp0BAT\libapa.dll (
+IF NOT EXIST %~dp0BAT\libps2hdd.dll (
 	set @pfs_lib1=fail
-"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libapa.dll" Missing
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo DEP "libps2hdd.dll" %DEPS_MISSING%
+	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else ( 
 	set @pfs_lib1=good
-"%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libapa.dll" Confirmed
+	echo DEP "libps2hdd.dll" %DEPS_FOUND%
 	)
-
-IF NOT EXIST %~dp0BAT\libfakeps2sdk.dll (
-	set @pfs_lib2=fail
-"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libfakeps2sdk.dll" Missing
-	) else ( 
-	set @pfs_lib2=good
-"%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libfakeps2sdk.dll" Confirmed
-	)
-
-IF NOT EXIST %~dp0BAT\libiomanX.dll (
-	set @pfs_lib3=fail
-"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libiomanX.dll" Missing
-	) else ( 
-	set @pfs_lib3=good
-"%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libiomanX.dll" Confirmed
-	)
-
-IF NOT EXIST %~dp0BAT\libpfs.dll (
-	set @pfs_lib4=fail
-"%~dp0BAT\Diagbox.EXE" gd 0c
-	echo DEP "libpfs.dll" Missing
-	) else ( 
-	set @pfs_lib4=good
-"%~dp0BAT\Diagbox.EXE" gd 0a
-	echo DEP "libpfs.dll" Confirmed
-	)
+	
 "%~dp0BAT\Diagbox.EXE" gd 0e
 
 echo\
@@ -2479,11 +2462,7 @@ IF %@dep_bbx%==fail ( cmd /k )
 IF %@dep_hdl%==fail ( cmd /k )
 IF %@dep_pfs%==fail ( cmd /k )
 IF %@pfs_lib1%==fail ( cmd /k )
-IF %@pfs_lib2%==fail ( cmd /k )
-IF %@pfs_lib3%==fail ( cmd /k )
-IF %@pfs_lib4%==fail ( cmd /k )
 
-IF NOT EXIST POPS\ MD POPS
 
 cls
 
@@ -2497,6 +2476,23 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+set "search=hdd"
+set "replace=\\.\PhysicalDrive"
+set "search2=:"
+set "replace2="
+set "textFile=hdl-hdd.txt"
+set "rootDir=%~dp0TMP"
+::for /R "%rootDir%" %%j in ("%textFile%") do (
+for %%j in ("%rootDir%\%textFile%") do (
+    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+        set "line=%%i"
+        setlocal EnableDelayedExpansion
+        set "line=!line:%search%=%replace%!"
+		set "line=!line:%search2%=%replace2%!"
+        >>"%%~j" echo(!line!
+        endlocal
+		)
+ )
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -2508,8 +2504,9 @@ IF "!@hdl_path!"=="" (
 "%~dp0BAT\Diagbox.EXE" gd 07
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
-		cmd /k
-		)
+		::cmd /k
+		pause & call .PFS-Batch-Kit-Manager.bat
+	)
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -2531,7 +2528,7 @@ echo\
 echo\
 echo POPS Binaries MD5 CHECKING:
 echo ----------------------------------------------------
-set "file=%~dp0POPS\POPS.ELF"
+set "file=%~dp0POPS-Binaries\POPS.ELF"
 if not exist "%file%" (goto notfound)
 call %~dp0BAT\md5.bat "%file%" md5 !md5!
 
@@ -2546,7 +2543,7 @@ if %md5% equ 355a892a8ce4e4a105469d4ef6f39a42 (
   )
   
 :check2POPS
-set "file=%~dp0POPS\POPS.ELF"
+set "file=%~dp0POPS-Binaries\POPS.ELF"
 call %~dp0BAT\md5.bat "%file%" md5 %md5%
 
 if %md5% equ 355a892a8ce4e4a105469d4ef6f39a42 (
@@ -2556,7 +2553,7 @@ if %md5% equ 355a892a8ce4e4a105469d4ef6f39a42 (
   (goto notfound)
   
 :checkIOP
-set "file=%~dp0POPS\IOPRP252.IMG"
+set "file=%~dp0POPS-Binaries\IOPRP252.IMG"
 if not exist "%file%" (goto notfound)
 call %~dp0BAT\md5.bat "%file%" md5 !md5!
 
@@ -2575,7 +2572,7 @@ echo IOPRP252.IMG - MD5 Does not match : !md5!
 "%~dp0BAT\Diagbox.EXE" gd 0f
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo\
-echo BINARIES POPS NOT DETECTED IN POPS FOLDER
+echo BINARIES POPS NOT DETECTED IN POPS-Binaries FOLDER
 echo\
 echo YOU NEED TO FIND THESE FILES FOR POPSTARTER WORKS!
 echo\
@@ -2594,16 +2591,15 @@ echo Detecting __common Partition:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 07
 
-echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
-echo ls >> %~dp0TMP\pfs-prt.txt
-echo exit >> %~dp0TMP\pfs-prt.txt
-type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
-"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "__common" | "%~dp0BAT\busybox" sed "s/.*__common/__common/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
-set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
-REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
-
-IF "!@hdd_avl!"=="__common" (
-"%~dp0BAT\Diagbox.EXE" gd 0a
+    echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
+    echo ls >> %~dp0TMP\pfs-prt.txt
+    echo exit >> %~dp0TMP\pfs-prt.txt
+    type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
+    "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "__common" | "%~dp0BAT\busybox" sed "s/.*__common/__common/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+    set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
+    REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
+    IF "!@hdd_avl!"=="__common" (
+    "%~dp0BAT\Diagbox.EXE" gd 0a
 	echo         __common - Partition Detected
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	) else (
@@ -2612,6 +2608,7 @@ IF "!@hdd_avl!"=="__common" (
 	echo         Partition Must Be Formatted First
 	echo\
 	echo\
+	pause
 	"%~dp0BAT\Diagbox.EXE" gd 07
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
@@ -2631,13 +2628,13 @@ echo ----------------------------------------------------
 echo\
 REM POPS BINARIES
 "%~dp0BAT\Diagbox.EXE" gd 07
-	cd %~dp0POPS
+	cd %~dp0POPS-Binaries
 	echo         Creating Que
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops-binaries.txt
 	echo mount __common >> %~dp0TMP\pfs-pops-binaries.txt
 	echo mkdir POPS >> %~dp0TMP\pfs-pops-binaries.txt
 	echo cd POPS >> %~dp0TMP\pfs-pops-binaries.txt
-	for %%f in (POPS.ELF IOPRP252.IMG TROJAN_7.BIN *.TM2) do (echo put "%%f") >> %~dp0TMP\pfs-pops-binaries.txt
+	for %%f in (POPS.ELF IOPRP252.IMG POPSTARTER.ELF TROJAN_7.BIN *.TM2) do (echo put "%%f") >> %~dp0TMP\pfs-pops-binaries.txt
 	echo umount >> %~dp0TMP\pfs-pops-binaries.txt
 	echo exit >> %~dp0TMP\pfs-pops-binaries.txt
 	echo         Installing Que
@@ -2660,7 +2657,7 @@ REM POPS BINARIES
 
 REM POPS FOR OPL
 "%~dp0BAT\Diagbox.EXE" gd 07
-	cd %~dp0POPS
+	cd %~dp0POPS-Binaries
 ::	echo         Creating Que
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops-binaries.txt
 	echo mount +OPL >> %~dp0TMP\pfs-pops-binaries.txt
@@ -2684,7 +2681,7 @@ REM POPS FOR OPL
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 ::	echo         POPS Completed...	
 	cd %~dp0
-	) else ( echo         POPS - Source Not Detected... )
+	) else ( echo         POPS Binaries - Source Not Detected... )
 )
 
 rmdir /Q/S %~dp0TMP >nul 2>&1
@@ -2703,8 +2700,6 @@ call .PFS-Batch-Kit-Manager.bat
 
 REM ########################################################################################################################################################################
 :7-BackupPS2Games
-
-IF NOT EXIST CD-DVD\  MD CD-DVD
 
 cd "%~dp0CD-DVD"
 
@@ -2744,23 +2739,30 @@ rem * chcp 1252 --> This is for display special caractere. Exemple &, é, à,!
 cls
 cd "%~dp0CD-DVD"
 
-echo.
-@ECHO Scanning drives...
-hdl_dump query
-
-@echo======================================================================
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo Scanning for Playstation 2 HDDs:
+echo ----------------------------------------------------
+    "%~dp0BAT\Diagbox.EXE" gd 03
+	%~dp0BAT\hdl_dump query | findstr "hdd1: hdd2: hdd3: hdd4: hdd5: hdd6:"
+	"%~dp0BAT\Diagbox.EXE" gd 07
     echo.
-	echo All disk drives EXCEPT for your PC boot drive
+    echo ----------------------------------------------------
+    "%~dp0BAT\Diagbox.EXE" gd 06
+	echo NOTE: If no PS2 HDDs are found, quit and retry after disconnecting
+	echo all disk drives EXCEPT for your PC boot drive and the PS2 HDDs.
+	"%~dp0BAT\Diagbox.EXE" gd 0f
 	echo.
 	echo. 
-	echo PLAYSTATION 2 HDD
+	echo PLAYSTATION 2 HDD Extraction
     echo 	1. hdd1:
     echo 	2. hdd2:
     echo 	3. hdd3:
-     echo 	4. hdd4:
-     echo 	5. hdd5:
-     echo 	6. hdd6:
-    echo 	7. Network (For the network Edit GET_GAMES_PARTITION_NAME.bat and go to the line 76 put the IP of your PS2
+    echo 	4. hdd4:
+    echo 	5. hdd5:
+    echo 	6. hdd6:
+    echo 	7. Network (For the network Edit .PFS-Batch-Kit-Manager.bat and go to the line 76 put the IP of your PS2
 	echo 	8. Quit
 	set /p choix=Choice the number of your PS2 HDD :
 
@@ -3116,8 +3118,8 @@ exit
 
 :network
 echo.
-rem Exemple : hdl_dump hdl_toc 192.169.1.1
-hdl_dump hdl_toc IP-HERE
+rem Exemple : hdl_dump hdl_toc 192.169.1.10
+hdl_dump hdl_toc 192.168.1.PS2IP
 @echo off
 setlocal enabledelayedexpansion
 
@@ -3131,8 +3133,8 @@ for /f "usebackq tokens=1* delims=[]" %%a in (`find /v /n "" .PARTITION_GAMES.tx
 set /a "LastLine=!LastLine!-1"
 for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
 	
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
+For %%Z in (PARTITION_GAMES_NEW.txt) do ( rem Exemple : hdl_dump.exe extract 192.168.1.10
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract 192.168.1.PS2IP "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
  (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
@@ -3180,7 +3182,7 @@ exit
 
 REM ####################################################################################################################################################
 
-:convONLYVCD
+:BIN2VCD
 cls
 cd %~dp0POPS
 @echo off
@@ -3190,36 +3192,45 @@ if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
 if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
 
-for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "%%f"
+for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "temp\%%~nf"
 
-move *.cue.cue "%~dp0POPS\temp" >nul 2>&1
-move *.cue.bin "%~dp0POPS\temp" >nul 2>&1
+cd temp
+@echo off 
+setlocal EnableExtensions DisableDelayedExpansion
 
-del *.bin >nul 2>&1
-del *.cue >nul 2>&1
+set "search=temp\"
+set "replace="
+set "textFile=*.cue"
+set "rootDir=."
+::for /R "%rootDir%" %%j in ("%textFile%") do (
+for %%j in ("%rootDir%\%textFile%") do (
+    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+        set "line=%%i"
+        setlocal EnableDelayedExpansion
+        set "line=!line:%search%=%replace%!"
+        >>"%%~j" echo(!line!
+        endlocal
+    )
+)
 
-move "temp\*.bin" %~dp0POPS >nul 2>&1
-move "temp\*.cue" %~dp0POPS >nul 2>&1
-move *.vcd temp >nul 2>&1
-%~d0
+endlocal
+move *.bin %~dp0POPS >nul 2>&1
+move *.cue %~dp0POPS >nul 2>&1
+
 cd %~dp0BAT
 if EXIST "%~dp0POPS" (goto checkBIN2) else (if exist *.cue (for %%i in (*.cue) do %~dp0BAT\CUE2POPS_2_3.EXE "%~p0%%i") else goto failBIN2)
-pause
-goto terminateVCD2
+(goto terminateVCD2)
+
 :checkBIN2
 @echo off
-if not exist "%~dp0POPS\*.*" goto convertVCD2
+if not exist "%~dp0POPS\*.*" (goto convertVCD2)
 cd "%~dp0POPS"
 if not exist *.cue goto failBIN2
 for %%i in (*.cue) do "%~dp0BAT\CUE2POPS_2_3.EXE" "%~dp0POPS\%%i"
 md temp >nul 2>&1
-del *.bin >nul 2>&1
-del *.cue >nul 2>&1
-ren *.vcd *. >nul 2>&1
-ren *.cue *.VCD >nul 2>&1
-move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
 rmdir /s /q temp >nul 2>&1
-goto terminateVCD2
+(goto terminateVCD2)
+
 :failBIN2
 @echo off
 "%~dp0BAT\Diagbox.EXE" gd 06
@@ -3230,13 +3241,16 @@ echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POP
 echo Also check that the name matches inside the .cue
 echo. 
 "%~dp0BAT\Diagbox.EXE" gd 07
-goto terminateVCD2
+(goto terminateVCD2)
 :convertVCD2
 CUE2POPS_2_3.EXE "%~dp0POPS"
-goto terminateVCD2
+(goto terminateVCD2)
 :terminateVCD2
+md Original
+move *.bin %~dp0POPS\Original >nul 2>&1
+move *.cue %~dp0POPS\Original >nul 2>&1
 pause
-goto Advanced-Menu
+(goto Conversion-Menu)
 
 REM ####################################################################################################################################################
 
@@ -3247,160 +3261,238 @@ cls
 cd %~dp0BAT
 if EXIST "%~dp0POPS" (goto checkVCD) else (if exist *.vcd (for %%i in (*.vcd) do %~dp0BAT\POPS2CUE.EXE "%~p0%%i") else goto failVCD)
 pause
-goto terminateBIN
+(goto terminateBIN)
 :checkVCD
 if not exist "%~dp0POPS\*.*" goto convertBIN
 cd "%~dp0POPS"
 if not exist *.vcd goto failVCD
 for %%i in (*.vcd) do "%~dp0BAT\POPS2CUE.EXE" "%~dp0POPS\%%i"
-goto terminateBIN
+(goto terminateBIN)
 :failVCD
 "%~dp0BAT\Diagbox.EXE" gd 06
 echo.
 echo .VCD NOT DETECTED: Please drop .VCD ON POPS FOLDER.
 echo.
 "%~dp0BAT\Diagbox.EXE" gd 0f
-goto terminateBIN
+pause
+(goto Conversion-Menu)
 :convertBIN
 POPS2CUE.EXE "%~dp0POPS"
 :terminateBIN
 cd "%~dp0POPS"	
 @echo off
 md temp >nul 2>&1
+md Original >nul 2>&1
 ren *.cue *.cuetemp >nul 2>&1
-for %%f in (*.cuetemp) do %~dp0BAT\binmerge.exe -s "%%f" "%%~nf"
-
+for %%f in (*.cuetemp) do %~dp0BAT\binmerge.exe -s "%%f" "%%~nf" >nul 2>&1
 del *.cuetemp >nul 2>&1
-move *.cue temp >nul 2>&1
 
 REM TRACKS 
-move *1).bin temp >nul 2>&1
-move *2).bin temp >nul 2>&1
-move *3).bin temp >nul 2>&1
-move *4).bin temp >nul 2>&1
-move *5).bin temp >nul 2>&1
-move *6).bin temp >nul 2>&1
-move *7).bin temp >nul 2>&1
-move *8).bin temp >nul 2>&1
-move *9).bin temp >nul 2>&1
-move *01).bin temp >nul 2>&1
-move *02).bin temp >nul 2>&1
-move *03).bin temp >nul 2>&1
-move *04).bin temp >nul 2>&1
-move *05).bin temp >nul 2>&1
-move *06).bin temp >nul 2>&1
-move *07).bin temp >nul 2>&1
-move *08).bin temp >nul 2>&1
-move *09).bin temp >nul 2>&1
-move *10).bin temp >nul 2>&1
-move *11).bin temp >nul 2>&1
-move *12).bin temp >nul 2>&1
-move *13).bin temp >nul 2>&1
-move *14).bin temp >nul 2>&1
-move *15).bin temp >nul 2>&1
-move *16).bin temp >nul 2>&1
-move *17).bin temp >nul 2>&1
-move *18).bin temp >nul 2>&1
-move *19).bin temp >nul 2>&1
-move *20).bin temp >nul 2>&1
-move *21).bin temp >nul 2>&1
-move *22).bin temp >nul 2>&1
-move *23).bin temp >nul 2>&1
-move *24).bin temp >nul 2>&1
-move *25).bin temp >nul 2>&1
-move *26).bin temp >nul 2>&1
-move *27).bin temp >nul 2>&1
-move *28).bin temp >nul 2>&1
-move *29).bin temp >nul 2>&1
-move *30).bin temp >nul 2>&1
-move *31).bin temp >nul 2>&1
-move *32).bin temp >nul 2>&1
-move *33).bin temp >nul 2>&1
-move *34).bin temp >nul 2>&1
-move *35).bin temp >nul 2>&1
-move *36).bin temp >nul 2>&1
-move *37).bin temp >nul 2>&1
-move *38).bin temp >nul 2>&1
-move *39).bin temp >nul 2>&1
-move *40).bin temp >nul 2>&1
-move *41).bin temp >nul 2>&1
-move *42).bin temp >nul 2>&1
-move *43).bin temp >nul 2>&1
-move *44).bin temp >nul 2>&1
-move *45).bin temp >nul 2>&1
-move *46).bin temp >nul 2>&1
-move *47).bin temp >nul 2>&1
-move *48).bin temp >nul 2>&1
-move *49).bin temp >nul 2>&1
-move *50).bin temp >nul 2>&1
-move *51).bin temp >nul 2>&1
-move *52).bin temp >nul 2>&1
-move *53).bin temp >nul 2>&1
-move *54).bin temp >nul 2>&1
-move *55).bin temp >nul 2>&1
-move *56).bin temp >nul 2>&1
-move *57).bin temp >nul 2>&1
-move *58).bin temp >nul 2>&1
-move *59).bin temp >nul 2>&1
-move *60).bin temp >nul 2>&1
-move *61).bin temp >nul 2>&1
-move *62).bin temp >nul 2>&1
-move *63).bin temp >nul 2>&1
-move *64).bin temp >nul 2>&1
-move *65).bin temp >nul 2>&1
-move *66).bin temp >nul 2>&1
-move *67).bin temp >nul 2>&1
-move *68).bin temp >nul 2>&1
-move *69).bin temp >nul 2>&1
-move *70).bin temp >nul 2>&1
-move *71).bin temp >nul 2>&1
-move *70).bin temp >nul 2>&1
-move *71).bin temp >nul 2>&1
-move *72).bin temp >nul 2>&1
-move *73).bin temp >nul 2>&1
-move *74).bin temp >nul 2>&1
-move *75).bin temp >nul 2>&1
-move *76).bin temp >nul 2>&1
-move *77).bin temp >nul 2>&1
-move *78).bin temp >nul 2>&1
-move *79).bin temp >nul 2>&1
-move *80).bin temp >nul 2>&1
-move *81).bin temp >nul 2>&1
-move *82).bin temp >nul 2>&1
-move *83).bin temp >nul 2>&1
-move *84).bin temp >nul 2>&1
-move *85).bin temp >nul 2>&1
-move *86).bin temp >nul 2>&1
-move *87).bin temp >nul 2>&1
-move *88).bin temp >nul 2>&1
-move *89).bin temp >nul 2>&1
-move *90).bin temp >nul 2>&1
-move *91).bin temp >nul 2>&1
-move *92).bin temp >nul 2>&1
-move *93).bin temp >nul 2>&1
-move *94).bin temp >nul 2>&1
-move *95).bin temp >nul 2>&1
-move *96).bin temp >nul 2>&1
-move *97).bin temp >nul 2>&1
-move *98).bin temp >nul 2>&1
-move *99).bin temp >nul 2>&1
-move *100).bin temp >nul 2>&1
+for %%# in (*.cue) do move "%%~n# (Track *).bin" temp >nul 2>&1
+move *.cue temp >nul 2>&1
 
 del *.bin >nul 2>&1
-del *.vcd >nul 2>&1
+move *.vcd Original >nul 2>&1
 
 move "%~dp0POPS\temp\*.bin" "%~dp0POPS" >nul 2>&1
 move "%~dp0POPS\temp\*.cue" "%~dp0POPS" >nul 2>&1
 
-for %%# in (*.cue) do %~dp0BAT\7z.exe a -bso0 "%%~n#.zip" "%%#" "%%~n# (Track ?).bin" "%%~n# (Track ??).bin"
+::for %%# in (*.cue) do %~dp0BAT\7z.exe a -bso0 "%%~n#.zip" "%%#" "%%~n# (Track ?).bin" "%%~n# (Track ??).bin"
 
-del *.bin >nul 2>&1
-del *.cue >nul 2>&1
+for %%# in (*.cue) do md "%%~n#" >nul 2>&1
+for %%# in (*.cue) do move "%%~n# (Track *).bin" "%%~n#" >nul 2>&1
+for %%# in (*.cue) do move "%%~n#.cue" "%%~n#" >nul 2>&1
 
 rmdir /s /q temp >nul 2>&1
 
 pause
-goto Advanced-Menu
+(goto Conversion-Menu)
+
+REM #######################################################################################################################################################
+
+:ECM2BIN
+cd %~dp0POPS
+md Original >nul 2>&1
+md temp >nul 2>&1
+if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
+if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+move *.ecm temp >nul 2>&1
+cd temp >nul 2>&1
+if not exist *.ecm (goto failECM)
+for %%f in (*.ecm) do %~dp0BAT\unecm.exe "%%f" "%%~nf"
+if not exist *.cue %~dp0BAT\cuemaker.exe "%%~nf"
+move *.bin %~dp0POPS >nul 2>&1
+move *.cue %~dp0POPS >nul 2>&1
+move *.ecm %~dp0POPS\Original >nul 2>&1
+cd %~dp0POPS
+
+rmdir /s /q temp >nul 2>&1
+echo.
+pause
+(goto conversion-Menu)
+
+:failECM
+cls
+"%~dp0BAT\Diagbox.EXE" gd 06
+echo.
+echo .ECM NOT DETECTED: Please drop .ECM ON POPS FOLDER.
+echo.
+"%~dp0BAT\Diagbox.EXE" gd 0f
+pause
+(goto Conversion-Menu)
+
+:BIN2CHD
+cd %~dp0POPS
+md Original >nul 2>&1
+if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
+if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+if not exist *.cue (goto failbin2CHD)
+for %%i in (*.cue) do %~dp0BAT\chdman.exe createcd -i "%%i" -o "%%~ni.chd" 
+move *.bin %~dp0POPS\Original >nul 2>&1
+move *.cue %~dp0POPS\Original >nul 2>&1
+echo.
+pause
+(goto conversion-Menu)
+
+:failCHD2BIN
+cls
+"%~dp0BAT\Diagbox.EXE" gd 06
+echo.
+echo .CHD NOT DETECTED: Please drop .CHD ON POPS FOLDER.
+echo.
+"%~dp0BAT\Diagbox.EXE" gd 0f
+pause
+(goto conversion-Menu)
+
+:CHD2BIN
+cd %~dp0POPS
+md Original >nul 2>&1
+if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
+if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+if not exist *.chd (goto failCHD2bin)
+for %%h in (*.chd) do %~dp0BAT\chdman.exe extractcd -i "%%h" -o "%%~nh.cue"
+move *.CHD %~dp0POPS\Original >nul 2>&1
+echo.
+pause
+(goto conversion-Menu)
+
+:failBIN2CHD
+cls
+"%~dp0BAT\Diagbox.EXE" gd 06
+echo.
+echo .BIN/.CUE NOT DETECTED: Please drop .BIN ON POPS FOLDER.
+echo.
+"%~dp0BAT\Diagbox.EXE" gd 0f
+pause
+(goto Conversion-Menu)
+
+:multibin2bin
+cls
+cd %~dp0POPS
+@echo off
+if exist rmdir /s /q temp >nul 2>&1
+md temp >nul 2>&1
+if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
+if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+if not exist *.cue (goto failbinsplit)
+
+for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "temp\%%~nf"
+md Original
+move *.bin %~dp0POPS\Original >nul 2>&1
+move *.cue %~dp0POPS\Original >nul 2>&1
+cd temp
+@echo off 
+setlocal EnableExtensions DisableDelayedExpansion
+
+set "search=temp\"
+set "replace="
+
+set "textFile=*.cue"
+set "rootDir=."
+::for /R "%rootDir%" %%j in ("%textFile%") do (
+for %%j in ("%rootDir%\%textFile%") do (
+    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+        set "line=%%i"
+        setlocal EnableDelayedExpansion
+        set "line=!line:%search%=%replace%!"
+        >>"%%~j" echo(!line!
+        endlocal
+    )
+)
+
+endlocal
+md Original >nul 2>&1
+move *.cue "%~dp0POPS" >nul 2>&1
+move *.bin "%~dp0POPS" >nul 2>&1
+cd %~dp0POPS
+rmdir /s /q temp >nul 2>&1
+echo.
+pause
+(goto conversion-Menu)
+
+:failmultibin
+cls 
+@echo off
+"%~dp0BAT\Diagbox.EXE" gd 06
+echo. 
+echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POPS folder.
+echo Also check that the name matches inside the .cue
+echo. 
+"%~dp0BAT\Diagbox.EXE" gd 07
+pause
+(goto conversion-Menu)
+
+:bin2split
+cls
+cd "%~dp0POPS"	
+@echo off
+md temp >nul 2>&1
+if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
+if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+if not exist *.cue (goto failbinsplit)
+ren *.cue *.cuetemp >nul 2>&1
+for %%f in (*.cuetemp) do %~dp0BAT\binmerge.exe -s "%%f" "%%~nf"
+del *.cuetemp >nul 2>&1
+
+REM TRACKS 
+for %%# in (*.cue) do move "%%~n# (Track *).bin" temp >nul 2>&1
+move *.cue temp >nul 2>&1
+del *.bin >nul 2>&1
+
+move "%~dp0POPS\temp\*.bin" "%~dp0POPS" >nul 2>&1
+move "%~dp0POPS\temp\*.cue" "%~dp0POPS" >nul 2>&1
+
+REM ZIP Tracks
+::for %%# in (*.cue) do %~dp0BAT\7z.exe a -bso0 "%%~n#.zip" "%%#" "%%~n# (Track ?).bin" "%%~n# (Track ??).bin"
+
+for %%# in (*.cue) do md "%%~n#" >nul 2>&1
+for %%# in (*.cue) do move "%%~n# (Track *).bin" "%%~n#" >nul 2>&1
+for %%# in (*.cue) do move "%%~n#.cue" "%%~n#" >nul 2>&1
+
+move "%~dp0POPS\temp\*.bin" "%~dp0POPS" >nul 2>&1
+move "%~dp0POPS\temp\*.cue" "%~dp0POPS" >nul 2>&1
+
+rmdir /s /q temp >nul 2>&1
+echo\
+pause
+(goto conversion-Menu)
+
+:failbinsplit
+cls 
+@echo off
+"%~dp0BAT\Diagbox.EXE" gd 06
+echo. 
+echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POPS folder.
+echo Also check that the name matches inside the .cue
+echo. 
+"%~dp0BAT\Diagbox.EXE" gd 07
+pause
+(goto conversion-Menu)
 
 REM #######################################################################################################################################################
 
@@ -3424,7 +3516,7 @@ echo @@@@@@@@@@@@/////////////////////////////////////////////////////////@@@@@@
 echo @@@@@@@@@@@@//////////////////////////////////////////////////////////@@@@@@@@@@
 echo @@@@@@@@@@@@//////////////////////////////////////////////////////////@@@@@@@@@@
 echo @@@@@@@@@@@@//////////////////////////////////////////////////////////@@@@@@@@@@
-echo @@@@@@@@@@@@@////////////////////////////////////////////////////////@@@@@@@@@@@
+echo @@@@@@@@@@@@@/////////////////////////////////////////////////////////@@@@@@@@@@
 echo @@@@@@@@@@@/////////////////////////FUCK-PS2-HOME////////////////////@@@@@@@@@@@
 echo @@@@@@@@/////////////////////////////////////////////////////////////////@@@@@@@
 echo @@@@@@/////////////////////////////////////////////////////////////////////@@@@@
