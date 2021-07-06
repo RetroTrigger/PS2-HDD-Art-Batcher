@@ -311,9 +311,9 @@ echo ----------------------------------------------------
 	echo 	1. hdd1:
 	echo 	2. hdd2:
 	echo 	3. hdd3:
-	echo 	4. hdd1:
-	echo 	5. hdd2:
-	echo 	6. hdd3:
+	echo 	4. hdd4:
+	echo 	5. hdd5:
+	echo 	6. hdd6:
 	echo 	7. Network
 	echo 	8. QUIT PROGRAM
 	choice /c 12345678 /m "Select your PS2 HDD"
