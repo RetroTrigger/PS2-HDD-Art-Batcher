@@ -604,26 +604,29 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
-set "search=hdd"
-set "replace=\\.\PhysicalDrive"
-set "search2=:"
-set "replace2="
-set "textFile=hdl-hdd.txt"
-set "rootDir=%~dp0TMP"
-::for /R "%rootDir%" %%j in ("%textFile%") do (
-for %%j in ("%rootDir%\%textFile%") do (
-    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
-        set "line=%%i"
-        setlocal EnableDelayedExpansion
-        set "line=!line:%search%=%replace%!"
-		set "line=!line:%search2%=%replace2%!"
-        >>"%%~j" echo(!line!
-        endlocal
-		)
- )
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
+REM OLD Replace 
+::set "search=hdd"
+::set "replace=\\.\PhysicalDrive"
+::set "search2=:"
+::set "replace2="
+::set "textFile=hdl-hdd.txt"
+::set "rootDir=%~dp0TMP"
+::::for /R "%rootDir%" %%j in ("%textFile%") do (
+::for %%j in ("%rootDir%\%textFile%") do (
+::    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+::        set "line=%%i"
+::        setlocal EnableDelayedExpansion
+::        set "line=!line:%search%=%replace%!"
+::		set "line=!line:%search2%=%replace2%!"
+::        >>"%%~j" echo(!line!
+::        endlocal
+::		)
+:: )
 
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
-del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
 "%~dp0BAT\Diagbox.EXE" gd 0c
 		echo         Playstation 2 HDD Not Detected
@@ -1507,23 +1510,8 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
-set "search=hdd"
-set "replace=\\.\PhysicalDrive"
-set "search2=:"
-set "replace2="
-set "textFile=hdl-hdd.txt"
-set "rootDir=%~dp0TMP"
-::for /R "%rootDir%" %%j in ("%textFile%") do (
-for %%j in ("%rootDir%\%textFile%") do (
-    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
-        set "line=%%i"
-        setlocal EnableDelayedExpansion
-        set "line=!line:%search%=%replace%!"
-		set "line=!line:%search2%=%replace2%!"
-        >>"%%~j" echo(!line!
-        endlocal
-		)
- )
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -1827,23 +1815,8 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
-set "search=hdd"
-set "replace=\\.\PhysicalDrive"
-set "search2=:"
-set "replace2="
-set "textFile=hdl-hdd.txt"
-set "rootDir=%~dp0TMP"
-::for /R "%rootDir%" %%j in ("%textFile%") do (
-for %%j in ("%rootDir%\%textFile%") do (
-    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
-        set "line=%%i"
-        setlocal EnableDelayedExpansion
-        set "line=!line:%search%=%replace%!"
-		set "line=!line:%search2%=%replace2%!"
-        >>"%%~j" echo(!line!
-        endlocal
-		)
- )
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
@@ -2233,23 +2206,7 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
-set "search=hdd"
-set "replace=\\.\PhysicalDrive"
-set "search2=:"
-set "replace2="
-set "textFile=hdl-hdd.txt"
-set "rootDir=%~dp0TMP"
-::for /R "%rootDir%" %%j in ("%textFile%") do (
-for %%j in ("%rootDir%\%textFile%") do (
-    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
-        set "line=%%i"
-        setlocal EnableDelayedExpansion
-        set "line=!line:%search%=%replace%!"
-		set "line=!line:%search2%=%replace2%!"
-        >>"%%~j" echo(!line!
-        endlocal
-		)
- )
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
 
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
@@ -2476,23 +2433,8 @@ echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
 "%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
-set "search=hdd"
-set "replace=\\.\PhysicalDrive"
-set "search2=:"
-set "replace2="
-set "textFile=hdl-hdd.txt"
-set "rootDir=%~dp0TMP"
-::for /R "%rootDir%" %%j in ("%textFile%") do (
-for %%j in ("%rootDir%\%textFile%") do (
-    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
-        set "line=%%i"
-        setlocal EnableDelayedExpansion
-        set "line=!line:%search%=%replace%!"
-		set "line=!line:%search2%=%replace2%!"
-        >>"%%~j" echo(!line!
-        endlocal
-		)
- )
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
 del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
