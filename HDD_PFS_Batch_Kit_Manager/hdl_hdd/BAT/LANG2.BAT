@@ -65,13 +65,13 @@ set DOWNLOAD_CHEATS=Download Latest Widescreen Cheats?
 
 set DOWNLOAD_HDLBINST=5. Download HDL Batch Installer
 
-set MENU_1=1. Transfer PS1 Games - (POPS Binaries Required)
+set MENU_1=1. Transfer PS1 Games
 set MENU_2=2. Transfer PS2 Games
 set MENU_3=3. Transfer APPS,ART,CFG,CHT,VMC,THM
 set MENU_4=4. Transfer POPS Binaries
 
-set MENU_7=7. Backup PS1 Games - (Backup All .VCD in __.POPS)
-set MENU_8=8. Backup PS2 Games - (Backup All .iso)
+set MENU_7=7. Backup PS1 Games
+set MENU_8=8. Backup PS2 Games
 set MENU_9=9. Backup ART,CFG,CHT,VMC
 set MENU_10=10. Advanced Menu
 set MENU_11=11. Exit
