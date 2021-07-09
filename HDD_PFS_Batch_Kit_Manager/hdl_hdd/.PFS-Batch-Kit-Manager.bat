@@ -2784,7 +2784,7 @@ For %%Z in (PARTITION_GAMES_NEW.txt) do (
 echo on & call PARTITION_GAMES_NEW.bat
 
 @echo off
-"%~dp0BAT\busybox" sed -i "s/\"//g" %~dp0CD-DVD\.PARTITION_GAMES.txt
+"%~dp0BAT\busybox" sed -i "s/\"//g" %~dp0CD-DVD\PARTITION_GAMES_NEW.txt
 
 For %%Z in (PARTITION_GAMES_NEW.txt) do (
  (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "RenameISO.bat")
@@ -2816,6 +2816,7 @@ call RenameISO.bat
 del gameid.txt >nul 2>&1
 del hdl_dump.exe >nul 2>&1
 del hdl_svr_093.elf >nul 2>&1
+del PARTITION_GAMES_NEW.txt >nul 2>&1
 del PARTITION_GAMES_NEW.bat >nul 2>&1
 del Rename.txt >nul 2>&1
 del RenameISO.bat >nul 2>&1
