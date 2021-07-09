@@ -298,7 +298,7 @@ echo\
 echo Scanning for Playstation 2 HDDs:
 echo ----------------------------------------------------
     "%~dp0BAT\Diagbox.EXE" gd 03
-	%~dp0BAT\hdl_dump query | findstr "hdd1: hdd2: hdd3: hdd4: hdd5: hdd6:"
+	%~dp0BAT\hdl_dump query | findstr "Playstation"
 	"%~dp0BAT\Diagbox.EXE" gd 07
     echo.
     echo ----------------------------------------------------
@@ -626,7 +626,7 @@ REM OLD Replace
 :: )
 
 set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
-::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+del %~dp0TMP\hdl-hdd.txt >nul 2>&1
 IF "!@hdl_path!"=="" ( 
 "%~dp0BAT\Diagbox.EXE" gd 0c
 		echo         Playstation 2 HDD Not Detected
@@ -1410,8 +1410,6 @@ REM ############################################################################
 
 @echo off
 
-::color 03
-
 echo\
 echo\
 
@@ -1636,7 +1634,7 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         POPS %COMPLETED%	
 	cd %~dp0
-	) else ( echo         POPS - %POPS_EMPTY% )
+	) else ( echo         .VCD - %IS_EMPTY% )
 )
 
 rmdir /Q/S %~dp0TMP >nul 2>&1
@@ -2643,16 +2641,15 @@ call .PFS-Batch-Kit-Manager.bat
 REM ########################################################################################################################################################################
 :7-BackupPS2Games
 
-cd "%~dp0CD-DVD"
+@echo off
 
-del gameid.txt
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
 copy "%~dp0BAT\hdl_dump.exe" "%~dp0CD-DVD\hdl_dump.exe"
 copy "%~dp0BAT\hdl_svr_093.elf" "%~dp0CD-DVD"
 
-@echo off 
 cls
-
-:: BatchGotAdmin
 :-------------------------------------
 REM  --> Check for permissions
 >nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
@@ -2676,18 +2673,17 @@ if '%errorlevel%' NEQ '0' (
     pushd "%CD%"
     CD /D "%~dp0"
 :--------------------------------------
-chcp 1252
-rem * chcp 1252 --> This is for display special caractere. Exemple &, é, à,!
-cls
-cd "%~dp0CD-DVD"
 
+cd /d "%~dp0CD-DVD"
+cls
+setlocal enableDelayedExpansion
 "%~dp0BAT\Diagbox.EXE" gd 0e
 echo\
 echo\
-echo Scanning for Playstation 2 HDDs:
+echo Scanning HDDs:
 echo ----------------------------------------------------
     "%~dp0BAT\Diagbox.EXE" gd 03
-	%~dp0BAT\hdl_dump query | findstr "hdd1: hdd2: hdd3: hdd4: hdd5: hdd6:"
+	"%~dp0BAT\hdl_dump" query | findstr "Playstation"
 	"%~dp0BAT\Diagbox.EXE" gd 07
     echo.
     echo ----------------------------------------------------
@@ -2698,422 +2694,131 @@ echo ----------------------------------------------------
 	echo.
 	echo. 
 	echo PLAYSTATION 2 HDD Extraction
-    echo 	1. hdd1:
-    echo 	2. hdd2:
-    echo 	3. hdd3:
-    echo 	4. hdd4:
-    echo 	5. hdd5:
-    echo 	6. hdd6:
-    echo 	7. Network (For the network Edit .PFS-Batch-Kit-Manager.bat and go to the line 76 put the IP of your PS2
-	echo 	8. Quit
-	set /p choix=Choice the number of your PS2 HDD :
+	echo 	1. hdd1: 
+	echo 	2. hdd2:
+	echo 	3. hdd3:
+	echo 	4. hdd4: 
+	echo 	5. hdd5:
+	echo 	6. hdd6:
+	echo 	7. Network
+	echo 	8. QUIT PROGRAM
+	choice /c 12345678 /m "Choice the number of your PS2 HDD."	
+	
+		if errorlevel 1 set hdlhdd=hdd1:
+		if errorlevel 2 set hdlhdd=hdd2:
+		if errorlevel 3 set hdlhdd=hdd3:
+		if errorlevel 4 set hdlhdd=hdd4:
+		if errorlevel 5 set hdlhdd=hdd5:
+		if errorlevel 6 set hdlhdd=hdd6:
+		if errorlevel 7 (goto extractnetwork)
+		if errorlevel 8 (goto start)
 
-:question
-if /I "%choix%"=="1" (goto :hdd1)
-if /I "%choix%"=="2" (goto :hdd2)
-if /I "%choix%"=="3" (goto :hdd3)
-if /I "%choix%"=="4" (goto :hdd4)
-if /I "%choix%"=="5" (goto :hdd5)
-if /I "%choix%"=="6" (goto :hdd6)
-if /I "%choix%"=="7" (goto :network)
-if /I "%choix%"=="8" (goto :start)
+cls
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo Prepare HDD for extraction:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+"%~dp0BAT\hdl_dump" query | findstr "%hdlhdd%"
+(goto extract)
 
-:hdd1
+:extractnetwork
+cls
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo Prepare HDD Network for extraction:
+echo ----------------------------------------------------
 echo.
-hdl_dump.exe hdl_toc hdd1: > .PARTITION_GAMES.txt
-@echo off
-setlocal enabledelayedexpansion
+     "%~dp0BAT\Diagbox.EXE" gd 0f
+     set /p "hdlhdd=Enter IP of the Playstation 2: "
+     ping -n 1 -w 2000 !hdlhdd!
+     if errorlevel 1 (
+     "%~dp0BAT\Diagbox.EXE" gd 0c
+     	echo Unable to ping !hdlhdd! ... ending script.
+     	"%~dp0BAT\Diagbox.EXE" gd 07
+		echo.
+     	pause & (goto 7-BackupPS2Games)
+     	)
+		
+:extract
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo Extract All .ISO ?
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
+echo\
+CHOICE /C 12 /M "Select Option:"
+
+IF ERRORLEVEL 2 (goto 7-BackupPS2Games)
+
+"%~dp0BAT\Diagbox.EXE" gd 0e
+cls
+echo\
+echo\
+echo Extraction iso...
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+setlocal DisableDelayedExpansion
+
+hdl_dump hdl_toc %hdlhdd% > .PARTITION_GAMES.txt
 
 more +1 ".PARTITION_GAMES.txt" >"file.txt"
-move /y "file.txt" ".PARTITION_GAMES.txt" >nul
+move /y "file.txt" "PARTITION_GAMES_NEW.txt" >nul
+
+"%~dp0BAT\busybox" sed -i -e "$ d" PARTITION_GAMES_NEW.txt
+more PARTITION_GAMES_NEW.txt
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+
+For %%Z in (PARTITION_GAMES_NEW.txt) do (
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract %hdlhdd% "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
  
-for /f "usebackq tokens=1* delims=[]" %%a in (`find /v /n "" .PARTITION_GAMES.txt`) do (
-	set "LastLine=%%a"
-	set ContentLine_%%a=%%b
-)
-set /a "LastLine=!LastLine!-1"
-for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
-	
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
-
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
-
-
 echo on & call PARTITION_GAMES_NEW.bat
-
-@ECHO OFF
-setlocal enabledelayedexpansion
-
-set "FileName=Rename.txt"
-set "OutFile=RenameISO.bat"
-(
-for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
- set "line=%%a"
- set "line=!line::=-!"
- set "line=!line:?=-!"
- set "line=!line:/=-!"
- set "line=!line:\=-!"
- set "line=!line:>=-!"
- set "line=!line:<=-!"
- echo !line!
-)
-)>"%OutFile%"
-ren *. *.iso >nul 2>&1
-call RenameISO.bat
-pause
-
-del gameid.txt
-del hdl_dump.exe
-del hdl_svr_093.elf
-del PARTITION_GAMES_NEW.txt
-del PARTITION_GAMES_NEW.bat
-del Rename.txt
-del RenameISO.bat
-call %~dp0.PFS-Batch-Kit-Manager.bat
-exit 
-
-:hdd2
-echo.
-hdl_dump.exe hdl_toc hdd2: > .PARTITION_GAMES.txt
-@echo off
-setlocal enabledelayedexpansion
-
-more +1 ".PARTITION_GAMES.txt" >"file.txt"
-move /y "file.txt" ".PARTITION_GAMES.txt" >nul
- 
-for /f "usebackq tokens=1* delims=[]" %%a in (`find /v /n "" .PARTITION_GAMES.txt`) do (
-	set "LastLine=%%a"
-	set ContentLine_%%a=%%b
-)
-set /a "LastLine=!LastLine!-1"
-for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
-	
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
-
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
-
-
-echo on & call PARTITION_GAMES_NEW.bat
-
-@ECHO OFF
-setlocal enabledelayedexpansion
-
-set "FileName=Rename.txt"
-set "OutFile=RenameISO.bat"
-(
-for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
- set "line=%%a"
- set "line=!line::=-!"
- set "line=!line:?=-!"
- set "line=!line:/=-!"
- set "line=!line:\=-!"
- set "line=!line:>=-!"
- set "line=!line:<=-!"
- echo !line!
-)
-)>"%OutFile%"
-ren *. *.iso >nul 2>&1
-call RenameISO.bat
-pause
-
-del gameid.txt
-del hdl_dump.exe
-del hdl_svr_093.elf
-del PARTITION_GAMES_NEW.txt
-del PARTITION_GAMES_NEW.bat
-del Rename.txt
-del RenameISO.bat
-call %~dp0.PFS-Batch-Kit-Manager.bat
-exit  
-
-:hdd3
-echo.
-hdl_dump.exe hdl_toc hdd3: > .PARTITION_GAMES.txt
-@echo off
-setlocal enabledelayedexpansion
-
-more +1 ".PARTITION_GAMES.txt" >"file.txt"
-move /y "file.txt" ".PARTITION_GAMES.txt" >nul
- 
-for /f "usebackq tokens=1* delims=[]" %%a in (`find /v /n "" .PARTITION_GAMES.txt`) do (
-	set "LastLine=%%a"
-	set ContentLine_%%a=%%b
-)
-set /a "LastLine=!LastLine!-1"
-for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
-	
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
-
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
-
-
-echo on & call PARTITION_GAMES_NEW.bat
-
-@ECHO OFF
-setlocal enabledelayedexpansion
-
-set "FileName=Rename.txt"
-set "OutFile=RenameISO.bat"
-(
-for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
- set "line=%%a"
- set "line=!line::=-!"
- set "line=!line:?=-!"
- set "line=!line:/=-!"
- set "line=!line:\=-!"
- set "line=!line:>=-!"
- set "line=!line:<=-!"
- echo !line!
-)
-)>"%OutFile%"
-ren *. *.iso >nul 2>&1
-call RenameISO.bat
-pause
-
-del gameid.txt
-del hdl_dump.exe
-del hdl_svr_093.elf
-del PARTITION_GAMES_NEW.txt
-del PARTITION_GAMES_NEW.bat
-del Rename.txt
-del RenameISO.bat
-call %~dp0.PFS-Batch-Kit-Manager.bat
-exit 
-
-:hdd4
-
-echo.
-hdl_dump.exe hdl_toc hdd4: > .PARTITION_GAMES.txt
 
 @echo off
-setlocal enabledelayedexpansion
+"%~dp0BAT\busybox" sed -i "s/\"//g" %~dp0CD-DVD\.PARTITION_GAMES.txt
 
-more +1 ".PARTITION_GAMES.txt" >"file.txt"
-move /y "file.txt" ".PARTITION_GAMES.txt" >nul
+For %%Z in (PARTITION_GAMES_NEW.txt) do (
+ (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "RenameISO.bat")
  
-for /f "usebackq tokens=1* delims=[]" %%a in (`find /v /n "" .PARTITION_GAMES.txt`) do (
-	set "LastLine=%%a"
-	set ContentLine_%%a=%%b
-)
-set /a "LastLine=!LastLine!-1"
-for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
-	
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
+"%~dp0BAT\busybox" sed -i "s/:/-/g; s/?//g; s/\!//g; s/\\//g; s/\///g; s/\*//g; s/>//g; s/<//g" %~dp0CD-DVD\RenameISO.bat
+"%~dp0BAT\busybox" sed -i "s/|//g" %~dp0CD-DVD\RenameISO.bat
 
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
+REM Old 
+::setlocal enabledelayedexpansion
+::
+::set "FileName=Rename.txt"
+::set "OutFile=RenameISO.bat"
+::(
+::for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
+:: set "line=%%a"
+:: set "line=!line::=-!"
+:: set "line=!line:?=-!"
+:: set "line=!line:/=-!"
+:: set "line=!line:\=-!"
+:: set "line=!line:>=-!"
+:: set "line=!line:<=-!"
+:: echo !line!
+::)
+::)>"%OutFile%"
 
-
-echo on & call PARTITION_GAMES_NEW.bat
-
-@ECHO OFF
-setlocal enabledelayedexpansion
-
-set "FileName=Rename.txt"
-set "OutFile=RenameISO.bat"
-(
-for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
- set "line=%%a"
- set "line=!line::=-!"
- set "line=!line:?=-!"
- set "line=!line:/=-!"
- set "line=!line:\=-!"
- set "line=!line:>=-!"
- set "line=!line:<=-!"
- echo !line!
-)
-)>"%OutFile%"
 ren *. *.iso >nul 2>&1
 call RenameISO.bat
-pause
 
-del gameid.txt
-del hdl_dump.exe
-del hdl_svr_093.elf
-del PARTITION_GAMES_NEW.txt
-del PARTITION_GAMES_NEW.bat
-del Rename.txt
-del RenameISO.bat
-call %~dp0.PFS-Batch-Kit-Manager.bat
-exit 
-
-:hdd5
-echo.
-hdl_dump.exe hdl_toc hdd5: > .PARTITION_GAMES.txt
-
-@echo off
-setlocal enabledelayedexpansion
-
-more +1 ".PARTITION_GAMES.txt" >"file.txt"
-move /y "file.txt" ".PARTITION_GAMES.txt" >nul
- 
-for /f "usebackq tokens=1* delims=[]" %%a in (`find /v /n "" .PARTITION_GAMES.txt`) do (
-	set "LastLine=%%a"
-	set ContentLine_%%a=%%b
-)
-set /a "LastLine=!LastLine!-1"
-for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
-	
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
-
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
-
-
-echo on & call PARTITION_GAMES_NEW.bat
-
-@ECHO OFF
-setlocal enabledelayedexpansion
-
-set "FileName=Rename.txt"
-set "OutFile=RenameISO.bat"
-(
-for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
- set "line=%%a"
- set "line=!line::=-!"
- set "line=!line:?=-!"
- set "line=!line:/=-!"
- set "line=!line:\=-!"
- set "line=!line:>=-!"
- set "line=!line:<=-!"
- echo !line!
-)
-)>"%OutFile%"
-ren *. *.iso >nul 2>&1
-call RenameISO.bat
-pause
-
-del gameid.txt
-del hdl_dump.exe
-del hdl_svr_093.elf
-del PARTITION_GAMES_NEW.txt
-del PARTITION_GAMES_NEW.bat
-del Rename.txt
-del RenameISO.bat
-call %~dp0.PFS-Batch-Kit-Manager.bat
-exit 
-
-:hdd6
-echo.
-hdl_dump.exe hdl_toc hdd6: > .PARTITION_GAMES.txt
-@echo off
-setlocal enabledelayedexpansion
-
-more +1 ".PARTITION_GAMES.txt" >"file.txt"
-move /y "file.txt" ".PARTITION_GAMES.txt" >nul
- 
-for /f "usebackq tokens=1* delims=[]" %%a in (`find /v /n "" .PARTITION_GAMES.txt`) do (
-	set "LastLine=%%a"
-	set ContentLine_%%a=%%b
-)
-set /a "LastLine=!LastLine!-1"
-for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
-	
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract hdd2: "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
-
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
-
-
-echo on & call PARTITION_GAMES_NEW.bat
-
-@ECHO OFF
-setlocal enabledelayedexpansion
-
-set "FileName=Rename.txt"
-set "OutFile=RenameISO.bat"
-(
-for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
- set "line=%%a"
- set "line=!line::=-!"
- set "line=!line:?=-!"
- set "line=!line:/=-!"
- set "line=!line:\=-!"
- set "line=!line:>=-!"
- set "line=!line:<=-!"
- echo !line!
-)
-)>"%OutFile%"
-ren *. *.iso >nul 2>&1
-call RenameISO.bat
-pause
-
-del gameid.txt
-del hdl_dump.exe
-del hdl_svr_093.elf
-del PARTITION_GAMES_NEW.txt
-del PARTITION_GAMES_NEW.bat
-del Rename.txt
-del RenameISO.bat
-call %~dp0.PFS-Batch-Kit-Manager.bat
-exit 
-
-
-:network
-echo.
-rem Exemple : hdl_dump hdl_toc 192.169.1.10
-hdl_dump hdl_toc 192.168.1.PS2IP
-@echo off
-setlocal enabledelayedexpansion
-
-more +1 ".PARTITION_GAMES.txt" >"file.txt"
-move /y "file.txt" ".PARTITION_GAMES.txt" >nul
- 
-for /f "usebackq tokens=1* delims=[]" %%a in (`find /v /n "" .PARTITION_GAMES.txt`) do (
-	set "LastLine=%%a"
-	set ContentLine_%%a=%%b
-)
-set /a "LastLine=!LastLine!-1"
-for /l %%a in (1,1,!LastLine!) do echo.!ContentLine_%%a!>>PARTITION_GAMES_NEW.txt
-	
-For %%Z in (PARTITION_GAMES_NEW.txt) do ( rem Exemple : hdl_dump.exe extract 192.168.1.10
- (for /f "tokens=2,5*" %%A in (%%Z) do echo hdl_dump.exe extract 192.168.1.PS2IP "%%C" %%B.iso) > "PARTITION_GAMES_NEW.bat")
-
-For %%Z in (PARTITION_GAMES_NEW.txt) do (
- (for /f "tokens=2,5*" %%A in (%%Z) do echo ren %%B.iso "%%C.iso") > "Rename.txt")
-
-
-echo on & call PARTITION_GAMES_NEW.bat
-
-@ECHO OFF
-setlocal enabledelayedexpansion
-
-set "FileName=Rename.txt"
-set "OutFile=RenameISO.bat"
-(
-for /f "usebackq delims=*" %%a IN ("%FileName%") DO (
- set "line=%%a"
- set "line=!line::=-!"
- set "line=!line:?=-!"
- set "line=!line:/=-!"
- set "line=!line:\=-!"
- set "line=!line:>=-!"
- set "line=!line:<=-!"
- echo !line!
-)
-)>"%OutFile%"
-ren *. *.iso >nul 2>&1
-call RenameISO.bat
-pause
-
-del gameid.txt
-del hdl_dump.exe
-del hdl_svr_093.elf
-del PARTITION_GAMES_NEW.txt
-del PARTITION_GAMES_NEW.bat
-del Rename.txt
-del RenameISO.bat
-call %~dp0.PFS-Batch-Kit-Manager.bat
-exit 
+del gameid.txt >nul 2>&1
+del hdl_dump.exe >nul 2>&1
+del hdl_svr_093.elf >nul 2>&1
+del PARTITION_GAMES_NEW.bat >nul 2>&1
+del Rename.txt >nul 2>&1
+del RenameISO.bat >nul 2>&1
 
 :: For HDL_DUMP_093
 ::For %%Z in (PARTITION_GAMES_NEW.txt) do (
@@ -3121,6 +2826,17 @@ exit
 ::
 ::For %%Z in (PARTITION_GAMES_NEW.txt) do (
 :: (for /f "tokens=2-4*" %%A in (%%Z) do echo ren %%C.iso "%%D.iso") > "Rename.txt")
+
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo Extraction Completed...
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+pause & (goto start)
 
 REM ####################################################################################################################################################
 
@@ -3137,25 +2853,9 @@ if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
 for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "temp\%%~nf"
 
 cd temp
-@echo off 
-setlocal EnableExtensions DisableDelayedExpansion
 
-set "search=temp\"
-set "replace="
-set "textFile=*.cue"
-set "rootDir=."
-::for /R "%rootDir%" %%j in ("%textFile%") do (
-for %%j in ("%rootDir%\%textFile%") do (
-    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
-        set "line=%%i"
-        setlocal EnableDelayedExpansion
-        set "line=!line:%search%=%replace%!"
-        >>"%%~j" echo(!line!
-        endlocal
-    )
-)
+"%~dp0BAT\busybox" find . -type f -name "*.cue" -exec sed -i "s:temp\\::g" {} + >nul 2>&1
 
-endlocal
 move *.bin %~dp0POPS >nul 2>&1
 move *.cue %~dp0POPS >nul 2>&1
 
@@ -3343,30 +3043,32 @@ if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
 if not exist *.cue (goto failbinsplit)
 
 for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "temp\%%~nf"
-md Original
+md Original >nul 2>&1
 move *.bin %~dp0POPS\Original >nul 2>&1
 move *.cue %~dp0POPS\Original >nul 2>&1
 cd temp
-@echo off 
-setlocal EnableExtensions DisableDelayedExpansion
 
-set "search=temp\"
-set "replace="
+"%~dp0BAT\busybox" find . -type f -name "*.cue" -exec sed -i "s:temp\\::g" {} + >nul 2>&1
 
-set "textFile=*.cue"
-set "rootDir=."
-::for /R "%rootDir%" %%j in ("%textFile%") do (
-for %%j in ("%rootDir%\%textFile%") do (
-    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
-        set "line=%%i"
-        setlocal EnableDelayedExpansion
-        set "line=!line:%search%=%replace%!"
-        >>"%%~j" echo(!line!
-        endlocal
-    )
-)
+REM OLD Replace
+::setlocal EnableExtensions DisableDelayedExpansion
+::
+::set "search=temp\"
+::set "replace="
+::
+::set "textFile=*.cue"
+::set "rootDir=."
+::::for /R "%rootDir%" %%j in ("%textFile%") do (
+::for %%j in ("%rootDir%\%textFile%") do (
+::    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+::        set "line=%%i"
+::        setlocal EnableDelayedExpansion
+::        set "line=!line:%search%=%replace%!"
+::        >>"%%~j" echo(!line!
+::        endlocal
+::    )
+::)
 
-endlocal
 md Original >nul 2>&1
 move *.cue "%~dp0POPS" >nul 2>&1
 move *.bin "%~dp0POPS" >nul 2>&1
