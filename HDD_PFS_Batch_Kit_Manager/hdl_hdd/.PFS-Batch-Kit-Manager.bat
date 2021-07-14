@@ -112,7 +112,6 @@ cls
 (goto start)
 
 @ECHO off
-:CLSstart
 cls
 :Advanced-Menu
 cls                  
@@ -205,8 +204,7 @@ ECHO 1.
 ECHO 2.
 ECHO 3.
 ECHO 4.
-ECHO 5.
-::ECHO %DOWNLOAD_HDLBINST%
+ECHO %DOWNLOAD_HDLBINST%
 ECHO 6.
 ECHO 7.
 ECHO 8.
@@ -221,7 +219,7 @@ set choice=
 set /p choice=Select Option:.
 if not '%choice%'=='' set choice=%choice:~0,10%
 
-rem if '%choice%'=='5' (start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart)
+if '%choice%'=='5' (start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart)
 if '%choice%'=='10' (goto Advanced-Menu)
 if '%choice%'=='11' (goto start)
 if '%choice%'=='12' (goto exit)
@@ -241,9 +239,10 @@ ECHO.
 ECHO 1. Create Partition
 ECHO 2. Delete Partition
 ECHO 3. Blank  Partition (Format only partition) 
-ECHO 4. Show   Partition
-ECHO.
-ECHO 6. Hack your PS2 HDD (Temporarily)
+ECHO 4. Show System Partition
+ECHO 5. Show Games Partition
+ECHO. 
+ECHO 7. Hack your PS2 HDD (Temporarily)
 ECHO.
 ECHO.
 ECHO.
@@ -263,7 +262,8 @@ if '%choice%'=='1'  (goto CreatePART)
 if '%choice%'=='2'  (goto DeletePART)
 if '%choice%'=='3'  (goto BlankPART)
 if '%choice%'=='4'  (goto partitionlist) 
-if '%choice%'=='6'  (goto hackHDDtoPS2)
+if '%choice%'=='5'  (goto partitionGAMElist) 
+if '%choice%'=='7'  (goto hackHDDtoPS2)
 
 
 if '%choice%'=='9'  (goto formatHDDtoPS2)
@@ -1632,10 +1632,10 @@ echo ----------------------------------------------------
 echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
-"%~dp0BAT\Diagbox.EXE" gd 07
+"%~dp0BAT\Diagbox.EXE" gd 0e
 echo         3) %YES% (Manually choose the partition where you want to install your .VCDs)
-
 echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
 CHOICE /C 123 /M "Select Option:"
 
 IF ERRORLEVEL 1 set @pfs_pop=yes
@@ -2373,9 +2373,10 @@ echo ----------------------------------------------------
 echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
-"%~dp0BAT\Diagbox.EXE" gd 07
+"%~dp0BAT\Diagbox.EXE" gd 0e
 echo         3) %YES% (Manually Choose the partition where your .VCDs to extract are located.)
 echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
 CHOICE /C 123 /M "Select Option:"
 
 IF ERRORLEVEL 1 set @pfs_pop=yes
@@ -3491,6 +3492,67 @@ echo ----------------------------------------------------
     type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
     "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep -e "0x0100" -e "0x0001" > %~dp0TMP\hdd-prt.txt
 	type %~dp0TMP\hdd-prt.txt
+	
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+
+echo.
+pause & (goto HDDManagement-Menu) 
+
+REM #######################################################################################################################################
+:partitionGAMElist
+
+@echo off
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
+cls
+:-------------------------------------
+REM  --> Check for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo %ADMIN_PRIV%
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------
+
+cls
+mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0e
+
+echo\
+echo\
+echo Scanning for Playstation 2 HDDs:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+
+set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
+::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+echo\
+echo Partition Games List:
+echo ----------------------------------------------------
+
+    "%~dp0BAT\hdl_dump" hdl_toc %@hdl_path% > %~dp0LOG\PARTITION_GAMES.txt
+	type %~dp0LOG\PARTITION_GAMES.txt
 	
 rmdir /Q/S %~dp0TMP >nul 2>&1
 del info.sys >nul 2>&1
