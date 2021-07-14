@@ -32,9 +32,11 @@ if '%errorlevel%' NEQ '0' (
 
 IF NOT EXIST APPS\ MD APPS
 IF NOT EXIST ART\  MD ART
-IF NOT EXIST CD-DVD\ MD CD-DVD
+REM IF NOT EXIST CD-DVD\ MD CD-DVD
+IF NOT EXIST "CD"\  MD "CD"
 IF NOT EXIST CFG\  MD CFG
 IF NOT EXIST CHT\  MD CHT
+IF NOT EXIST DVD\  MD DVD
 IF NOT EXIST POPS\ MD POPS
 IF NOT EXIST POPS-Binaries\ MD POPS-Binaries
 IF NOT EXIST THM\  MD THM
@@ -47,8 +49,8 @@ setlocal enableDelayedExpansion
 :start
 cls
 %~dp0BAT\Diagbox.exe gd 0f
-title PFS Batch Kit Manager by GDX and El_isra
-echo.Welcome to PFS Batch Kit Manager
+title PFS Batch Kit Manager By GDX 
+echo.Welcome to PFS Batch Kit Manager By GDX
 echo.------------------------------------------
 echo.
 ECHO %MENU_1%
@@ -78,13 +80,14 @@ if '%choice%'=='7' (goto 5-BackupPS1Games)
 if '%choice%'=='8' (goto 7-BackupPS2Games)
 if '%choice%'=='9' (goto 4-Backup-ART-CFG-CHT-VMC)
 if '%choice%'=='10' (goto Advanced-Menu)
-if '%choice%'=='11' exit
+if '%choice%'=='11' (goto exit)
 
 if '%choice%'=='99' (goto FPH)
-ECHO "%choice%" is not valid, try again
+if '%choice%'=='100' (goto GDX-X)
+ECHO /c "%choice%" is not valid, try again
 ECHO
 (goto start)
-:GDX 
+:GDX-X 
 cls   
 echo\ 
 echo\ 
@@ -113,16 +116,20 @@ cls
 cls
 :Advanced-Menu
 cls                  
-title PFS Batch Kit Manager by GDX and El_isra
-echo.Welcome in PFS Batch Kit Manager
+title PFS Batch Kit Manager By GDX
+echo.Welcome in PFS Batch Kit Manager By GDX
 echo.------------------------------------------
 ECHO Advanced Menu 
 ECHO.
 ECHO 1. Conversion Menu
-ECHO.
-ECHO.
-ECHO.
-ECHO %DOWNLOAD_HDLBINST%
+ECHO 2.
+ECHO 3. Download Menu
+ECHO 4.
+ECHO 5.
+ECHO 6.
+ECHO 7.
+ECHO 8.
+ECHO 9. HDD Management
 ECHO.
 ECHO 10. Back to main menu
 ECHO 11. Exit
@@ -133,9 +140,10 @@ set /p choice=Select Option:.
 if not '%choice%'=='' set choice=%choice:~0,10%
 
 if '%choice%'=='1'  (goto Conversion-Menu)
-if '%choice%'=='5'  (start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart)
+if '%choice%'=='3'  (goto Download-Menu)
+if '%choice%'=='9'  (goto HDDManagement-Menu)
 if '%choice%'=='10' (goto start)
-if '%choice%'=='11' exit
+if '%choice%'=='11' (goto exit)
 
 ECHO "%choice%" is not valid, try again
 cls
@@ -144,8 +152,8 @@ cls
 @ECHO off
 :Conversion-Menu
 cls                  
-title PFS Batch Kit Manager by GDX and El_isra
-echo.Welcome in PFS Batch Kit Manager
+title PFS Batch Kit Manager By GDX
+echo.Welcome in PFS Batch Kit Manager By GDX
 echo.------------------------------------------
 ECHO Conversion Menu
 ECHO.
@@ -177,16 +185,103 @@ if '%choice%'=='8'  (goto multibin2bin)
 if '%choice%'=='9'  (goto bin2split)
 if '%choice%'=='10' (goto Advanced-Menu)
 if '%choice%'=='11' (goto start)
-if '%choice%'=='12' exit
+if '%choice%'=='12' (goto exit)
 
 ECHO "%choice%" is not valid, try again
 cls
 (goto Conversion-Menu)
-           
+
+@ECHO off
+:CLSstart
+cls
+:Download-Menu
+cls                  
+title PFS Batch Kit Manager By GDX
+echo.Welcome in PFS Batch Kit Manager By GDX
+echo.------------------------------------------
+ECHO Download Menu 
+ECHO.
+ECHO 1. 
+ECHO 2.
+ECHO 3.
+ECHO 4.
+ECHO 5.
+::ECHO %DOWNLOAD_HDLBINST%
+ECHO 6.
+ECHO 7.
+ECHO 8.
+ECHO 9.
+ECHO.
+ECHO 10. Back
+ECHO 11. Back to main menu
+ECHO 12. Exit
+ECHO.
+echo.------------------------------------------
+set choice=
+set /p choice=Select Option:.
+if not '%choice%'=='' set choice=%choice:~0,10%
+
+rem if '%choice%'=='5' (start https://github.com/israpps/HDL-Batch-installer/releases & goto CLSstart)
+if '%choice%'=='10' (goto Advanced-Menu)
+if '%choice%'=='11' (goto start)
+if '%choice%'=='12' (goto exit)
+
+ECHO "%choice%" is not valid, try again
+cls
+(goto Download-Menu)
+
+@ECHO off
+:HDDManagement-Menu
+cls             
+title PFS Batch Kit Manager By GDX
+echo.Welcome in PFS Batch Kit Manager By GDX
+echo.------------------------------------------
+ECHO HDD Management 
+ECHO.
+ECHO 1. Create Partition
+ECHO 2. Delete Partition
+ECHO 3. Blank  Partition (Format only partition) 
+ECHO 4. Show   Partition
+ECHO.
+ECHO 6. Hack your PS2 HDD (Temporarily)
+ECHO.
+ECHO.
+ECHO.
+"%~dp0BAT\Diagbox.EXE" gd 0c
+ECHO 9. Format HDD to PS2 Format
+"%~dp0BAT\Diagbox.EXE" gd 0f
+ECHO.
+ECHO 10. Back
+ECHO 11. Back to main menu
+ECHO 12. Exit
+ECHO.
+echo.------------------------------------------
+set choice=
+set /p choice=Select Option:.
+if not '%choice%'=='' set choice=%choice:~0,10%
+if '%choice%'=='1'  (goto CreatePART)
+if '%choice%'=='2'  (goto DeletePART)
+if '%choice%'=='3'  (goto BlankPART)
+if '%choice%'=='4'  (goto partitionlist) 
+if '%choice%'=='6'  (goto hackHDDtoPS2)
+
+
+if '%choice%'=='9'  (goto formatHDDtoPS2)
+if '%choice%'=='10' (goto Advanced-Menu)
+if '%choice%'=='11' (goto start)
+if '%choice%'=='12' (goto exit)
+
+ECHO "%choice%" is not valid, try again
+cls
+(goto HDDManagement-Menu)
+
+:exit 
+exit
 	   
-REM ########################################################################################################################################################################
+REM ################################################################################################################################################################################################################################
 
 :1-Transfer-PS2Games-HDLBATCH
+
 @echo off
 
 :-------------------------------------
@@ -279,6 +374,7 @@ rem * NOTHING TO EDIT BELOW THIS LINE
 setlocal enableDelayedExpansion
 
 cls
+mkdir %~dp0CD-DVD >nul 2>&1
 cd /d "%~dp0CD-DVD"
 
 del gameid.txt
@@ -392,14 +488,14 @@ cls
 ::%~dp0BAT\7z.exe x -bso0 "%~dp0CD-DVD\*.zip"
 
 REM CHECK IF .CUE IS MISSING FOR .BIN IF IT IS NOT DETECTED IT WILL BE CREATED
-md temp >nul 2>&1
-move *.bin temp >nul 2>&1
-cd temp >nul 2>&1
-if not exist *.cue %~dp0BAT\cuemaker.exe "%%~nf" 
+cd "%~dp0CD"
+if not exist %%~nf.cue %~dp0BAT\cuemaker.exe "%%~nf" 
 move *.bin %~dp0CD-DVD >nul 2>&1
 move *.cue %~dp0CD-DVD >nul 2>&1
+
+cd "%~dp0DVD"
+move *.iso %~dp0CD-DVD >nul 2>&1
 cd %~dp0CD-DVD
-rmdir /s /q temp >nul 2>&1
 
 
 set /a gamecount=0
@@ -466,15 +562,15 @@ for %%f in (*.iso *.cue *.nrg *.gi *.iml) do (
 )
 endlocal
 echo\
-pause
-cls
-del %~dp0CD-DVD\gameid.txt
-del %~dp0CD-DVD\hdl_dump.exe
-del %~dp0CD-DVD\hdl_svr_093.elf
-del %~dp0CD-DVD\boot.kelf
-del %~dp0CD-DVD\info.sys
-::cmd /k
-call %~dp0.PFS-Batch-Kit-Manager.bat
+
+cd "%~dp0CD-DVD"
+move *.bin %~dp0CD >nul 2>&1
+move *.cue %~dp0CD >nul 2>&1
+move *.iso %~dp0DVD >nul 2>&1
+cd "%~dp0"
+rmdir /Q/S %~dp0CD-DVD >nul 2>&1
+
+pause & call %~dp0.PFS-Batch-Kit-Manager.bat
 
 REM ########################################################################################################################################################################
 
@@ -1410,6 +1506,9 @@ REM ############################################################################
 
 @echo off
 
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
 echo\
 echo\
 
@@ -1534,22 +1633,18 @@ echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
 "%~dp0BAT\Diagbox.EXE" gd 07
-::echo         3) %YES% (Unzip and Convert Multiple .bin/.cue to .VCD)
-"%~dp0BAT\Diagbox.EXE" gd 06
-::echo            After installation the .vcd will be deleted from the POPS folder
-"%~dp0BAT\Diagbox.EXE" gd 07
+echo         3) %YES% (Manually choose the partition where you want to install your .VCDs)
+
 echo\
 CHOICE /C 123 /M "Select Option:"
 
 IF ERRORLEVEL 1 set @pfs_pop=yes
 IF ERRORLEVEL 2 set @pfs_pop=no
-IF ERRORLEVEL 3 set @pfs_pop=yes
-IF ERRORLEVEL 3 (goto convVCD)
+IF ERRORLEVEL 3 set @pfs_pop=yesmanually
+IF ERRORLEVEL 3 (goto partpopsname)
 
 "%~dp0BAT\Diagbox.EXE" gd 0f
 
-
-:terminateVCD
 echo\
 echo\
 echo Estimating File Size:
@@ -1567,7 +1662,7 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	echo         VCD - Files: !@pops_file! Size: !@pops_size! Mb
 	) else ( echo        .VCD - Source Not Detected... )
 )
-)
+
 "%~dp0BAT\Diagbox.EXE" gd 0e
 echo\
 echo\
@@ -1579,10 +1674,12 @@ echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
 echo ls >> %~dp0TMP\pfs-prt.txt
 echo exit >> %~dp0TMP\pfs-prt.txt
 type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
-"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%POPSPART%" | "%~dp0BAT\busybox" sed "s/.*%POPSPART%/%POPSPART%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "__.POPS" | "%~dp0BAT\busybox" sed "s/.*__.POPS/__.POPS/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+"%~dp0BAT\busybox" sed -i "s/[0-9]*//g" %~dp0TMP\hdd-prt.txt
 set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
 REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
-IF "!@hdd_avl!"=="%POPSPART%" (
+
+IF "!@hdd_avl!"=="__.POPS" (
 "%~dp0BAT\Diagbox.EXE" gd 0a
 	echo         POPS - Partition Detected
 	"%~dp0BAT\Diagbox.EXE" gd 07
@@ -1597,8 +1694,8 @@ IF "!@hdd_avl!"=="%POPSPART%" (
 	del info.sys >nul 2>&1
 	::cmd /k
 	pause & call %~dp0.PFS-Batch-Kit-Manager.bat
-	)
-
+ )
+	
 echo\
 echo\
 pause
@@ -1653,73 +1750,117 @@ echo\
 pause
 call %~dp0.PFS-Batch-Kit-Manager.bat
 
-:convVCD
-cd %~dp0POPS
-@echo off
-if exist rmdir /s /q temp >nul 2>&1
-md temp >nul 2>&1
-if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
-if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
-if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
 
-REM ECM TO .BIN
-move *.ecm temp >nul 2>&1
-cd temp
-for %%f in (*.ecm) do %~dp0BAT\unecm.exe "%%f" "%%~nf"
-if not exist *.cue %~dp0BAT\cuemaker.exe "%%~nf"
-move *.bin %~dp0POPS >nul 2>&1
-move *.cue %~dp0POPS >nul 2>&1
-cd %~dp0POPS
-
-REM CHD TO .BIN
-for %%i in (*.chd) do %~dp0BAT\chdman.exe extractcd -i "%%i" -o "%%~ni.cue"
-
-REM Merge muulti .BIN to one
-for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "%%f"
-
-move *.cue.cue "%~dp0POPS\temp" >nul 2>&1
-move *.cue.bin "%~dp0POPS\temp" >nul 2>&1
-
-del *.bin >nul 2>&1
-del *.cue >nul 2>&1
-
-move "temp\*.bin" %~dp0POPS >nul 2>&1
-move "temp\*.cue" %~dp0POPS >nul 2>&1
-move *.vcd temp >nul 2>&1
-%~d0
-cd %~dp0BAT
-if EXIST "%~dp0POPS" (goto checkBIN) else (if exist *.cue (for %%i in (*.cue) do %~dp0BAT\CUE2POPS_2_3.EXE "%~p0%%i") else goto failBIN)
-pause
-(goto terminateVCD)
-:checkBIN
-@echo off
-if not exist "%~dp0POPS\*.*" (goto convertVCD)
-cd "%~dp0POPS"
-if not exist *.cue goto failBIN
-for %%i in (*.cue) do "%~dp0BAT\CUE2POPS_2_3.EXE" "%~dp0POPS\%%i"
-md temp >nul 2>&1
-del *.bin >nul 2>&1
-del *.cue >nul 2>&1
-ren *.vcd *. >nul 2>&1
-ren *.cue *.VCD >nul 2>&1
-move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
-rmdir /s /q temp >nul 2>&1
-(goto terminateVCD)
-:failBIN
-@echo off
-"%~dp0BAT\Diagbox.EXE" gd 06
-move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
-rmdir /s /q temp >nul 2>&1
+:partpopsname
+IF %@pfs_pop%==yesmanually (
 echo.
-echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POPS folder.
-echo Also check that the name matches inside the .cue
-echo. 
-"%~dp0BAT\Diagbox.EXE" gd 07
-(goto terminateVCD)
-:convertVCD
-CUE2POPS_2_3.EXE "%~dp0POPS"
-(goto terminateVCD)
+echo Manually choose the partition on which you want to install your .VCDs
+echo By default it will be the partition __.POPS 
+echo.
+echo Example:  __.POPS0 or __.POPS1 up to __.POPS9
+echo.
+set /p "partnamepops=Enter partition Name:" 
 
+echo\
+echo\
+echo Estimating File Size: FDP
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 07
+IF /I EXIST %~dp0POPS\*.VCD (
+	dir /s /a %~dp0POPS\*.VCD | "%~dp0BAT\busybox" grep "File(s)" | "%~dp0BAT\busybox" head -1 | "%~dp0BAT\busybox" sed "s/ File(s).*//" | "%~dp0BAT\busybox" tr -d " " > %~dp0TMP\popsfiles.txt
+	dir /s /a %~dp0POPS\*.VCD | "%~dp0BAT\busybox" grep "File(s)" | "%~dp0BAT\busybox" head -1 | "%~dp0BAT\busybox" sed "s/.*File(s)//" | "%~dp0BAT\busybox" sed "s/bytes//" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" tr -d "," > %~dp0TMP\popssize.txt
+	"%~dp0BAT\busybox" cat %~dp0TMP\popssize.txt | "%~dp0BAT\busybox" awk "{ foo = $1 / 1024 / 1024 ; print foo }" | "%~dp0BAT\busybox" sed "s/\..*$//"  > %~dp0TMP\popssizeMB.txt
+	REM "%~dp0BAT\busybox" cat %~dp0TMP\popsize.txt | "%~dp0BAT\busybox" awk "{ bar = $1 / 1024 / 1024 / 1024 ; print bar }" | "%~dp0BAT\busybox" sed -re "s/([0-9]+\.[0-9]{2})[0-9]+/\1/g" > %~dp0TMP\popsizeGB.txt
+	set /P @pop_file=<%~dp0TMP\popsfiles.txt
+	set /P @pop_size=<%~dp0TMP\popssizeMB.txt
+	del %~dp0TMP\popsfiles.txt %~dp0TMP\popssize.txt %~dp0TMP\popssizeMB.txt >nul 2>&1
+	echo         VCD - Files: !@pops_file! Size: !@pops_size! Mb
+	) else ( echo        .VCD - Source Not Detected... )
+)
+
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo Detecting POPS Partition:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 07
+echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
+echo ls >> %~dp0TMP\pfs-prt.txt
+echo exit >> %~dp0TMP\pfs-prt.txt
+type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
+"%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%partnamepops%" | "%~dp0BAT\busybox" sed "s/.*%partnamepops%/%partnamepops%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
+REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
+
+IF "!@hdd_avl!"=="%partnamepops%" (
+"%~dp0BAT\Diagbox.EXE" gd 0a
+	echo         POPS - Partition Detected
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	) else (
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo         POPS - Partition NOT Detected
+	echo         Partition Must Be Formatted First
+	echo\
+	echo\
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	rmdir /Q/S %~dp0TMP >nul 2>&1
+	del info.sys >nul 2>&1
+	::cmd /k
+	pause & call %~dp0.PFS-Batch-Kit-Manager.bat
+	)
+)
+echo\
+echo\
+pause
+cls
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+echo\
+echo Installing VCD:
+echo ----------------------------------------------------
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+IF /I EXIST %~dp0POPS\*.VCD (
+	cd %~dp0POPS
+	echo         Creating Que
+	echo device !@hdl_path! > %~dp0TMP\pfs-pops.txt
+	echo mount %partnamepops% >> %~dp0TMP\pfs-pops.txt
+	for %%f in (*.VCD) do (echo put "%%f") >> %~dp0TMP\pfs-pops.txt
+	echo umount >> %~dp0TMP\pfs-pops.txt
+	echo exit >> %~dp0TMP\pfs-pops.txt
+	echo         %INSTALLING% Que
+	type %~dp0TMP\pfs-pops.txt | "%~dp0BAT\pfsshell" >nul 2>&1
+	del %~dp0TMP\pfs-pops.txt >nul 2>&1
+	echo         %CREAT_LOG%
+	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
+	echo mount %partnamepops% >> %~dp0TMP\pfs-log.txt
+	echo ls >> %~dp0TMP\pfs-log.txt
+	echo umount >> %~dp0TMP\pfs-log.txt
+	echo exit >> %~dp0TMP\pfs-log.txt
+	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
+	mkdir %~dp0LOG >nul 2>&1
+	"%~dp0BAT\busybox" grep -e ".vcd" -e ".VCD" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
+	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
+	echo         POPS %COMPLETED%	
+	cd %~dp0
+	) else ( echo         .VCD - %IS_EMPTY% )
+)
+
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+echo\
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo Installation Completed...
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+::cmd /k
+
+pause
+call %~dp0.PFS-Batch-Kit-Manager.bat
 
 REM ########################################################################################################################################################################
 :4-Backup-ART-CFG-CHT-VMC
@@ -2110,9 +2251,12 @@ pause
 call .PFS-Batch-Kit-Manager.bat
 
 REM ########################################################################################################################################################################
-
 :5-BackupPS1Games
 @echo off
+
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
 echo\
 echo\
 
@@ -2230,11 +2374,14 @@ echo         1) %YES%
 "%~dp0BAT\Diagbox.EXE" gd 0c
 echo         2) %NO%
 "%~dp0BAT\Diagbox.EXE" gd 07
+echo         3) %YES% (Manually Choose the partition where your .VCDs to extract are located.)
 echo\
-CHOICE /C 12 /M "Select Option:"
+CHOICE /C 123 /M "Select Option:"
 
 IF ERRORLEVEL 1 set @pfs_pop=yes
 IF ERRORLEVEL 2 set @pfs_pop=no
+IF ERRORLEVEL 3 set @pfs_pop=yesmanually
+IF ERRORLEVEL 3 (goto extractpartpopsname)
 
 echo\
 echo\
@@ -2245,11 +2392,12 @@ echo ----------------------------------------------------
     echo ls >> %~dp0TMP\pfs-prt.txt
     echo exit >> %~dp0TMP\pfs-prt.txt
     type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
-    "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%POPSPART%" | "%~dp0BAT\busybox" sed "s/.*%POPSPART%/%POPSPART%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
-    set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
+    "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "__.POPS" | "%~dp0BAT\busybox" sed "s/.*__.POPS/__.POPS/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+    "%~dp0BAT\busybox" sed -i "s/[0-9]*//g" %~dp0TMP\hdd-prt.txt
+	 set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
     REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
 
-IF "!@hdd_avl!"=="%POPSPART%" (
+IF "!@hdd_avl!"=="__.POPS" (
 "%~dp0BAT\Diagbox.EXE" gd 0a
 	echo         POPS - Partition Detected
 	"%~dp0BAT\Diagbox.EXE" gd 07
@@ -2280,7 +2428,7 @@ echo\
     cd %~dp0POPS
     echo         Files scan...
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount %POPSPART% >> %~dp0TMP\pfs-log.txt
+	echo mount __.POPS >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	echo umount >> %~dp0TMP\pfs-log.txt
 	echo exit >> %~dp0TMP\pfs-log.txt
@@ -2296,7 +2444,107 @@ echo\
 	cd %~dp0POPS
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops.txt
-	echo mount %POPSPART% >> %~dp0TMP\pfs-pops.txt
+	echo mount __.POPS >> %~dp0TMP\pfs-pops.txt
+	call PFS-POPS-NEW.bat >> %~dp0TMP\pfs-pops.txt
+	echo umount >> %~dp0TMP\pfs-pops.txt
+	echo exit >> %~dp0TMP\pfs-pops.txt
+	del %~dp0POPS\PFS-POPS-NEW.txt >nul 2>&1
+	del %~dp0POPS\PFS-POPS-NEW.bat >nul 2>&1
+	type %~dp0TMP\pfs-popS.txt | "%~dp0BAT\pfsshell" >nul 2>&1
+	cd %~dp0
+	
+	) else ( echo         POPS - Source Not Detected... )
+)
+	
+
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+
+echo\
+echo\
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo Extraction Completed...
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+::cmd /k
+
+pause
+call .PFS-Batch-Kit-Manager.bat
+
+:extractpartpopsname
+IF %@pfs_pop%==yesmanually (
+echo.
+echo Choose the partition where your .VCDs to extract are located.
+echo By default it will be the partition __.POPS 
+echo.
+echo Example:  __.POPS0 or __.POPS1 up to __.POPS9
+echo.
+set /p "extractpartpopsname=Enter partition Name:" 
+
+)
+
+echo\
+echo\
+echo Detecting POPS Partition:
+echo ----------------------------------------------------
+    "%~dp0BAT\Diagbox.EXE" gd 07
+    echo device !@hdl_path! > %~dp0TMP\pfs-prt.txt
+    echo ls >> %~dp0TMP\pfs-prt.txt
+    echo exit >> %~dp0TMP\pfs-prt.txt
+    type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
+    "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep "%extractpartpopsname%" | "%~dp0BAT\busybox" sed "s/.*%extractpartpopsname%/%extractpartpopsname%/" | "%~dp0BAT\busybox" tr -d " " | "%~dp0BAT\busybox" head -1 > %~dp0TMP\hdd-prt.txt
+    set /P @hdd_avl=<%~dp0TMP\hdd-prt.txt
+    REM del %~dp0TMP\pfs-prt.txt %~dp0TMP\pfs-prt.log >nul 2>&1 %~dp0TMP\hdd-prt.txt
+
+IF "!@hdd_avl!"=="%extractpartpopsname%" (
+"%~dp0BAT\Diagbox.EXE" gd 0a
+	echo         POPS - Partition Detected
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	) else (
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo         POPS - Partition NOT Detected
+	echo         Partition Must Be Formatted First
+	echo\
+	echo\
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	rmdir /Q/S %~dp0TMP >nul 2>&1
+	del info.sys >nul 2>&1
+	::cmd /k
+	pause & call %~dp0.PFS-Batch-Kit-Manager.bat
+	)
+)
+echo\
+echo\
+pause
+cls
+echo\
+echo\
+echo Extraction VCD:
+echo ----------------------------------------------------
+echo\
+
+    cd %~dp0POPS
+    echo         Files scan...
+	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
+	echo mount %extractpartpopsname% >> %~dp0TMP\pfs-log.txt
+	echo ls >> %~dp0TMP\pfs-log.txt
+	echo umount >> %~dp0TMP\pfs-log.txt
+	echo exit >> %~dp0TMP\pfs-log.txt
+	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
+	mkdir %~dp0LOG >nul 2>&1 
+	"%~dp0BAT\busybox" grep -e ".vcd" -e ".VCD" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
+	
+    cd %~dp0LOG
+    @Echo off
+    For %%Z in (PFS-POPS.log) do (
+    (for /f "tokens=2-4*" %%A in (%%Z) do echo echo get "%%D") > "%~dp0POPS\PFS-POPS-NEW.bat")
+	
+	cd %~dp0POPS
+	echo         Extraction...
+	echo device !@hdl_path! > %~dp0TMP\pfs-pops.txt
+	echo mount %extractpartpopsname% >> %~dp0TMP\pfs-pops.txt
 	call PFS-POPS-NEW.bat >> %~dp0TMP\pfs-pops.txt
 	echo umount >> %~dp0TMP\pfs-pops.txt
 	echo exit >> %~dp0TMP\pfs-pops.txt
@@ -2330,7 +2578,7 @@ REM ############################################################################
 :6-POPS-Binaries
 
 @echo off
-::color 03
+
 echo\
 echo\
 
@@ -2447,6 +2695,7 @@ IF "!@hdl_path!"=="" (
 		::cmd /k
 		pause & call .PFS-Batch-Kit-Manager.bat
 	)
+	
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -2577,18 +2826,21 @@ REM POPS BINARIES
 	for %%f in (POPS.ELF IOPRP252.IMG POPSTARTER.ELF TROJAN_7.BIN *.TM2) do (echo put "%%f") >> %~dp0TMP\pfs-pops-binaries.txt
 	echo umount >> %~dp0TMP\pfs-pops-binaries.txt
 	echo exit >> %~dp0TMP\pfs-pops-binaries.txt
+	
 	echo         Installing Que
 	type %~dp0TMP\pfs-pops-binaries.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-pops-binaries.txt >nul 2>&1
+	
 	echo         Creating Log
 	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
 	echo mount __common >> %~dp0TMP\pfs-log.txt
+	echo cd POPS >> %~dp0TMP\pfs-log.txt
 	echo ls >> %~dp0TMP\pfs-log.txt
 	echo umount >> %~dp0TMP\pfs-log.txt
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".ELF" -e ".IMG" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
+	"%~dp0BAT\busybox" grep -e ".ELF" -e ".IMG" -e ".BIN" -e ".TM2" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS-Binaries.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         POPS Binaries Completed...	
 	cd %~dp0
@@ -2598,7 +2850,7 @@ REM POPS BINARIES
 REM POPS FOR OPL
 "%~dp0BAT\Diagbox.EXE" gd 07
 	cd %~dp0POPS-Binaries
-::	echo         Creating Que
+REM	echo         Creating Que
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops-binaries.txt
 	echo mount +OPL >> %~dp0TMP\pfs-pops-binaries.txt
 	echo mkdir POPS >> %~dp0TMP\pfs-pops-binaries.txt
@@ -2606,20 +2858,9 @@ REM POPS FOR OPL
 	for %%g in (POPSTARTER.ELF) do (echo put "%%g") >> %~dp0TMP\pfs-pops-binaries.txt
 	echo umount >> %~dp0TMP\pfs-pops-binaries.txt
 	echo exit >> %~dp0TMP\pfs-pops-binaries.txt
-::	echo         Installing Que
+REM	echo         Installing Que
 	type %~dp0TMP\pfs-pops-binaries.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	del %~dp0TMP\pfs-pops-binaries.txt >nul 2>&1
-::	echo         Creating Log
-	echo device !@hdl_path! > %~dp0TMP\pfs-log.txt
-	echo mount __common >> %~dp0TMP\pfs-log.txt
-	echo ls >> %~dp0TMP\pfs-log.txt
-	echo umount >> %~dp0TMP\pfs-log.txt
-	echo exit >> %~dp0TMP\pfs-log.txt
-	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
-	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".ELF" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
-	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
-::	echo         POPS Completed...	
 	cd %~dp0
 	) else ( echo         POPS Binaries - Source Not Detected... )
 )
@@ -2645,6 +2886,8 @@ REM ############################################################################
 
 call "%~dp0BAT\LANG2.BAT"
 call "%~dp0BAT\CFG2.BAT"
+
+mkdir %~dp0CD-DVD >nul 2>&1
 
 copy "%~dp0BAT\hdl_dump.exe" "%~dp0CD-DVD\hdl_dump.exe"
 copy "%~dp0BAT\hdl_svr_093.elf" "%~dp0CD-DVD"
@@ -2703,7 +2946,8 @@ echo ----------------------------------------------------
 	echo 	7. Network
 	echo 	8. QUIT PROGRAM
 	choice /c 12345678 /m "Choice the number of your PS2 HDD."	
-	
+	    
+		if errorlevel 8 (goto start)
 		if errorlevel 1 set hdlhdd=hdd1:
 		if errorlevel 2 set hdlhdd=hdd2:
 		if errorlevel 3 set hdlhdd=hdd3:
@@ -2711,7 +2955,6 @@ echo ----------------------------------------------------
 		if errorlevel 5 set hdlhdd=hdd5:
 		if errorlevel 6 set hdlhdd=hdd6:
 		if errorlevel 7 (goto extractnetwork)
-		if errorlevel 8 (goto start)
 
 cls
 "%~dp0BAT\Diagbox.EXE" gd 0e
@@ -2816,6 +3059,7 @@ call RenameISO.bat
 del gameid.txt >nul 2>&1
 del hdl_dump.exe >nul 2>&1
 del hdl_svr_093.elf >nul 2>&1
+del boot.kelf >nul 2>&1
 del PARTITION_GAMES_NEW.txt >nul 2>&1
 del PARTITION_GAMES_NEW.bat >nul 2>&1
 del Rename.txt >nul 2>&1
@@ -2840,7 +3084,767 @@ echo\
 pause & (goto start)
 
 REM ####################################################################################################################################################
+:CreatePART
 
+@echo off
+
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
+cls
+:-------------------------------------
+REM  --> Check for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo %ADMIN_PRIV%
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------
+
+cls
+mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0e
+
+echo\
+echo\
+echo Scanning for Playstation 2 HDDs:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
+set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
+::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+echo\
+
+echo Create Partition:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
+echo\
+CHOICE /C 12 /M "Select Option:"
+
+IF ERRORLEVEL 1 set @pfs_part=yes
+IF ERRORLEVEL 2 set @pfs_part=no
+
+IF %@pfs_part%==yes (
+echo.
+echo Example +OPL
+echo.
+set /p "partname=Enter partition Name:" 
+
+echo.
+echo.
+echo The size must be multiplied by 128
+echo Example size: "(Max size per partition 128gb)" 
+echo.
+echo 128mb = 128
+echo 256mb = 256
+echo 384mb = 384
+echo 512mb = 512
+echo.
+set /p "partsize=Enter partition size:" 
+)
+
+cls
+IF %@pfs_part%==yes (
+echo\
+echo\
+echo Creating %partname% Partition:
+echo ----------------------------------------------------
+echo\
+
+    echo        Creating partitions...
+  	echo device %@hdl_path% > %~dp0TMP\pfs-log.txt
+	echo mkpart %partname% %partsize% >> %~dp0TMP\pfs-log.txt
+	echo mkfs %partname% >> %~dp0TMP\pfs-log.txt
+  	echo exit >> %~dp0TMP\pfs-log.txt
+	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
+	echo        partition %partname% completed...
+	
+	) else ( echo          Canceled... )
+)
+
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+
+echo\
+echo\
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo Partition Completed...
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+::cmd /k
+
+pause & (goto HDDManagement-Menu)
+
+
+REM ####################################################################################################################################################
+:DeletePART
+
+@echo off
+
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
+cls
+:-------------------------------------
+REM  --> Check for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo %ADMIN_PRIV%
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------
+
+cls
+mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0e
+
+echo\
+echo\
+echo Scanning for Playstation 2 HDDs:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
+set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
+::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+echo\
+
+echo Scan Partition:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
+echo\
+CHOICE /C 12 /M "Select Option:"
+
+IF ERRORLEVEL 1 set @pfs_partdel=yes
+IF ERRORLEVEL 2 set @pfs_partdel=no
+
+IF %@pfs_partdel%==yes (
+echo\
+echo\
+echo Partition List:
+echo ----------------------------------------------------
+
+    echo device %@hdl_path% > %~dp0TMP\pfs-prt.txt
+    echo ls >> %~dp0TMP\pfs-prt.txt
+    echo exit >> %~dp0TMP\pfs-prt.txt
+    type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
+    "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep -e "0x0100" -e "0x0001" > %~dp0TMP\hdd-prt.txt
+	type %~dp0TMP\hdd-prt.txt
+	echo.
+    set /p "partnamedel=Enter the partition name you want to delete:" 
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	)
+)
+
+cls
+IF %@pfs_partdel%==yes (
+echo\
+echo\
+echo Deleting %partnamedel% Partition:
+echo ----------------------------------------------------
+echo\
+
+    echo        Deleting partitions...
+  	echo device %@hdl_path% > %~dp0TMP\pfs-log.txt
+	echo rmpart %partnamedel% >> %~dp0TMP\pfs-log.txt
+  	echo exit >> %~dp0TMP\pfs-log.txt
+	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
+	echo        Partition %partnamedel% Deleted...	
+	) else ( echo          Canceled... )
+)
+
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+
+echo\
+echo\
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo Partition Completed...
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+::cmd /k
+
+pause & (goto HDDManagement-Menu)
+
+REM ####################################################################################################################################################
+:BlankPART
+
+@echo off
+
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
+cls
+:-------------------------------------
+REM  --> Check for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo %ADMIN_PRIV%
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------
+
+cls
+mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0e
+
+echo\
+echo\
+echo Scanning for Playstation 2 HDDs:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
+set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
+::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+echo\
+
+echo Scan Partition:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
+echo\
+CHOICE /C 12 /M "Select Option:"
+
+IF ERRORLEVEL 1 set @pfs_partblank=yes
+IF ERRORLEVEL 2 set @pfs_partblank=no
+
+IF %@pfs_partblank%==yes (
+echo\
+echo\
+echo Partition List:
+echo ----------------------------------------------------
+
+    echo device %@hdl_path% > %~dp0TMP\pfs-prt.txt
+    echo ls >> %~dp0TMP\pfs-prt.txt
+    echo exit >> %~dp0TMP\pfs-prt.txt
+    type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
+    "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep -e "0x0100" -e "0x0001" > %~dp0TMP\hdd-prt.txt
+	type %~dp0TMP\hdd-prt.txt
+	echo.
+    set /p "partnameblank=Enter the partition name you want to blank:" 
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	)
+)
+
+cls
+IF %@pfs_partblank%==yes (
+echo\
+echo\
+echo Blank %partnameblank% Partition:
+echo ----------------------------------------------------
+echo\
+
+    echo        Blank partitions...
+  	echo device %@hdl_path% > %~dp0TMP\pfs-log.txt
+	echo mkfs %partnameblank% >> %~dp0TMP\pfs-log.txt
+  	echo exit >> %~dp0TMP\pfs-log.txt
+	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
+	echo        Partition %partnameblank% Empty...	
+	) else ( echo          Canceled... )
+)
+
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+
+echo\
+echo\
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo Partition Completed...
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+::cmd /k
+
+pause & (goto HDDManagement-Menu)
+REM ######################################################################################################################################################################################################################################
+:partitionlist
+
+@echo off
+
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
+cls
+:-------------------------------------
+REM  --> Check for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo %ADMIN_PRIV%
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------
+
+cls
+mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0e
+
+echo\
+echo\
+echo Scanning for Playstation 2 HDDs:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD"
+"%~dp0BAT\hdl_dump" query | findstr "hdd" | "%~dp0BAT\busybox" grep "Playstation 2 HDD" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
+set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
+::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+echo\
+echo Partition List:
+echo ----------------------------------------------------
+
+    echo device %@hdl_path% > %~dp0TMP\pfs-prt.txt
+    echo ls >> %~dp0TMP\pfs-prt.txt
+    echo exit >> %~dp0TMP\pfs-prt.txt
+    type %~dp0TMP\pfs-prt.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-prt.log
+    "%~dp0BAT\busybox" cat %~dp0TMP\pfs-prt.log | "%~dp0BAT\busybox" grep -e "0x0100" -e "0x0001" > %~dp0TMP\hdd-prt.txt
+	type %~dp0TMP\hdd-prt.txt
+	
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+
+echo.
+pause & (goto HDDManagement-Menu) 
+
+REM #######################################################################################################################################################################################################################################
+:formatHDDtoPS2
+
+@echo off
+
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
+cls
+:-------------------------------------
+REM  --> Check for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo %ADMIN_PRIV%
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------
+
+cls
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo Scanning HDDs:
+echo ----------------------------------------------------
+    "%~dp0BAT\Diagbox.EXE" gd 03
+	%~dp0BAT\hdl_dump query | findstr "hdd1: hdd2: hdd3: hdd4: hdd5: hdd6:"
+	"%~dp0BAT\Diagbox.EXE" gd 07
+    echo.
+    echo ----------------------------------------------------
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo WARNING: MAKE SURE YOU CHOOSE THE RIGHT HARD DRIVE YOU WANT TO FORMAT
+	"%~dp0BAT\Diagbox.EXE" gd 06
+	echo.
+	echo NOTE: If no PS2 HDDs are found, quit and retry after disconnecting
+	echo all disk drives EXCEPT for your PC boot drive and the PS2 HDDs.
+	echo.
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo Disclaimer: I can in no way be held responsible for improper use.
+	echo. 
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	echo PLAYSTATION 2 HDD FORMAT
+	echo 	1. hdd1: 
+	echo 	2. hdd2:
+	echo 	3. hdd3:
+	echo 	4. hdd4: 
+	echo 	5. hdd5:
+	echo 	6. hdd6:
+	echo 	7. QUIT PROGRAM
+	choice /c 1234567 /m "Select your HDD you want to format."	
+	
+	if errorlevel 1 set hdlhdd=hdd1:
+	if errorlevel 2 set hdlhdd=hdd2:
+	if errorlevel 3 set hdlhdd=hdd3:
+	if errorlevel 4 set hdlhdd=hdd4:
+	if errorlevel 5 set hdlhdd=hdd5:
+	if errorlevel 6 set hdlhdd=hdd6:
+	if errorlevel 7 (goto HDDManagement-Menu)
+
+mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 00
+echo\
+echo\
+echo Prepare HDD for formatting: >nul 2>&1
+echo ---------------------------------------------------- >nul 2>&1
+"%~dp0BAT\hdl_dump" query | findstr "%hdlhdd%"
+"%~dp0BAT\hdl_dump" query | findstr "%hdlhdd%" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
+set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
+::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+cls
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo HDD Selected:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+%~dp0BAT\hdl_dump query | findstr "%hdlhdd%"
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo\
+echo\
+echo Are you sure you want to format this hard drive to PS2 format ?:
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
+echo\
+CHOICE /C 12 /M "Select Option:"
+
+IF ERRORLEVEL 1 set @pfs_formathdd=yes
+IF ERRORLEVEL 2 set @pfs_formathdd=no
+IF ERRORLEVEL 2 (goto formatHDDtoPS2)
+
+echo.
+
+CHOICE /C YN /m "Confirm"
+IF ERRORLEVEL 2 (goto formatHDDtoPS2)
+
+
+cls
+IF %@pfs_formathdd%==yes (
+echo\
+echo\
+echo Formatting HDD:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+%~dp0BAT\hdl_dump query | findstr "%hdlhdd%"
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+
+    echo         Formatting in Progress...
+	echo device %@hdl_path% > %~dp0TMP\pfs-log.txt
+    echo initialize yes >> %~dp0TMP\pfs-log.txt
+  	echo exit >> %~dp0TMP\pfs-log.txt
+	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
+	
+	echo %@hdl_path% > %~dp0TMP\disk-log.txt
+	"%~dp0BAT\busybox" sed -i "s/\\\\.\\\PhysicalDrive/select disk /g" %~dp0TMP\disk-log.txt
+	echo offline disk >> %~dp0TMP\disk-log.txt
+	type %~dp0TMP\disk-log.txt | "diskpart" >nul 2>&1
+	
+	echo %@hdl_path% > %~dp0TMP\disk-log.txt
+	"%~dp0BAT\busybox" sed -i "s/\\\\.\\\PhysicalDrive/select disk /g" %~dp0TMP\disk-log.txt
+	echo online disk >> %~dp0TMP\disk-log.txt
+	type %~dp0TMP\disk-log.txt | "diskpart" >nul 2>&1
+	
+	echo device %@hdl_path% > %~dp0TMP\pfs-log.txt
+    echo initialize yes >> %~dp0TMP\pfs-log.txt
+    echo         Generating PFS filesystem for system partitions...
+    echo mkfs __net >> %~dp0TMP\pfs-log.txt
+    echo mkfs __sysconf >> %~dp0TMP\pfs-log.txt
+    echo mkfs __system >> %~dp0TMP\pfs-log.txt
+    echo mkfs __common >> %~dp0TMP\pfs-log.txt
+REM echo mkpart +OPL 256 >> %~dp0TMP\pfs-log.txt
+REM echo mkfs +OPL >> %~dp0TMP\pfs-log.txt
+  	echo exit >> %~dp0TMP\pfs-log.txt
+	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
+	echo         Formatting HDD completed...
+	
+	) else ( echo          HDD - Not Detected... )
+)
+
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+
+echo\
+echo\
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo Formatting Completed...
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+::cmd /k
+
+pause & (goto HDDManagement-Menu)
+
+REM ####################################################################################################################################################
+:hackHDDtoPS2
+
+@echo off
+
+call "%~dp0BAT\LANG2.BAT"
+call "%~dp0BAT\CFG2.BAT"
+
+cls
+:-------------------------------------
+REM  --> Check for permissions
+>nul 2>&1 "%SYSTEMROOT%\system32\cacls.exe" "%SYSTEMROOT%\system32\config\system"
+
+REM --> If error flag set, we do not have admin.
+if '%errorlevel%' NEQ '0' (
+    echo %ADMIN_PRIV%
+    goto UACPrompt
+) else ( goto gotAdmin )
+
+:UACPrompt
+    echo Set UAC = CreateObject^("Shell.Application"^) > "%temp%\getadmin.vbs"
+    set params = %*:"=""
+    echo UAC.ShellExecute "cmd.exe", "/c %~s0 %params%", "", "runas", 1 >> "%temp%\getadmin.vbs"
+
+    "%temp%\getadmin.vbs"
+    del "%temp%\getadmin.vbs"
+    exit /B
+
+:gotAdmin
+    pushd "%CD%"
+    CD /D "%~dp0"
+:--------------------------------------
+
+cls
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo Scanning HDDs:
+echo ----------------------------------------------------
+    "%~dp0BAT\Diagbox.EXE" gd 03
+	%~dp0BAT\hdl_dump query | findstr "hdd1: hdd2: hdd3: hdd4: hdd5: hdd6:"
+	"%~dp0BAT\Diagbox.EXE" gd 07
+    echo.
+    echo ----------------------------------------------------
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo WARNING: MAKE SURE YOU CHOOSE THE RIGHT HARD DRIVE YOU WANT TO HACK
+	"%~dp0BAT\Diagbox.EXE" gd 06
+	echo.
+	echo NOTE: If no PS2 HDDs are found, quit and retry after disconnecting
+	echo all disk drives EXCEPT for your PC boot drive and the PS2 HDDs.
+	echo.
+	"%~dp0BAT\Diagbox.EXE" gd 0c
+	echo Disclaimer: I can in no way be held responsible for improper use.
+	echo. 
+	"%~dp0BAT\Diagbox.EXE" gd 07
+	echo PLAYSTATION 2 HDD
+	echo 	1. hdd1: 
+	echo 	2. hdd2:
+	echo 	3. hdd3:
+	echo 	4. hdd4: 
+	echo 	5. hdd5:
+	echo 	6. hdd6:
+	echo 	7. QUIT PROGRAM
+	choice /c 1234567 /m "Select your HDD you want to hack."	
+	
+	if errorlevel 1 set hdlhdd=hdd1:
+	if errorlevel 2 set hdlhdd=hdd2:
+	if errorlevel 3 set hdlhdd=hdd3:
+	if errorlevel 4 set hdlhdd=hdd4:
+	if errorlevel 5 set hdlhdd=hdd5:
+	if errorlevel 6 set hdlhdd=hdd6:
+	if errorlevel 7 (goto HDDManagement-Menu)
+
+mkdir %~dp0TMP >nul 2>&1
+"%~dp0BAT\Diagbox.EXE" gd 00
+echo\
+echo\
+echo Prepare HDD for formatting: >nul 2>&1
+echo ---------------------------------------------------- >nul 2>&1
+"%~dp0BAT\hdl_dump" query | findstr "%hdlhdd%"
+"%~dp0BAT\hdl_dump" query | findstr "%hdlhdd%" | "%~dp0BAT\busybox" cut -c2-6 > %~dp0TMP\hdl-hdd.txt
+"%~dp0BAT\busybox" sed -i "s/hdd/\\\\.\\\PhysicalDrive/g; s/://g" %~dp0TMP\hdl-hdd.txt
+
+set /P @hdl_path=<%~dp0TMP\hdl-hdd.txt
+::del %~dp0TMP\hdl-hdd.txt >nul 2>&1
+cls
+"%~dp0BAT\Diagbox.EXE" gd 0e
+echo\
+echo\
+echo HDD Selected:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+%~dp0BAT\hdl_dump query | findstr "%hdlhdd%"
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo\
+echo\
+echo Are you sure you want to HACK this hard drive ? this is irreversible:
+echo.
+echo (1) After the hacking put your HDD in your PS2 and format your hard drive with wLaunchELF
+echo.
+echo (2) Install FreeMcBoot (From Memory Card) or FreeHDBoot (From HDD)
+echo.
+echo (3) Your hard drive will be properly formatted and hacked after that
+echo.
+echo (4) Have Fun
+echo.
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo         1) %YES%
+"%~dp0BAT\Diagbox.EXE" gd 0c
+echo         2) %NO%
+"%~dp0BAT\Diagbox.EXE" gd 07
+echo\
+CHOICE /C 12 /M "Select Option:"
+
+IF ERRORLEVEL 1 set @pfs_hackhdd=yes
+IF ERRORLEVEL 2 set @pfs_hackhdd=no
+IF ERRORLEVEL 2 (goto hackHDDtoPS2)
+
+echo.
+
+CHOICE /C YN /m "Confirm"
+IF ERRORLEVEL 2 (goto hackHDDtoPS2)
+
+
+cls
+IF %@pfs_hackhdd%==yes (
+echo\
+echo\
+echo Install HACK PS2 HDD:
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 03
+%~dp0BAT\hdl_dump query | findstr "%hdlhdd%"
+"%~dp0BAT\Diagbox.EXE" gd 0f
+echo\
+
+    echo         Hacking in progress...
+	echo "%~dp0BAT\rawcopy" "%~dp0BAT\mbr.img" %@hdl_path% > %~dp0TMP\disk-log.bat
+	call %~dp0TMP\disk-log.bat
+	
+	echo %@hdl_path% > %~dp0TMP\disk-log.txt
+	"%~dp0BAT\busybox" sed -i "s/\\\\.\\\PhysicalDrive/select disk /g" %~dp0TMP\disk-log.txt
+	echo offline disk >> %~dp0TMP\disk-log.txt
+	type %~dp0TMP\disk-log.txt | "diskpart" >nul 2>&1
+	
+	echo %@hdl_path% > %~dp0TMP\disk-log.txt
+	"%~dp0BAT\busybox" sed -i "s/\\\\.\\\PhysicalDrive/select disk /g" %~dp0TMP\disk-log.txt
+	echo online disk >> %~dp0TMP\disk-log.txt
+	type %~dp0TMP\disk-log.txt | "diskpart" >nul 2>&1
+	echo         Hacking completed...
+	
+	) else ( echo          HDD - Not Detected... )
+)
+
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
+
+echo\
+echo\
+echo ----------------------------------------------------
+"%~dp0BAT\Diagbox.EXE" gd 0a
+echo Hack Completed...
+echo\
+echo\
+"%~dp0BAT\Diagbox.EXE" gd 07
+::cmd /k
+
+pause & (goto HDDManagement-Menu)
+
+
+REM ####################################################################################################################################################
 :BIN2VCD
 cls
 cd %~dp0POPS
