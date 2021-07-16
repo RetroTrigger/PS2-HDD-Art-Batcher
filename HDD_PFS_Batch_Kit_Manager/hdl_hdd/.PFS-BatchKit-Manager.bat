@@ -167,7 +167,7 @@ echo.------------------------------------------
 ECHO Conversion Menu
 ECHO.
 ECHO 1. Convert .BIN to .VCD (Multi-Tracks .BIN Compatible)
-ECHO 2. Convert .VCD to .BIN (If compatible, it will rebuild the original .bin with the Multi-Track)
+ECHO 2. Convert .VCD to .BIN
 ECHO 3. Convert .BIN to .CHD (Multi-Tracks .BIN Compatible)
 ECHO 4. Convert .CHD to .BIN
 ECHO 5. Convert .ECM to .BIN
@@ -3909,124 +3909,83 @@ cd %~dp0POPS
 @echo off
 if exist rmdir /s /q temp >nul 2>&1
 md temp >nul 2>&1
+md Original >nul 2>&1
 if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
 if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+if not exist *.cue (goto failmultibin)
 
 for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "temp\%%~nf"
-
-cd temp
-
-"%~dp0BAT\busybox" find . -type f -name "*.cue" -exec sed -i "s:temp\\::g" {} + >nul 2>&1
-
-move *.bin %~dp0POPS >nul 2>&1
-move *.cue %~dp0POPS >nul 2>&1
-
-cd %~dp0BAT
-if EXIST "%~dp0POPS" (goto checkBIN2) else (if exist *.cue (for %%i in (*.cue) do %~dp0BAT\CUE2POPS_2_3.EXE "%~p0%%i") else goto failBIN2)
-(goto terminateVCD2)
-
-:checkBIN2
-@echo off
-if not exist "%~dp0POPS\*.*" (goto convertVCD2)
-cd "%~dp0POPS"
-if not exist *.cue goto failBIN2
-for %%i in (*.cue) do "%~dp0BAT\CUE2POPS_2_3.EXE" "%~dp0POPS\%%i"
-md temp >nul 2>&1
-rmdir /s /q temp >nul 2>&1
-(goto terminateVCD2)
-
-:failBIN2
-@echo off
-"%~dp0BAT\Diagbox.EXE" gd 06
-move "temp\*.vcd" "%~dp0POPS" >nul 2>&1
-rmdir /s /q temp >nul 2>&1
-echo. 
-echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POPS folder.
-echo Also check that the name matches inside the .cue
-echo. 
-"%~dp0BAT\Diagbox.EXE" gd 07
-(goto terminateVCD2)
-:convertVCD2
-CUE2POPS_2_3.EXE "%~dp0POPS"
-(goto terminateVCD2)
-:terminateVCD2
-md Original
 move *.bin %~dp0POPS\Original >nul 2>&1
 move *.cue %~dp0POPS\Original >nul 2>&1
-pause
-(goto Conversion-Menu)
+
+cd %~dp0POPS\temp
+"%~dp0BAT\busybox" find . -type f -name "*.cue" -exec sed -i "s:temp\\::g" {} + >nul 2>&1
+move *.bin "%~dp0POPS" >nul 2>&1
+move *.cue "%~dp0POPS" >nul 2>&1
+cd %~dp0POPS
+
+for %%f in (*.cue) do %~dp0BAT\CUE2POPS_2_3 "%%f"
+move *.bin "%~dp0POPS\temp" >nul 2>&1
+move *.cue "%~dp0POPS\temp" >nul 2>&1
+
+rmdir /s /q temp >nul 2>&1
+echo.
+pause & (goto conversion-Menu)
 
 REM ####################################################################################################################################################
-
 :VCD2BIN
 cls
+cd %~dp0POPS
 @echo off
-%~d0
-cd %~dp0BAT
-if EXIST "%~dp0POPS" (goto checkVCD) else (if exist *.vcd (for %%i in (*.vcd) do %~dp0BAT\POPS2CUE.EXE "%~p0%%i") else goto failVCD)
-pause
-(goto terminateBIN)
-:checkVCD
-if not exist "%~dp0POPS\*.*" goto convertBIN
-cd "%~dp0POPS"
-if not exist *.vcd goto failVCD
-for %%i in (*.vcd) do "%~dp0BAT\POPS2CUE.EXE" "%~dp0POPS\%%i"
-(goto terminateBIN)
+if exist rmdir /s /q temp >nul 2>&1
+md temp >nul 2>&1
+md Original >nul 2>&1
+if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
+if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
+if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+if not exist *.vcd (goto failVCD)
+
+for %%f in (*.vcd) do %~dp0BAT\POPS2CUE.EXE "%%f"
+move *.vcd %~dp0POPS\Original >nul 2>&1
+
+REM ZIP Multiple Tracks
+::for %%# in (*.cue) do %~dp0BAT\7z.exe a -bso0 "%%~n#.zip" "%%#" "%%~n# (Track ?).bin" "%%~n# (Track ??).bin"
+
+REM Put BIN/CUE in FOLDER
+for %%# in (*.cue) do md "%%~n#" >nul 2>&1
+for %%# in (*.cue) do move "%%~n#.bin" "%%~n#" >nul 2>&1
+for %%# in (*.cue) do move "%%~n#.cue" "%%~n#" >nul 2>&1
+
+rmdir /s /q temp >nul 2>&1
+echo.
+pause & (goto conversion-Menu)
+
 :failVCD
 "%~dp0BAT\Diagbox.EXE" gd 06
 echo.
 echo .VCD NOT DETECTED: Please drop .VCD ON POPS FOLDER.
 echo.
 "%~dp0BAT\Diagbox.EXE" gd 0f
-pause
-(goto Conversion-Menu)
-:convertBIN
-POPS2CUE.EXE "%~dp0POPS"
-:terminateBIN
-cd "%~dp0POPS"	
-@echo off
-md temp >nul 2>&1
-md Original >nul 2>&1
-ren *.cue *.cuetemp >nul 2>&1
-for %%f in (*.cuetemp) do %~dp0BAT\binmerge.exe -s "%%f" "%%~nf" >nul 2>&1
-del *.cuetemp >nul 2>&1
+pause & (goto Conversion-Menu)
 
-REM TRACKS 
-for %%# in (*.cue) do move "%%~n# (Track *).bin" temp >nul 2>&1
-move *.cue temp >nul 2>&1
-
-del *.bin >nul 2>&1
-move *.vcd Original >nul 2>&1
-
-move "%~dp0POPS\temp\*.bin" "%~dp0POPS" >nul 2>&1
-move "%~dp0POPS\temp\*.cue" "%~dp0POPS" >nul 2>&1
-
-::for %%# in (*.cue) do %~dp0BAT\7z.exe a -bso0 "%%~n#.zip" "%%#" "%%~n# (Track ?).bin" "%%~n# (Track ??).bin"
-
-for %%# in (*.cue) do md "%%~n#" >nul 2>&1
-for %%# in (*.cue) do move "%%~n# (Track *).bin" "%%~n#" >nul 2>&1
-for %%# in (*.cue) do move "%%~n#.cue" "%%~n#" >nul 2>&1
-
-rmdir /s /q temp >nul 2>&1
-
-pause
-(goto Conversion-Menu)
-
-REM #######################################################################################################################################################
-
+REM #########################################################################################################################################################
 :ECM2BIN
 cd %~dp0POPS
-md Original >nul 2>&1
 md temp >nul 2>&1
+md Original >nul 2>&1
 if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
 if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
+
 move *.ecm temp >nul 2>&1
+move *.cue temp >nul 2>&1
 cd temp >nul 2>&1
 if not exist *.ecm (goto failECM)
+
 for %%f in (*.ecm) do %~dp0BAT\unecm.exe "%%f" "%%~nf"
-if not exist *.cue %~dp0BAT\cuemaker.exe "%%~nf"
+if not exist "%%~nf.cue" %~dp0BAT\cuemaker.exe "%%~nf"
+
 move *.bin %~dp0POPS >nul 2>&1
 move *.cue %~dp0POPS >nul 2>&1
 move *.ecm %~dp0POPS\Original >nul 2>&1
@@ -4034,8 +3993,8 @@ cd %~dp0POPS
 
 rmdir /s /q temp >nul 2>&1
 echo.
-pause
-(goto conversion-Menu)
+
+pause & (goto conversion-Menu)
 
 :failECM
 cls
@@ -4044,9 +4003,9 @@ echo.
 echo .ECM NOT DETECTED: Please drop .ECM ON POPS FOLDER.
 echo.
 "%~dp0BAT\Diagbox.EXE" gd 0f
-pause
-(goto Conversion-Menu)
+pause & (goto Conversion-Menu)
 
+REM ##########################################################################################################################################################
 :BIN2CHD
 cd %~dp0POPS
 md Original >nul 2>&1
@@ -4054,12 +4013,13 @@ if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
 if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
 if not exist *.cue (goto failbin2CHD)
+
 for %%i in (*.cue) do %~dp0BAT\chdman.exe createcd -i "%%i" -o "%%~ni.chd" 
 move *.bin %~dp0POPS\Original >nul 2>&1
 move *.cue %~dp0POPS\Original >nul 2>&1
+
 echo.
-pause
-(goto conversion-Menu)
+pause & (goto conversion-Menu)
 
 :failCHD2BIN
 cls
@@ -4068,9 +4028,9 @@ echo.
 echo .CHD NOT DETECTED: Please drop .CHD ON POPS FOLDER.
 echo.
 "%~dp0BAT\Diagbox.EXE" gd 0f
-pause
-(goto conversion-Menu)
+pause & (goto conversion-Menu)
 
+REM ##########################################################################################################################################################
 :CHD2BIN
 cd %~dp0POPS
 md Original >nul 2>&1
@@ -4078,11 +4038,12 @@ if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
 if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
 if not exist *.chd (goto failCHD2bin)
+
 for %%h in (*.chd) do %~dp0BAT\chdman.exe extractcd -i "%%h" -o "%%~nh.cue"
 move *.CHD %~dp0POPS\Original >nul 2>&1
+
 echo.
-pause
-(goto conversion-Menu)
+pause & (goto conversion-Menu)
 
 :failBIN2CHD
 cls
@@ -4091,55 +4052,34 @@ echo.
 echo .BIN/.CUE NOT DETECTED: Please drop .BIN ON POPS FOLDER.
 echo.
 "%~dp0BAT\Diagbox.EXE" gd 0f
-pause
-(goto Conversion-Menu)
+pause & (goto Conversion-Menu)
 
+REM ##########################################################################################################################################################
 :multibin2bin
 cls
 cd %~dp0POPS
 @echo off
 if exist rmdir /s /q temp >nul 2>&1
 md temp >nul 2>&1
+md Original >nul 2>&1
 if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
 if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
-if not exist *.cue (goto failbinsplit)
+if not exist *.cue (goto failmultibin)
 
 for %%f in (*.cue) do %~dp0BAT\binmerge "%%f" "temp\%%~nf"
-md Original >nul 2>&1
 move *.bin %~dp0POPS\Original >nul 2>&1
 move *.cue %~dp0POPS\Original >nul 2>&1
-cd temp
 
+cd %~dp0POPS\temp
 "%~dp0BAT\busybox" find . -type f -name "*.cue" -exec sed -i "s:temp\\::g" {} + >nul 2>&1
-
-REM OLD Replace
-::setlocal EnableExtensions DisableDelayedExpansion
-::
-::set "search=temp\"
-::set "replace="
-::
-::set "textFile=*.cue"
-::set "rootDir=."
-::::for /R "%rootDir%" %%j in ("%textFile%") do (
-::for %%j in ("%rootDir%\%textFile%") do (
-::    for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
-::        set "line=%%i"
-::        setlocal EnableDelayedExpansion
-::        set "line=!line:%search%=%replace%!"
-::        >>"%%~j" echo(!line!
-::        endlocal
-::    )
-::)
-
-md Original >nul 2>&1
-move *.cue "%~dp0POPS" >nul 2>&1
 move *.bin "%~dp0POPS" >nul 2>&1
+move *.cue "%~dp0POPS" >nul 2>&1
 cd %~dp0POPS
+
 rmdir /s /q temp >nul 2>&1
 echo.
-pause
-(goto conversion-Menu)
+pause & (goto conversion-Menu)
 
 :failmultibin
 cls 
@@ -4150,44 +4090,42 @@ echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POP
 echo Also check that the name matches inside the .cue
 echo. 
 "%~dp0BAT\Diagbox.EXE" gd 07
-pause
-(goto conversion-Menu)
+pause & (goto conversion-Menu)
 
+REM ##########################################################################################################################################################
 :bin2split
 cls
-cd "%~dp0POPS"	
+cd %~dp0POPS
 @echo off
+if exist rmdir /s /q temp >nul 2>&1
 md temp >nul 2>&1
+md Original >nul 2>&1
 if exist *.zip %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.zip
 if exist *.rar %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.rar
 if exist *.7z  %~dp0BAT\7z.exe x -bso0 %~dp0POPS\*.7z
 if not exist *.cue (goto failbinsplit)
-ren *.cue *.cuetemp >nul 2>&1
-for %%f in (*.cuetemp) do %~dp0BAT\binmerge.exe -s "%%f" "%%~nf"
-del *.cuetemp >nul 2>&1
 
-REM TRACKS 
-for %%# in (*.cue) do move "%%~n# (Track *).bin" temp >nul 2>&1
-move *.cue temp >nul 2>&1
-del *.bin >nul 2>&1
+for %%f in (*.cue) do %~dp0BAT\binmerge -s "%%f" "temp\%%~nf"
+move *.bin %~dp0POPS\Original >nul 2>&1
+move *.cue %~dp0POPS\Original >nul 2>&1
 
-move "%~dp0POPS\temp\*.bin" "%~dp0POPS" >nul 2>&1
-move "%~dp0POPS\temp\*.cue" "%~dp0POPS" >nul 2>&1
+cd %~dp0POPS\temp
+"%~dp0BAT\busybox" find . -type f -name "*.cue" -exec sed -i "s:temp\\::g" {} + >nul 2>&1
+move *.bin "%~dp0POPS" >nul 2>&1
+move *.cue "%~dp0POPS" >nul 2>&1
+cd %~dp0POPS
 
-REM ZIP Tracks
+REM ZIP Multiple Tracks
 ::for %%# in (*.cue) do %~dp0BAT\7z.exe a -bso0 "%%~n#.zip" "%%#" "%%~n# (Track ?).bin" "%%~n# (Track ??).bin"
 
+REM Put Multiple Tracks in FOLDER
 for %%# in (*.cue) do md "%%~n#" >nul 2>&1
 for %%# in (*.cue) do move "%%~n# (Track *).bin" "%%~n#" >nul 2>&1
 for %%# in (*.cue) do move "%%~n#.cue" "%%~n#" >nul 2>&1
 
-move "%~dp0POPS\temp\*.bin" "%~dp0POPS" >nul 2>&1
-move "%~dp0POPS\temp\*.cue" "%~dp0POPS" >nul 2>&1
-
 rmdir /s /q temp >nul 2>&1
-echo\
-pause
-(goto conversion-Menu)
+echo.
+pause & (goto conversion-Menu)
 
 :failbinsplit
 cls 
@@ -4198,8 +4136,26 @@ echo .BIN/.CUE NOT DETECTED: Please drop .BIN/.CUE with the same name in the POP
 echo Also check that the name matches inside the .cue
 echo. 
 "%~dp0BAT\Diagbox.EXE" gd 07
-pause
-(goto conversion-Menu)
+pause & (goto conversion-Menu)
+
+REM OLD Replace
+REM setlocal EnableExtensions DisableDelayedExpansion
+REM 
+REM set "search=temp\"
+REM set "replace="
+REM 
+REM set "textFile=*.cue"
+REM set "rootDir=."
+REM for /R "%rootDir%" %%j in ("%textFile%") do (
+REM for %%j in ("%rootDir%\%textFile%") do (
+REM     for /f "delims=" %%i in ('type "%%~j" ^& break ^> "%%~j"') do (
+REM         set "line=%%i"
+REM         setlocal EnableDelayedExpansion
+REM         set "line=!line:%search%=%replace%!"
+REM         >>"%%~j" echo(!line!
+REM         endlocal
+REM     )
+REM )
 
 REM #######################################################################################################################################################
 
