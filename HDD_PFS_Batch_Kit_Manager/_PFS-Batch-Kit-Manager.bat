@@ -78,4 +78,4 @@ cd ..
 timeout 2 >nul
 PAUSE
 cls
-CALL "hdl_hdd\.PFS-Batch-Kit-Manager.bat"
+CALL "hdl_hdd\.PFS-BatchKit-Manager.bat"
