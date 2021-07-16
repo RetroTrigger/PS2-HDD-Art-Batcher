@@ -1,9 +1,13 @@
 %~dp0BAT\Diagbox.exe gd 07
+
 @echo off
 chcp 1252
 
 call "%~dp0BAT\LANG2.BAT"
 call "%~dp0BAT\CFG2.BAT"
+
+rmdir /Q/S %~dp0TMP >nul 2>&1
+del info.sys >nul 2>&1
 
 cls
 :-------------------------------------
@@ -30,10 +34,14 @@ if '%errorlevel%' NEQ '0' (
     CD /D "%~dp0"
 :--------------------------------------
 
+IF EXIST "BAT" (
+attrib +h "BAT"
+)
+
 IF NOT EXIST APPS\ MD APPS
 IF NOT EXIST ART\  MD ART
 REM IF NOT EXIST CD-DVD\ MD CD-DVD
-IF NOT EXIST "CD"\  MD "CD"
+IF NOT EXIST "CD\"  MD "CD"
 IF NOT EXIST CFG\  MD CFG
 IF NOT EXIST CHT\  MD CHT
 IF NOT EXIST DVD\  MD DVD
@@ -49,8 +57,8 @@ setlocal enableDelayedExpansion
 :start
 cls
 %~dp0BAT\Diagbox.exe gd 0f
-title PFS Batch Kit Manager By GDX 
-echo.Welcome to PFS Batch Kit Manager By GDX
+title PFS BatchKit Manager By GDX 
+echo.Welcome to PFS BatchKit Manager By GDX
 echo.------------------------------------------
 echo.
 ECHO %MENU_1%
@@ -114,9 +122,10 @@ cls
 @ECHO off
 cls
 :Advanced-Menu
-cls                  
-title PFS Batch Kit Manager By GDX
-echo.Welcome in PFS Batch Kit Manager By GDX
+cls
+%~dp0BAT\Diagbox.exe gd 0f    
+title PFS BatchKit Manager By GDX
+echo.Welcome in PFS BatchKit Manager By GDX
 echo.------------------------------------------
 ECHO Advanced Menu 
 ECHO.
@@ -150,9 +159,10 @@ cls
 
 @ECHO off
 :Conversion-Menu
-cls                  
-title PFS Batch Kit Manager By GDX
-echo.Welcome in PFS Batch Kit Manager By GDX
+cls
+%~dp0BAT\Diagbox.exe gd 0f 
+title PFS BatchKit Manager By GDX
+echo.Welcome in PFS BatchKit Manager By GDX
 echo.------------------------------------------
 ECHO Conversion Menu
 ECHO.
@@ -194,9 +204,10 @@ cls
 :CLSstart
 cls
 :Download-Menu
-cls                  
-title PFS Batch Kit Manager By GDX
-echo.Welcome in PFS Batch Kit Manager By GDX
+cls
+%~dp0BAT\Diagbox.exe gd 0f
+title PFS BatchKit Manager By GDX
+echo.Welcome in PFS BatchKit Manager By GDX
 echo.------------------------------------------
 ECHO Download Menu 
 ECHO.
@@ -230,9 +241,10 @@ cls
 
 @ECHO off
 :HDDManagement-Menu
-cls             
-title PFS Batch Kit Manager By GDX
-echo.Welcome in PFS Batch Kit Manager By GDX
+cls
+%~dp0BAT\Diagbox.exe gd 0f
+title PFS BatchKit Manager By GDX
+echo.Welcome in PFS BatchKit Manager By GDX
 echo.------------------------------------------
 ECHO HDD Management 
 ECHO.
@@ -570,11 +582,11 @@ move *.iso %~dp0DVD >nul 2>&1
 cd "%~dp0"
 rmdir /Q/S %~dp0CD-DVD >nul 2>&1
 
-pause & call %~dp0.PFS-Batch-Kit-Manager.bat
+pause & (goto start)
 
 REM ########################################################################################################################################################################
-
 :2-Transfer-APPS-ART-CFG-CHT-THM-VMC
+
 @echo off
 ::cls
 "%~dp0BAT\Diagbox.EXE" gd 07
@@ -733,7 +745,7 @@ IF "!@hdl_path!"=="" (
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		::cmd /k
-		pause & call .PFS-Batch-Kit-Manager.bat
+		pause & (goto start)
 	)
 		
 "%~dp0BAT\Diagbox.EXE" gd 0f
@@ -1235,7 +1247,7 @@ IF /I EXIST %~dp0APPS\* (
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e "apps_" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-APPS.log
+	"%~dp0BAT\busybox" grep -i -e "apps_" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-APPS.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         APPS %COMPLETED%	
 	cd %~dp0
@@ -1275,7 +1287,7 @@ IF /I EXIST %~dp0ART\*.* (
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".png" -e ".jpg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-ART.log
+	"%~dp0BAT\busybox" grep -i -e ".png" -e ".jpg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-ART.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         ART %COMPLETED%	
 	cd %~dp0
@@ -1315,7 +1327,7 @@ IF /I EXIST %~dp0CFG\*.* (
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".cfg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CFG.log
+	"%~dp0BAT\busybox" grep -i -e ".cfg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CFG.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         CFG %COMPLETED%	
 	cd %~dp0
@@ -1354,7 +1366,7 @@ IF /I EXIST %~dp0CHT\*.* (
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".cht" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CHT.log
+	"%~dp0BAT\busybox" grep -i -e ".cht" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CHT.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         CHT %COMPLETED%	
 	cd %~dp0
@@ -1394,7 +1406,7 @@ IF /I EXIST %~dp0VMC\*.* (
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".bin" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-VMC.log
+	"%~dp0BAT\busybox" grep -i -e ".bin" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-VMC.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         VMC %COMPLETED%	
 	cd %~dp0
@@ -1480,7 +1492,7 @@ IF /I EXIST %~dp0THM\* (
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e "thm_" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-THM.log
+	"%~dp0BAT\busybox" grep -i -e "thm_" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-THM.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         THM %COMPLETED%	
 	cd %~dp0
@@ -1498,8 +1510,7 @@ echo\
 echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
 ::cmd /k
-pause
-call .PFS-Batch-Kit-Manager.bat
+pause & (goto start)
 
 REM ########################################################################################################################################################################
 :3-Transfer-PS1Games-HDDPOPS
@@ -1621,7 +1632,7 @@ IF "!@hdl_path!"=="" (
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		::cmd /k
-		pause & call .PFS-Batch-Kit-Manager.bat
+		pause & (goto start)
 	)
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
@@ -1693,7 +1704,7 @@ IF "!@hdd_avl!"=="__.POPS" (
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
 	::cmd /k
-	pause & call %~dp0.PFS-Batch-Kit-Manager.bat
+	pause & (goto start)
  )
 	
 echo\
@@ -1727,7 +1738,7 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".vcd" -e ".VCD" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
+	"%~dp0BAT\busybox" grep -i -e ".vcd" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         POPS %COMPLETED%	
 	cd %~dp0
@@ -1736,6 +1747,7 @@ IF /I EXIST %~dp0POPS\*.VCD (
 
 rmdir /Q/S %~dp0TMP >nul 2>&1
 del info.sys >nul 2>&1
+
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -1747,8 +1759,7 @@ echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
 ::cmd /k
 
-pause
-call %~dp0.PFS-Batch-Kit-Manager.bat
+pause & (goto start)
 
 
 :partpopsname
@@ -1806,7 +1817,7 @@ IF "!@hdd_avl!"=="%partnamepops%" (
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
 	::cmd /k
-	pause & call %~dp0.PFS-Batch-Kit-Manager.bat
+	pause & (goto start)
 	)
 )
 echo\
@@ -1839,7 +1850,7 @@ IF /I EXIST %~dp0POPS\*.VCD (
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".vcd" -e ".VCD" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
+	"%~dp0BAT\busybox" grep -i -e ".vcd" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
 	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
 	echo         POPS %COMPLETED%	
 	cd %~dp0
@@ -1859,12 +1870,12 @@ echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
 ::cmd /k
 
-pause
-call %~dp0.PFS-Batch-Kit-Manager.bat
+pause & (goto start)
 
 REM ########################################################################################################################################################################
 :4-Backup-ART-CFG-CHT-VMC
 @echo off
+
 echo\
 echo\
 
@@ -1968,7 +1979,7 @@ IF "!@hdl_path!"=="" (
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		::cmd /k
-		pause & call .PFS-Batch-Kit-Manager.bat
+		pause & (goto start)
 	)
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
@@ -2089,22 +2100,19 @@ echo\
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
-	"%~dp0BAT\busybox" grep -e ".png" -e ".jpg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-ART.log
+	"%~dp0BAT\busybox" grep -i -e ".png" -e ".jpg"  %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-ART.log
 	
-    cd %~dp0LOG
     @Echo off
-    For %%F in (PFS-ART.log) do (
-    (for /f "tokens=2,3,5" %%A in (%%F) do echo %%C) > "%~dp0ART\PFS-ART-NEW.txt")
+    For %%F in (%~dp0LOG\PFS-ART.log) do (
+    (for /f "tokens=2,3,5" %%A in (%%F) do echo %%C) > "%~dp0TMP\pfs-art-new.txt")
 	
-	cd %~dp0ART
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-art.txt
 	echo mount %OPLPART% >> %~dp0TMP\pfs-art.txt
 	echo cd ART >> %~dp0TMP\pfs-art.txt
-	for /f %%f in (PFS-ART-NEW.txt) do echo get %%f >> %~dp0TMP\pfs-art.txt
+	for /f %%f in (%~dp0TMP\pfs-art-new.txt) do echo get %%f >> %~dp0TMP\pfs-art.txt
 	echo umount >> %~dp0TMP\pfs-art.txt
 	echo exit >> %~dp0TMP\pfs-art.txt
-	del %~dp0ART\PFS-ART-NEW.txt >nul 2>&1
 	type %~dp0TMP\pfs-art.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	
 	) else ( echo         ART - Source Not Detected... )
@@ -2131,22 +2139,19 @@ echo\
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
-	"%~dp0BAT\busybox" grep -e ".cfg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CFG.log
+	"%~dp0BAT\busybox" grep -i -e ".cfg" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CFG.log
 	
-    cd %~dp0LOG
     @Echo off
-    For %%F in (PFS-CFG.log) do (
-    (for /f "tokens=2,3,5" %%A in (%%F) do echo %%C) > "%~dp0CFG\PFS-CFG-NEW.txt")
+    For %%F in (%~dp0LOG\PFS-CFG.log) do (
+    (for /f "tokens=2,3,5" %%A in (%%F) do echo %%C) > "%~dp0TMP\pfs-cfg-new.txt")
 	
-	cd %~dp0CFG
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-cfg.txt
 	echo mount %OPLPART% >> %~dp0TMP\pfs-cfg.txt
 	echo cd CFG >> %~dp0TMP\pfs-cfg.txt
-	for /f %%f in (PFS-CFG-NEW.txt) do echo get %%f >> %~dp0TMP\pfs-cfg.txt
+	for /f %%f in (%~dp0TMP\pfs-cfg-new.txt) do echo get %%f >> %~dp0TMP\pfs-cfg.txt
 	echo umount >> %~dp0TMP\pfs-cfg.txt
 	echo exit >> %~dp0TMP\pfs-cfg.txt
-	del %~dp0CFG\PFS-CFG-NEW.txt >nul 2>&1
 	type %~dp0TMP\pfs-cfg.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	
 	) else ( echo         CFG - Source Not Detected... )
@@ -2172,22 +2177,19 @@ echo\
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
-	"%~dp0BAT\busybox" grep -e ".cht" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CHT.log
+	"%~dp0BAT\busybox" grep -i -e ".cht" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-CHT.log
 	
-    cd %~dp0LOG
     @Echo off
-    For %%F in (PFS-CHT.log) do (
-    (for /f "tokens=2,3,5" %%A in (%%F) do echo %%C) > "%~dp0CHT\PFS-CHT-NEW.txt")
+    For %%F in (%~dp0LOG\PFS-CHT.log) do (
+    (for /f "tokens=2,3,5" %%A in (%%F) do echo %%C) > "%~dp0TMP\pfs-cht-new.txt")
 	
-	cd %~dp0CHT
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-cht.txt
 	echo mount %OPLPART% >> %~dp0TMP\pfs-cht.txt
 	echo cd CHT >> %~dp0TMP\pfs-cht.txt
-	for /f %%f in (PFS-CHT-NEW.txt) do echo get %%f >> %~dp0TMP\pfs-cht.txt
+	for /f %%f in (%~dp0TMP\pfs-cht-new.txt) do echo get %%f >> %~dp0TMP\pfs-cht.txt
 	echo umount >> %~dp0TMP\pfs-cht.txt
 	echo exit >> %~dp0TMP\pfs-cht.txt
-	del %~dp0CHT\PFS-CHT-NEW.txt >nul 2>&1
 	type %~dp0TMP\pfs-cht.txt | "%~dp0BAT\pfsshell" >nul 2>&1
 	
 	) else ( echo         CHT - Source Not Detected... )
@@ -2214,30 +2216,28 @@ echo\
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
-	"%~dp0BAT\busybox" grep -e ".bin" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-VMC.log
+	"%~dp0BAT\busybox" grep -i -e ".bin" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-VMC.log
 	
-    cd %~dp0LOG
     @Echo off
-    For %%F in (PFS-VMC.log) do (
-    (for /f "tokens=2,3,5" %%A in (%%F) do echo %%C) > "%~dp0VMC\PFS-VMC-NEW.txt")
+    For %%F in (%~dp0LOG\PFS-VMC.log) do (
+    (for /f "tokens=2,3,5" %%A in (%%F) do echo %%C) > "%~dp0TMP\pfs-vmc-new.txt")
 	
-	cd %~dp0VMC
 	echo         Extraction...
 	echo device !@hdl_path! > %~dp0TMP\pfs-vmc.txt
 	echo mount %OPLPART% >> %~dp0TMP\pfs-vmc.txt
 	echo cd VMC >> %~dp0TMP\pfs-vmc.txt
-	for /f %%f in (PFS-VMC-NEW.txt) do echo get %%f >> %~dp0TMP\pfs-vmc.txt
+	for /f %%f in (%~dp0TMP\pfs-vmc-new.txt) do echo get %%f >> %~dp0TMP\pfs-vmc.txt
 	echo umount >> %~dp0TMP\pfs-vmc.txt
 	echo exit >> %~dp0TMP\pfs-vmc.txt
-	del %~dp0VMC\PFS-VMC-NEW.txt >nul 2>&1
 	type %~dp0TMP\pfs-vmc.txt | "%~dp0BAT\pfsshell" >nul 2>&1
+	cd %~dp0
 	
 	) else ( echo         VMC - Source Not Detected... )
 )
 
-cd %~dp0
 rmdir /Q/S %~dp0TMP >nul 2>&1
 del info.sys >nul 2>&1
+
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -2247,8 +2247,8 @@ echo Extraction Completed...
 echo\
 echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
-pause
-call .PFS-Batch-Kit-Manager.bat
+
+pause & (goto start)
 
 REM ########################################################################################################################################################################
 :5-BackupPS1Games
@@ -2362,7 +2362,7 @@ IF "!@hdl_path!"=="" (
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		::cmd /k
-		pause & call .PFS-Batch-Kit-Manager.bat
+		pause & (goto start)
 	)
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
@@ -2412,7 +2412,7 @@ IF "!@hdd_avl!"=="__.POPS" (
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
 	::cmd /k
-	pause & call .PFS-Batch-Kit-Manager.bat
+	pause & (goto start)
 	)
 )
 echo\
@@ -2435,7 +2435,7 @@ echo\
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
-	"%~dp0BAT\busybox" grep -e ".vcd" -e ".VCD" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
+	"%~dp0BAT\busybox" grep -i -e ".vcd" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
 	
     cd %~dp0LOG
     @Echo off
@@ -2471,8 +2471,7 @@ echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
 ::cmd /k
 
-pause
-call .PFS-Batch-Kit-Manager.bat
+pause & (goto start)
 
 :extractpartpopsname
 IF %@pfs_pop%==yesmanually (
@@ -2513,7 +2512,7 @@ IF "!@hdd_avl!"=="%extractpartpopsname%" (
 	rmdir /Q/S %~dp0TMP >nul 2>&1
 	del info.sys >nul 2>&1
 	::cmd /k
-	pause & call %~dp0.PFS-Batch-Kit-Manager.bat
+	pause & (goto start)
 	)
 )
 echo\
@@ -2535,7 +2534,7 @@ echo\
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1 
-	"%~dp0BAT\busybox" grep -e ".vcd" -e ".VCD" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
+	"%~dp0BAT\busybox" grep -i -e ".vcd" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS.log
 	
     cd %~dp0LOG
     @Echo off
@@ -2571,8 +2570,7 @@ echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
 ::cmd /k
 
-pause
-call .PFS-Batch-Kit-Manager.bat
+pause & (goto start)
 
 REM ########################################################################################################################################################################
 
@@ -2694,7 +2692,7 @@ IF "!@hdl_path!"=="" (
 		rmdir /Q/S %~dp0TMP >nul 2>&1
 		del info.sys >nul 2>&1
 		::cmd /k
-		pause & call .PFS-Batch-Kit-Manager.bat
+		pause & (goto start)
 	)
 	
 "%~dp0BAT\Diagbox.EXE" gd 0f
@@ -2818,6 +2816,7 @@ echo ----------------------------------------------------
 echo\
 REM POPS BINARIES
 "%~dp0BAT\Diagbox.EXE" gd 07
+
 	cd %~dp0POPS-Binaries
 	echo         Creating Que
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops-binaries.txt
@@ -2841,17 +2840,15 @@ REM POPS BINARIES
 	echo exit >> %~dp0TMP\pfs-log.txt
 	type %~dp0TMP\pfs-log.txt | "%~dp0BAT\pfsshell" 2>&1 | "%~dp0BAT\busybox" tee > %~dp0TMP\pfs-tmp.log
 	mkdir %~dp0LOG >nul 2>&1
-	"%~dp0BAT\busybox" grep -e ".ELF" -e ".IMG" -e ".BIN" -e ".TM2" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS-Binaries.log
-	del %~dp0TMP\pfs-log.txt %~dp0TMP\pfs-tmp.log >nul 2>&1
+	"%~dp0BAT\busybox" grep -i -e ".ELF" -e ".IMG" -e ".BIN" -e ".TM2" %~dp0TMP\pfs-tmp.log > %~dp0LOG\PFS-POPS-Binaries.log
 	echo         POPS Binaries Completed...	
 	cd %~dp0
 	) else ( echo         POPS Binaries - Source Not Detected... )
 )
 
 REM POPS FOR OPL
-"%~dp0BAT\Diagbox.EXE" gd 07
-	cd %~dp0POPS-Binaries
 REM	echo         Creating Que
+    cd %~dp0POPS-Binaries
 	echo device !@hdl_path! > %~dp0TMP\pfs-pops-binaries.txt
 	echo mount +OPL >> %~dp0TMP\pfs-pops-binaries.txt
 	echo mkdir POPS >> %~dp0TMP\pfs-pops-binaries.txt
@@ -2861,13 +2858,13 @@ REM	echo         Creating Que
 	echo exit >> %~dp0TMP\pfs-pops-binaries.txt
 REM	echo         Installing Que
 	type %~dp0TMP\pfs-pops-binaries.txt | "%~dp0BAT\pfsshell" >nul 2>&1
-	del %~dp0TMP\pfs-pops-binaries.txt >nul 2>&1
 	cd %~dp0
 	) else ( echo         POPS Binaries - Source Not Detected... )
 )
 
 rmdir /Q/S %~dp0TMP >nul 2>&1
 del info.sys >nul 2>&1
+
 "%~dp0BAT\Diagbox.EXE" gd 0f
 echo\
 echo\
@@ -2877,8 +2874,8 @@ echo Installation Completed...
 echo\
 echo\
 "%~dp0BAT\Diagbox.EXE" gd 07
-pause
-call .PFS-Batch-Kit-Manager.bat
+
+pause & (goto start)
 
 REM ########################################################################################################################################################################
 :7-BackupPS2Games
@@ -3151,14 +3148,14 @@ IF ERRORLEVEL 2 set @pfs_part=no
 
 IF %@pfs_part%==yes (
 echo.
-echo Example +OPL
+echo Example: +OPL
 echo.
 set /p "partname=Enter partition Name:" 
 
 echo.
 echo.
 echo The size must be multiplied by 128
-echo Example size: "(Max size per partition 128gb)" 
+echo Example size: "(Max size per partition 128GB)" 
 echo.
 echo 128mb = 128
 echo 256mb = 256
@@ -3653,7 +3650,7 @@ echo HDD Selected:
 echo ----------------------------------------------------
 "%~dp0BAT\Diagbox.EXE" gd 03
 %~dp0BAT\hdl_dump query | findstr "%hdlhdd%"
-"%~dp0BAT\Diagbox.EXE" gd 0c
+"%~dp0BAT\Diagbox.EXE" gd 0c	
 echo\
 echo\
 echo Are you sure you want to format this hard drive to PS2 format ?:
@@ -3675,7 +3672,6 @@ echo.
 
 CHOICE /C YN /m "Confirm"
 IF ERRORLEVEL 2 (goto formatHDDtoPS2)
-
 
 cls
 IF %@pfs_formathdd%==yes (
