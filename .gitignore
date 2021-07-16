@@ -12,7 +12,9 @@ HDD_PFS_Batch_Kit_Manager/hdl_hdd/CHT/**.*
 HDD_PFS_Batch_Kit_Manager/hdl_hdd/CFG/**.*
 HDD_PFS_Batch_Kit_Manager/hdl_hdd/VMC/**.*
 HDD_PFS_Batch_Kit_Manager/hdl_hdd/TMP/**.*
+!HDD_PFS_Batch_Kit_Manager/hdl_hdd/TMP/desktop.ini
 HDD_PFS_Batch_Kit_Manager/hdl_hdd/THM/**.*
 
 
 
+HDD_PFS_Batch_Kit_Manager/hdl_hdd/BAT/OPNPS2LD.ELF
