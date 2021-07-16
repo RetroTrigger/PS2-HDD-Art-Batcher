@@ -76,6 +76,6 @@ attrib +s BAT
 
 cd ..
 timeout 2 >nul
-PAUSE
+::PAUSE
 cls
 CALL "hdl_hdd\.PFS-BatchKit-Manager.bat"
