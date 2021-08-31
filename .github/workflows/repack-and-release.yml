@@ -32,7 +32,7 @@ jobs:
     
     - name: generate Change log
       run: |
-        sudo ./generate_changelog.sh
+        sh ./generate_changelog.sh
         cp tmp/DETAILED_CHANGELOG HDD_PFS_Batch_Kit_Manager/CHANGELOG.TXT
         echo "------------"
         cat HDD_PFS_Batch_Kit_Manager/CHANGELOG.TXT
