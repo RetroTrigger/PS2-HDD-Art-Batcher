@@ -11,13 +11,14 @@ jobs:
 
   Repack_and_Release:
     runs-on: ubuntu-latest
+    container: ps2dev/ps2dev:latest
     strategy:
       matrix:
         package: [English]
     steps:
 
     - name: checkout code for release
-      uses: actions/checkout@v1
+      uses: actions/checkout@v2
       
     - name: Install dependencies
       run: |
