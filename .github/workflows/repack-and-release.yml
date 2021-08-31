@@ -19,7 +19,9 @@ jobs:
     - name: checkout code for release
       uses: actions/checkout@v1
       
-      
+    - name: Install dependencies
+      run: |
+        apk add build-base git zip gawk
       
     - name: Update Widescreen Hacks Package
       run: |
