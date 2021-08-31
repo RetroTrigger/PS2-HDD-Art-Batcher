@@ -30,9 +30,12 @@ jobs:
         rm -f WIDE.ZIP
         wget https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O $PWD/WIDE.ZIP
     
-    
-
-    
+    - name: generate Change log
+      run: |
+        ./generate_changelog.sh
+        cp tmp/DETAILED_CHANGELOG HDD_PFS_Batch_Kit_Manager/CHANGELOG.TXT
+        echo "------------"
+        cat HDD_PFS_Batch_Kit_Manager/CHANGELOG.TXT
     - name: Zip Folder
       run: |
         SCH=${GITHUB_SHA::7}
