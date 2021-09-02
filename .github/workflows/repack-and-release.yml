@@ -1,4 +1,4 @@
-name: Release HDL Batch Installer
+name: PS2-HDD-Art-Batcher
 on:
   workflow_dispatch:
   push:
@@ -11,18 +11,15 @@ jobs:
 
   Repack_and_Release:
     runs-on: ubuntu-latest
-    container: ps2dev/ps2dev:latest
     strategy:
       matrix:
         package: [English]
     steps:
 
     - name: checkout code for release
-      uses: actions/checkout@v2
+      uses: actions/checkout@v1
       
-    - name: Install dependencies
-      run: |
-        apk add build-base git zip gawk
+      
       
     - name: Update Widescreen Hacks Package
       run: |
@@ -32,7 +29,10 @@ jobs:
         cd BAT
         rm -f WIDE.ZIP
         wget https://github.com/PS2-Widescreen/OPL-Widescreen-Cheats/releases/download/Latest/widescreen_hacks.zip -O $PWD/WIDE.ZIP
+    
+    
 
+    
     - name: Zip Folder
       run: |
         SCH=${GITHUB_SHA::7}
