@@ -1,5 +1,8 @@
 # [PS2 HDD Art Batcher]( https://github.com/israpps/PS2-HDD-Art-Batcher )
 
+
+![GitHub all releases](https://img.shields.io/github/downloads/israpps/PS2-HDD-Art-Batcher/total)
+
 # NO LONGER USING WINHIIP 
 
 WinHiip has been obsolete for a long time, it does not support hard drives of 1TB and above.
